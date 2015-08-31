@@ -36,17 +36,24 @@ handlers:
 #  http_headers:
 #    X-Static: static
 
-## Frontend: Static files (without text and HTML files)
-#- url: /(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
-#  static_files: application/frontend/http_root/\1
-#  upload: application/frontend/http_root/(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
-#  http_headers:
-#    X-Static: static
+# Api Static Files (without text and HTML files)
+- url: /api/(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|html|htm|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|xml|lay|wmv|map|eot)$)
+  static_files: application/api/http_root/\1
+  upload: application/api/http_root/(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|html|htm|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|xml|lay|wmv|map|eot)$)
+  http_headers:
+    X-Static: static
 
 # API
 - url: /api/.*
   secure: always
   script: api.app
+
+## Frontend: Static Files (without text and HTML files)
+#- url: /(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
+#  static_files: application/frontend/http_root/\1
+#  upload: application/frontend/http_root/(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
+#  http_headers:
+#    X-Static: static
 
 ## Alles was nicht statisch ist und nicht zum Backoffice gehört,
 ## wird von dieser WSGI-Anwendung ausgeliefert

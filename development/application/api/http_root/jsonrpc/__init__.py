@@ -108,9 +108,7 @@ class JsonRpc(CherryPyJsonRpc):
 
     _cp_config = {
         "tools.basic_auth.on": True,
-        "tools.basic_auth.realm": "{appname} - JSON-RPC API".format(
-            appname = cherrypy.config["appname"]
-        ),
+        "tools.basic_auth.realm": "GAE-Address-Book - JSON-RPC API",
         "tools.basic_auth.users": _api_users
     }
 
@@ -122,54 +120,42 @@ class JsonRpc(CherryPyJsonRpc):
     def add(self, a, b):
         """
         Test method
+
+        ==========
+        Parameters
+        ==========
+
+        :param a: Any value
+
+        :param b: Any value
+
+        :return: Result of ``a + b``.
         """
+
         return a + b
 
 
-    @rpcmethod
-    def xxx(
+def jronsrpc_help(*args, **kwargs):
+    """
+    Gibt eine Hilfe-Seite zurück
+    """
 
-        # Testing
-        testing = None
-    ):
-        """
+    # Vorlage
+    template_path = os.path.join(THISDIR, "help.mako")
+    template = Template(filename = template_path)
+    rendered = template.render_unicode(
+        version = common.constants.VERSION,
+        appname = cherrypy.config["APPNAME"],
+        add_doc = extract_documentation(JsonRpc.add, u"add")
+    )
 
-        XXX
-
-        =========
-        Parameter
-        =========
-
-        :param email: Eindeutige E-Mail-Adresse der Firma oder der Kontaktperson.
-            Diese E-Mail-Adresse ist im Immoads-System der eindeutige Benutzername
-            und dient auch als Fallback für Kundenanfragen.
-
-        :return: Bei Erfolg wird ein Bestätigungstext zurück gegeben.
-            Tritt ein Fehler auf, wird ein Json-Rpc-Fehler ausgelöst.
-        """
-
-        pass
+    # Fertig
+    return rendered
 
 
-    @staticmethod
-    @cherrypy.expose
-    def help(*args, **kwargs):
-        """
-        Gibt eine Hilfe-Seite zurück
-        """
-
-        # Vorlage
-        template_path = os.path.join(THISDIR, "help.mako")
-        template = Template(filename = template_path)
-        rendered = template.render_unicode(
-            version = common.constants.VERSION,
-            subscribe_doc = extract_documentation(JsonRpc.xxx, u"subscribe"),
-        )
-
-        # Fertig
-        return rendered
-
-
-
+jsonrpc = JsonRpc()
+jsonrpc.help = jronsrpc_help
+jsonrpc.help._cp_config = {"tools.basic_auth.on": False}
+jsonrpc.help.exposed = True
 
 
