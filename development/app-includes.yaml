@@ -1,0 +1,55 @@
+# Skip Files
+skip_files:
+
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^(.*/)?.*/node_modules/
+- ^(.*/)?.*/scss/
+- ^(.*/)?.*\.scss$
+- ^(.*/)?.*\.bowerrc$
+- ^(.*/)?.*bower\.json$
+- ^(.*/)?.*composer\.json$
+- ^(.*/)?.*package\.json$
+- ^(.*/)?.*sache\.json$
+- ^(.*/)?.*gulpfile\.js$
+- ^(.*/)?.*appcfg_update\.py$
+- ^(.*/)?.*appcfg_update\.py$
+- ^(.*/)?.*/bower_components/angular-i18n/
+- ^(.*/)?.*/bower_components/jquery/src/
+- ^(.*/)?.*/bower_components/moment/src/
+- ^(.*/)?.*/bower_components/moment/locale/
+- ^(.*/)?.*/bower_components/modernizr/feature-detects/
+- ^(.*/)?.*/bower_components/modernizr/media/
+- ^(.*/)?.*/bower_components/modernizr/test/
+
+
+# Handlers
+handlers:
+
+## Favicon
+#- url: /favicon.ico
+#  static_files: application/frontend/http_root/images/favicon.ico
+#  upload: application/frontend/http_root/images/favicon.ico
+#  http_headers:
+#    X-Static: static
+
+## Frontend: Static files (without text and HTML files)
+#- url: /(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
+#  static_files: application/frontend/http_root/\1
+#  upload: application/frontend/http_root/(.*?\.(gif|jpg|png|jpeg|js|7z|pdf|zip|spl|svg|svgz|emf|avi|ods|css|ico|p3p|swf|htc|woff|ttf|mp3|mpg|cur|tar|tgz|gz|spl|odp|lay|wmv|map)$)
+#  http_headers:
+#    X-Static: static
+
+# API
+- url: /api/.*
+  secure: always
+  script: api.app
+
+## Alles was nicht statisch ist und nicht zum Backoffice gehört,
+## wird von dieser WSGI-Anwendung ausgeliefert
+## (muss ganz unten in dieser Konfigurationsdatei stehen)
+#- url: .*
+#  script: frontend.app
