@@ -17,7 +17,6 @@
       <sourceFolder url="file://$MODULE_DIR$/application/api/http_root" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/application/api" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/application" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/_local_datastore" />
       <excludeFolder url="file://$MODULE_DIR$/development/_local_datastore" />
     </content>
     <orderEntry type="inheritedJdk" />
