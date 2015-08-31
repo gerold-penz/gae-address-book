@@ -1,7 +1,0 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
-# Namespace Imports
-from jsonrpc import jsonrpc
-
