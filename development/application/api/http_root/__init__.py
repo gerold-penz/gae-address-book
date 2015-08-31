@@ -3,4 +3,7 @@
 
 
 # Namespace Imports
+from jsonrpc import JsonRpc
+
+jsonrpc = JsonRpc()
 
