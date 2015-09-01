@@ -12,7 +12,7 @@ gae-address-book
         - Vorname (first_name)
         - Nachname (last_name)
         - Spitzname (nickname)
-        - Straße/Nr. (address)
+        - Straße/Nr. (street)
         - PLZ (Postcode)
         - Ort (City)
         - Bezirk (District)
@@ -41,43 +41,10 @@ gae-address-book
         - CardDAV
         - LDAP
     
-    - Adressbücher für Immoads in einem eigenen Github-Repository
-    
-        - immoads-address-book
-        - herold-address-book
 
 
-Immoads-Verwaltung
 
-- Berechtigungen einstellbar machen
-    
-- Adressen-Bereich
 
-    - Adressbücher einstellbar
 
-    - Filter
-    - Adressenliste (links)
-    - Adressdetails (rechts)
-    - Datenänderungen checken und Speichern vorschlagen
 
-    - Aktionen:
-    
-        - Kunde in Billomat eintragen oder anpassen
-        - Zum Kunden in Billomat springen
-        
-        - Kunde im Immoads eintragen
-        - Zum Kunden im Immoads springen
-        
-        - Profil in Bauenwohnen24 eintragen
-        - Zum Profil in Bauenwohnen24 springen
-        
-        - Adressen von Billomat importieren
-        - Adressen von Immoads importieren
-        
-        - Journaleinträge importieren
-        - Produkte importieren
-        
-        - Adresse von einem Adressbuch in ein anderes Adressbuch importieren
-        
-        
 
