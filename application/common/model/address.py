@@ -8,21 +8,92 @@
 from google.appengine.ext import ndb
 
 
+class Tel(ndb.Model):
+    label = ndb.StringProperty()
+    number = ndb.StringProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Email(ndb.Model):
+    label = ndb.StringProperty()
+    email = ndb.StringProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Url(ndb.Model):
+    label = ndb.StringProperty()
+    url = ndb.StringProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Note(ndb.Model):
+    text = ndb.TextProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Agreement(ndb.Model):
+    text = ndb.TextProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class JournalItem(ndb.Model):
+    date_time = ndb.DateTimeProperty()
+    text = ndb.TextProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Anniversary(ndb.Model):
+    label = ndb.StringProperty(required = True)
+    year = ndb.IntegerProperty()
+    month = ndb.IntegerProperty(required = True, choices = range(1, 13))
+    day = ndb.IntegerProperty(required = True)
+
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
 class Address(ndb.Model):
     """
     See: https://en.wikipedia.org/wiki/VCard#Properties
     """
 
-    uid = ndb.StringProperty(verbose_name = u"VCard: UID", required = True)
+    uid = ndb.StringProperty(required = True)
     owner = ndb.StringProperty(required = True)
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True, required = True)
-    creation_user = ndb.StringProperty(required = True)
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True, required = True)
-    edit_user = ndb.StringProperty()
-    kind = ndb.StringProperty(verbose_name = u"VCard: KIND", required = True)
-    categories = ndb.StringProperty(repeated = True, verbose_name = u"VCard: CATEGORIES")
+    ct = ndb.DateTimeProperty(auto_now_add = True, required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(auto_now = True, required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+    kind = ndb.StringProperty(required = True)
+    category_items = ndb.StringProperty(repeated = True)
     organization = ndb.StringProperty()
-    position = ndb.StringProperty(verbose_name = u"VCard: TITLE")
+    position = ndb.StringProperty()
     salutation = ndb.StringProperty()  # Anrede/Titel
     first_name = ndb.StringProperty()
     last_name = ndb.StringProperty()
@@ -33,72 +104,14 @@ class Address(ndb.Model):
     district = ndb.StringProperty()  # Bezirk
     land = ndb.StringProperty()  # Bundesland
     country = ndb.StringProperty()  # Land
-    phone_numbers = ndb.StructuredProperty(Tel)  # Telefonnummern
-    email_addresses = ndb.StructuredProperty(Email)  # E-Mail-Adressen
-    web_urls = ndb.StructuredProperty(Url)  # URLs
-    notes = ndb.StructuredProperty(Note)  # Notizen
-    journal = ndb.StructuredProperty(Journal)  # Journaleinträge
-    business = ndb.StringProperty(repeated = True)  # Branchen
-    anniversaries = ndb.StructuredProperty(Date)  # Jahrestage, Geburtstag
-    gender = ndb.StringProperty(verbose_name = u"VCard: GENDER")
+    phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern
+    email_items = ndb.StructuredProperty(Email, repeated = True)  # E-Mail-Adressen
+    url_items = ndb.StructuredProperty(Url, repeated = True)  # URLs
+    note_items = ndb.StructuredProperty(Note, repeated = True)  # Notizen
+    journal_items = ndb.StructuredProperty(JournalItem, repeated = True)  # Journaleinträge
+    business_items = ndb.StringProperty(repeated = True)  # Branchen
+    anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
+    gender = ndb.StringProperty()
 
-
-class Tel(ndb.Model):
-    name = ndb.StringProperty()
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    number = ndb.StringProperty()
-
-
-class Email(ndb.Model):
-    name = ndb.StringProperty()
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    address = ndb.StringProperty()
-
-
-class Url(ndb.Model):
-    name = ndb.StringProperty()
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    url = ndb.StringProperty()
-
-
-class Note(ndb.Model):
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    note = ndb.TextProperty()
-
-
-class Agreement(ndb.Model):
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    note = ndb.TextProperty()
-
-
-class Journal(ndb.Model):
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    note = ndb.TextProperty()
-
-
-class Date(ndb.Model):
-    user = ndb.StringProperty()
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
-    edit_user = ndb.StringProperty()
-    date = ndb.DateProperty()
 
 

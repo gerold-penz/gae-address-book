@@ -10,6 +10,13 @@ import docutils
 import docutils.core
 import common.constants
 import common.format_
+import common.addresses
+import common.authorization
+from common.model.address import (
+    Tel, Email, Url, Note, Agreement, JournalItem, Anniversary
+)
+
+
 from mako.template import Template
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 
@@ -22,9 +29,9 @@ _users = None
 _users_lock = threading.Lock()
 
 
-def _api_users():
+def _security_users():
     """
-    Liest die API-Benutzer aus der INI aus uns speichert diese in einer
+    Liest die Benutzer aus der Scurity-INI aus uns speichert diese in einer
     globalen Variable zwischen.
     """
 
@@ -35,7 +42,7 @@ def _api_users():
 
     with _users_lock:
         _users = {}
-        for key, value in cherrypy.config["api.jsonrpc.users"].items():
+        for key, value in cherrypy.config["users"].items():
             _users[key] = hashlib.md5(value).hexdigest()
 
     return _users
@@ -109,7 +116,7 @@ class JsonRpc(CherryPyJsonRpc):
     _cp_config = {
         "tools.basic_auth.on": True,
         "tools.basic_auth.realm": "GAE-Address-Book - JSON-RPC API",
-        "tools.basic_auth.users": _api_users
+        "tools.basic_auth.users": _security_users
     }
 
     index = CherryPyJsonRpc.request_handler
@@ -133,6 +140,169 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         return a + b
+
+
+    @rpcmethod
+    def create_address(
+        self,
+        kind = None,
+        category_list = None,
+        organization = None,
+        position = None,
+        salutation = None,
+        first_name = None,
+        last_name = None,
+        nickname = None,
+        street = None,
+        postcode = None,
+        city = None,
+        district = None,
+        land = None,
+        country = None,
+        phone_list = None,
+        email_list = None,
+        url_list = None,
+        note_list = None,
+        journal_list = None,
+        business_list = None,
+        anniversary_list = None,
+        gender = None
+    ):
+        """
+        Creates a new address
+
+        :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-*"
+        :param category_list: A list of "tags" that can be used to describe the object.
+        :param organization: Organization name or location name
+        :param position: Specifies the job title, functional position or function of
+            the individual within an organization.
+        :param salutation: Salutation (Dr., Prof.)
+        :param first_name: First name of a person
+        :param last_name: Last name of a person
+        :param nickname: Nickname
+        :param street: Street and number
+        :param postcode: Postcode/ZIP
+        :param city: City/town/place
+        :param district: Political district
+        :param land: Bundesland (z.B. Tirol, Bayern)
+        :param country: Staat (z.B. Österreich, Deutschland)
+
+        :param phone_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<name>", "number": "<number">}, ...]
+
+            Example::
+
+                [
+                    {"label": "Mobile", "number": "+43 123 456 789"},
+                    {"label": "Fax", "number": "+43 123 456 999"}
+                ]
+
+        :param email_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "email": "<email>"}, ...]
+
+            Example::
+
+                [
+                    {"label": "Private", "email": "max.mustermann@private.com"},
+                    {"label": "Business", "email": "m.mustermann@organization.com"}
+                ]
+
+        :param url_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "url": "<url>"}, ...]
+
+            Example::
+
+                [{"label": "Homepage", "url": "http://halvar.at/"}]
+
+        :param note_list: A list with dictionaries.
+            Syntax::
+
+                [{"text": "<note>"}, ...]
+
+            Example::
+
+                [{"text": "This is a short note"}]
+
+
+        :param journal_list: A list with dictionaries.
+            Syntax::
+
+                [{"date_time_iso": <DateTimeIso>, "text": "<note>"), ...]
+
+            Example::
+
+                [
+                    {
+                        "date_time_iso": "2000-01-01T14:30",
+                        "text": "This is a short journal item."
+                    }, ...
+                ]
+
+        :param business_list: A list with strings.
+            Example::
+
+                ["carpenter", "furniture"]
+
+
+        :param anniversary_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "year": <year>, "month": <month [1-12]>, "day": <day>}, ...]
+
+            Example::
+
+                [{"label": "Birthday", "year": 1974, "month": 8, "day": 18}, ...]
+
+        :param gender: Defines the person's gender. A single letter.
+            M stands for "male",
+            F stands for "female",
+            O stands for "other",
+            N stands for "none or not applicable",
+            U stands for "unknown"
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+
+
+
+        # Create new address
+        new_address = common.addresses.create(
+            user = user,
+            kind = None,
+            category_items = None,
+            organization = None,
+            position = None,
+            salutation = None,
+            first_name = None,
+            last_name = None,
+            nickname = None,
+            street = None,
+            postcode = None,
+            city = None,
+            district = None,
+            land = None,
+            country = None,
+            phone_items = None,
+            email_items = None,
+            url_items = None,
+            note_items = None,
+            journal_items = None,
+            business_items = None,
+            anniversary_items = None,
+            gender = None
+        )
+
+
+
+
 
 
 def jronsrpc_help(*args, **kwargs):

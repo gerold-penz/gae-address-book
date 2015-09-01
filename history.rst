@@ -15,6 +15,10 @@ Version 0.0.2
 
 - *create*-function created
 
+- Tests
+
+- Address datamodel changed
+
 
 =============
 Version 0.0.1
