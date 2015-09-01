@@ -13,21 +13,16 @@ class Address(ndb.Model):
     See: https://en.wikipedia.org/wiki/VCard#Properties
     """
 
-    uid = ndb.StringProperty(verbose_name = u"VCard: UID")
-    owner = ndb.StringProperty()
-    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
-    creation_user = ndb.StringProperty()
-    edit_timestamp = ndb.DateTimeProperty(auto_now = True)
+    uid = ndb.StringProperty(verbose_name = u"VCard: UID", required = True)
+    owner = ndb.StringProperty(required = True)
+    creation_timestamp = ndb.DateTimeProperty(auto_now_add = True, required = True)
+    creation_user = ndb.StringProperty(required = True)
+    edit_timestamp = ndb.DateTimeProperty(auto_now = True, required = True)
     edit_user = ndb.StringProperty()
-    kind = ndb.StringProperty(
-        choices = [u"individual", u"organization", u"group", u"location"],
-        default = u"individual",
-        verbose_name = u"VCard: KIND"
-    )
+    kind = ndb.StringProperty(verbose_name = u"VCard: KIND", required = True)
     categories = ndb.StringProperty(repeated = True, verbose_name = u"VCard: CATEGORIES")
-    source = ndb.StringProperty(verbose_name = u"VCard: SOURCE")
-    company = ndb.StringProperty(verbose_name = u"VCard: ORG")
-    role = ndb.StringProperty(verbose_name = u"VCard: ROLE")
+    organization = ndb.StringProperty()
+    position = ndb.StringProperty(verbose_name = u"VCard: TITLE")
     salutation = ndb.StringProperty()  # Anrede/Titel
     first_name = ndb.StringProperty()
     last_name = ndb.StringProperty()

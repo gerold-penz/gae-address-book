@@ -13,6 +13,8 @@ Version 0.0.2
 
 - *security.ini* for authentification and authorization
 
+- *create*-function created
+
 
 =============
 Version 0.0.1
