@@ -47,7 +47,7 @@ def get_app():
 
     cherrypy.config.update(cherrypy_config)
     cherrypy.config.update(common.constants.COMMON_INIPATH)
-    cherrypy.config.update(lib.constants.API_INIPATH)
+    cherrypy.config.update(lib.constants.SECURITY_INIPATH)
 
     # app.config
     app_config = {
@@ -61,7 +61,7 @@ def get_app():
     }
     app.config.update(app_config)
     app.merge(common.constants.COMMON_INIPATH)
-    app.merge(lib.constants.API_INIPATH)
+    app.merge(lib.constants.SECURITY_INIPATH)
 
     # Fertig
     return app

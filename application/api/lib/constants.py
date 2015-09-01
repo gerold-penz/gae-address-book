@@ -9,4 +9,4 @@ APIDIR = os.path.abspath(os.path.join(THISDIR, ".."))
 HTTPROOTDIR = os.path.join(APIDIR, "http_root")
 
 # Ini
-API_INIPATH = os.path.join(common.constants.SETTINGSDIR, "api.ini")
+SECURITY_INIPATH = os.path.join(common.constants.SETTINGSDIR, "security.ini")

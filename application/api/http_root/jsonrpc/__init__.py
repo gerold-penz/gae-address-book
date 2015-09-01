@@ -145,7 +145,7 @@ def jronsrpc_help(*args, **kwargs):
     template = Template(filename = template_path)
     rendered = template.render_unicode(
         version = common.constants.VERSION,
-        appname = cherrypy.config["APPNAME"],
+        appname = cherrypy.config["appname"],
         add_doc = extract_documentation(JsonRpc.add, u"add")
     )
 

@@ -14,6 +14,7 @@ class Address(ndb.Model):
     """
 
     uid = ndb.StringProperty(verbose_name = u"VCard: UID")
+    owner = ndb.StringProperty()
     creation_timestamp = ndb.DateTimeProperty(auto_now_add = True)
     creation_user = ndb.StringProperty()
     edit_timestamp = ndb.DateTimeProperty(auto_now = True)
