@@ -9,7 +9,7 @@ Version 0.0.2
 
 2015-09-01
 
-- Datamodel created
+- Address datamodel created
 
 
 =============
