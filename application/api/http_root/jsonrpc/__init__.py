@@ -123,14 +123,8 @@ class JsonRpc(CherryPyJsonRpc):
         """
         Test method
 
-        ==========
-        Parameters
-        ==========
-
         :param a: Any value
-
         :param b: Any value
-
         :return: Result of ``a + b``.
         """
 
@@ -140,7 +134,7 @@ class JsonRpc(CherryPyJsonRpc):
     @rpcmethod
     def get_info(self):
         """
-        Returns informations about this address book
+        Returns informations about the address book
         """
 
         # Finished
@@ -180,7 +174,11 @@ class JsonRpc(CherryPyJsonRpc):
         """
         Creates a new address
 
-        :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-*"
+        ==========
+        Parameters
+        ==========
+
+        :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-\*"
         :param category_list: A list of "tags" that can be used to describe the object.
         :param organization: Organization name or location name
         :param position: Specifies the job title, functional position or function of
@@ -274,44 +272,111 @@ class JsonRpc(CherryPyJsonRpc):
             O stands for "other",
             N stands for "none or not applicable",
             U stands for "unknown"
+
+        :return: UID of the new address
         """
 
         # Username
         user = cherrypy.request.login
 
+        # Prepare Phone-Items
+        phone_items = None
+        if phone_list:
+            phone_items = []
+            for data in phone_list:
+                phone_items.append(
+                    common.addresses.Tel(
+                        label = data.get("label"),
+                        number = data["number"]
+                    )
+                )
 
+        # Prepare Email-Items
+        email_items = None
+        if email_list:
+            email_items = []
+            for data in email_list:
+                email_items.append(
+                    common.addresses.Email(
+                        label = data.get("label"),
+                        email = data["email"]
+                    )
+                )
 
+        # Prepare Url-Items
+        url_items = None
+        if url_list:
+            url_items = []
+            for data in url_list:
+                url_items.append(
+                    common.addresses.Url(
+                        label = data.get("label"),
+                        url = data["url"]
+                    )
+                )
+
+        # Prepare Note-Items
+        note_items = None
+        if note_list:
+            note_items = []
+            for data in note_list:
+                note_items.append(common.addresses.Note(text = data["text"]))
+
+        # Prepare Journal-Items
+        journal_items = None
+        if journal_list:
+            journal_items = []
+            for data in journal_list:
+                journal_items.append(
+                    common.addresses.JournalItem(
+                        date_time = common.format_.string_to_datetime(data.get("date_time_iso")),
+                        text = data["text"]
+                    )
+                )
+
+        # Prepare Anniversary-Items
+        anniversary_items = None
+        if anniversary_list:
+            anniversary_items = []
+            for data in anniversary_list:
+                anniversary_items.append(
+                    common.addresses.Anniversary(
+                        label = data["label"],
+                        year = data.get("year"),
+                        month = data["month"],
+                        day = data["day"],
+                    )
+                )
 
         # Create new address
         new_address = common.addresses.create(
             user = user,
-            kind = None,
-            category_items = None,
-            organization = None,
-            position = None,
-            salutation = None,
-            first_name = None,
-            last_name = None,
-            nickname = None,
-            street = None,
-            postcode = None,
-            city = None,
-            district = None,
-            land = None,
-            country = None,
-            phone_items = None,
-            email_items = None,
-            url_items = None,
-            note_items = None,
-            journal_items = None,
-            business_items = None,
-            anniversary_items = None,
-            gender = None
+            kind = kind,
+            category_items = category_list,
+            organization = organization,
+            position = position,
+            salutation = salutation,
+            first_name = first_name,
+            last_name = last_name,
+            nickname = nickname,
+            street = street,
+            postcode = postcode,
+            city = city,
+            district = district,
+            land = land,
+            country = country,
+            phone_items = phone_items,
+            email_items = email_items,
+            url_items = url_items,
+            note_items = note_items,
+            journal_items = journal_items,
+            business_items = business_list,
+            anniversary_items = anniversary_items,
+            gender = gender
         )
 
-
-
-
+        # Finished
+        return new_address.uid
 
 
 def jronsrpc_help(*args, **kwargs):
@@ -325,10 +390,11 @@ def jronsrpc_help(*args, **kwargs):
     rendered = template.render_unicode(
         version = common.constants.VERSION,
         appname = cherrypy.config["appname"],
-        add_doc = extract_documentation(JsonRpc.add, u"add"),
-        get_info_doc = extract_documentation(JsonRpc.add, u"get_info"),
-
-
+        function_help_strings = [
+            # Help strings
+            extract_documentation(JsonRpc.get_info, u"get_info"),
+            extract_documentation(JsonRpc.create_address, u"create_address"),
+        ]
     )
 
     # Fertig

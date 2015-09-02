@@ -256,6 +256,6 @@ def get_addresses_count():
     Returns the quantity of addresses in the database
     """
 
-    return Address.query(keys_only = True, batch_size = 100000).count()
+    return Address.query().count()
 
 

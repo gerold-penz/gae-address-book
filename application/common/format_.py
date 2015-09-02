@@ -8,7 +8,6 @@ import string
 import datetime
 import pytz
 import decimal
-import constants
 
 
 ALLLOWED_ASCII_CHARS = string.digits + string.ascii_letters + "-_ "
@@ -46,6 +45,30 @@ def string_to_date(date_string):
         date_object = datetime.date(year, month, day)
 
     return date_object
+
+
+def string_to_datetime(datetime_string):
+    """
+    Versucht den übergebenen Text in ein datetime.datetime-Objekt umzuwandeln
+
+    Falls versehentlich ein datetime.datetime-Objekt übergeben wird, wird auf die
+    Umwandlung verzichtet.
+    """
+
+    if not datetime_string:
+        return None
+
+    if isinstance(datetime_string, datetime.datetime):
+        return datetime_string
+    else:
+        if len(datetime_string) == 10:
+            # Wenn kein Datum angegeben ist
+            datetime_string += " 00:00:00"
+        elif "T" in datetime_string:
+            # Wenn ISO-String mit 'T'-Connector übergeben wird
+            datetime_string = datetime_string.replace("T", " ")
+
+    return datetime.datetime.strptime(datetime_string, "%Y-%m-%d %H:%M:%S")
 
 
 def date_to_iso(date_obj, empty_string_if_none = False):

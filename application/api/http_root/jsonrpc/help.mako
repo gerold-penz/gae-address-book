@@ -25,12 +25,13 @@
         JSON-RPC-BATCH übergeben werden.
       </p>
 
+      %for function_help in function_help_strings:
+        <div>
+          ${function_help}
+        </div>
+      %endfor
 
-      ${add_doc}
-
-
-      ${get_info_doc}
-
+      <p>&nbsp;</p>
 
       <div class="footer" style="text-align: right">
         <span style="font-size: x-small">Version: ${version}</span>
