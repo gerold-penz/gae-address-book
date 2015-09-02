@@ -29,6 +29,9 @@
       ${add_doc}
 
 
+      ${get_info_doc}
+
+
       <div class="footer" style="text-align: right">
         <span style="font-size: x-small">Version: ${version}</span>
       </div>

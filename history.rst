@@ -9,7 +9,7 @@ Version 0.0.3
 
 2015-09-02
 
-
+- API: Added *get_info()*-Function
 
 
 =============

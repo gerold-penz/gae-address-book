@@ -12,11 +12,6 @@ import common.constants
 import common.format_
 import common.addresses
 import common.authorization
-from common.model.address import (
-    Tel, Email, Url, Note, Agreement, JournalItem, Anniversary
-)
-
-
 from mako.template import Template
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 
@@ -140,6 +135,20 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         return a + b
+
+
+    @rpcmethod
+    def get_info(self):
+        """
+        Returns informations about this address book
+        """
+
+        # Finished
+        return dict(
+            appname = cherrypy.config["appname"],
+            label = cherrypy.config["label"],
+            addresses_count = common.addresses.get_addresses_count()
+        )
 
 
     @rpcmethod
@@ -316,7 +325,10 @@ def jronsrpc_help(*args, **kwargs):
     rendered = template.render_unicode(
         version = common.constants.VERSION,
         appname = cherrypy.config["appname"],
-        add_doc = extract_documentation(JsonRpc.add, u"add")
+        add_doc = extract_documentation(JsonRpc.add, u"add"),
+        get_info_doc = extract_documentation(JsonRpc.add, u"get_info"),
+
+
     )
 
     # Fertig
