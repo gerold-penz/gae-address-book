@@ -139,8 +139,8 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return dict(
-            appname = cherrypy.config["appname"],
-            label = cherrypy.config["label"],
+            appname = cherrypy.config["APPNAME"],
+            label = cherrypy.config["LABEL"],
             addresses_count = common.addresses.get_addresses_count()
         )
 
@@ -389,7 +389,7 @@ def jronsrpc_help(*args, **kwargs):
     template = Template(filename = template_path)
     rendered = template.render_unicode(
         version = common.constants.VERSION,
-        appname = cherrypy.config["appname"],
+        appname = cherrypy.config["APPNAME"],
         function_help_strings = [
             # Help strings
             extract_documentation(JsonRpc.get_info, u"get_info"),

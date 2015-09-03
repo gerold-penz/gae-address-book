@@ -4,6 +4,17 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.0
+=============
+
+2015-09-03
+
+- `appname` --> `APPNAME`
+
+- Bei Fehler wird ein E-Mail an Gerold gesendet
+
+
+=============
 Version 0.0.3
 =============
 
