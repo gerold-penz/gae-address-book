@@ -55,6 +55,7 @@ def get_app():
             # Error-Page(s)
             "error_page.500": error_pages.error_page_500,
             "error_page.404": error_pages.error_page_404,
+
             # URL Anpassung
             "tools.trailing_slash.on": False,
         },
