@@ -5,3 +5,9 @@
 from jsonrpc import jsonrpc
 
 
+import cherrypy
+
+
+@cherrypy.expose
+def testpage():
+    raise RuntimeError(u"Österreich - GAE-Address-Book")
