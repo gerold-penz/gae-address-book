@@ -259,3 +259,17 @@ def get_addresses_count():
     return Address.query().count()
 
 
+def get_addresses(page, page_size):
+    """
+    Returns one page with addresses
+    """
+
+    offset = (page - 1) * page_size
+
+    return Address.query(
+        offset = offset,
+        limit = page_size,
+        batch_size = page_size,
+        deadline = 30  # seconds
+    )
+

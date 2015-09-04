@@ -379,6 +379,33 @@ class JsonRpc(CherryPyJsonRpc):
         return new_address.uid
 
 
+    @rpcmethod
+    def get_addresses(self, page = 1, page_size = 20, include = None, exclude = None):
+        """
+        Returns one page with addresses in a list
+
+        :param page: Page to fetch
+
+        :param page_size: Page size
+
+        :param include: Optional list of properties to include. Default: all.
+
+        :param exclude: Optional list of properties to exclude.
+            If there is overlap between include and exclude, then exclude "wins."
+        """
+
+        addresses = []
+        for address in common.addresses.get_addresses(page, page_size):
+            assert isinstance(address, common.addresses.Address)
+            addresses.append(address.to_dict(
+                include = include,
+                exclude = exclude
+            ))
+
+        # Finish
+        return addresses
+
+
 def jronsrpc_help(*args, **kwargs):
     """
     Gibt eine Hilfe-Seite zurück
