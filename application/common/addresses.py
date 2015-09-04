@@ -266,9 +266,10 @@ def get_addresses(page, page_size):
 
     offset = (page - 1) * page_size
 
-    return Address.query(
+    return Address.query().fetch(
         offset = offset,
         limit = page_size,
-        batch_size = page_size
+        batch_size = page_size,
+        deadline = 30  # seconds
     )
 
