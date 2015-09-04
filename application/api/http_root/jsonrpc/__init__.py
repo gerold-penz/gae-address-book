@@ -390,7 +390,8 @@ class JsonRpc(CherryPyJsonRpc):
         include = None,
         exclude = None,
         exclude_creation_metadata = True,
-        exclude_edit_metadata = True
+        exclude_edit_metadata = True,
+        exclude_empty_fields = True
     ):
         """
         Returns one page with addresses in a list.
@@ -408,33 +409,59 @@ class JsonRpc(CherryPyJsonRpc):
             If there is overlap between include and exclude, then exclude "wins."
 
         :param exclude_creation_metadata: If `True`, the fields "ct" (creation timestamp)
-            and "cu" (creation user) will submitted.
+            and "cu" (creation user) will excluded
 
         :param exclude_edit_metadata: If `True`, the fields "et" (creation timestamp)
-            and "eu" (creation user) will submitted.
+            and "eu" (creation user) will excluded.
         """
 
         addresses = []
         exclude = exclude or []
         if exclude_creation_metadata:
-            exclude.extend([
-                "ct", "cu",
-                "anniversary_items.ct", "anniversary_items.cu",
-            ])
+            exclude.extend(["ct", "cu"])
         if exclude_edit_metadata:
-            exclude.extend([
-                "et", "eu",
-                "anniversary_items.et", "anniversary_items.eu",
-            ])
+            exclude.extend(["et", "eu"])
         exclude = exclude or None
 
         for address in common.addresses.get_addresses(page, page_size):
             address_dict = address.to_dict(include = include, exclude = exclude)
             addresses.append(address_dict)
 
-        logging.info(repr(addresses))
+            # Repeated fields
+            for fieldname in [
+                "phone_items",
+                "email_items",
+                "url_items",
+                "note_items",
+                "journal_items",
+                "anniversary_items",
+            ]:
+                for field_item in address_dict.get(fieldname, []):
+                    # Exclude creation metadata
+                    if exclude_creation_metadata:
+                        if "ct" in field_item:
+                            del field_item["ct"]
+                        if "cu" in field_item:
+                            del field_item["cu"]
 
+                    # Exclude edit metadata
+                    if exclude_edit_metadata:
+                        if "et" in field_item:
+                            del field_item["et"]
+                        if "eu" in field_item:
+                            del field_item["eu"]
 
+                # Exclude empty fields
+                if exclude_empty_fields:
+                    field = address_dict.get(fieldname, [])
+                    if not field:
+                        del address_dict[fieldname]
+
+            # Exclude empty fields
+            if exclude_empty_fields:
+                for key, value in address_dict.items():
+                    if value is None:
+                        del address_dict[key]
 
         # Finish
         return addresses
