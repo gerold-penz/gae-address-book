@@ -462,6 +462,9 @@ class JsonRpc(CherryPyJsonRpc):
                 for key, value in address_dict.items():
                     if value is None:
                         del address_dict[key]
+                    elif key in ["category_items", "business_items"]:
+                        if not value:
+                            del address_dict[key]
 
         # Finish
         return addresses
