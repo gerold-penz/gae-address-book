@@ -396,11 +396,12 @@ class JsonRpc(CherryPyJsonRpc):
 
         addresses = []
         for address in common.addresses.get_addresses(page, page_size):
-            assert isinstance(address, common.addresses.Address)
-            addresses.append(address.to_dict(
-                include = include,
-                exclude = exclude
-            ))
+            to_dict_params = {}
+            if include:
+                to_dict_params["include"] = include
+            if exclude:
+                to_dict_params["exclude"] = exclude
+            addresses.append(address.to_dict(**to_dict_params))
 
         # Finish
         return addresses
