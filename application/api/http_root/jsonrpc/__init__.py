@@ -6,6 +6,8 @@ import cherrypy
 import hashlib
 import threading
 import inspect
+import logging
+import datetime
 import docutils
 import docutils.core
 import common.constants
@@ -13,6 +15,7 @@ import common.format_
 import common.addresses
 import common.authorization
 from mako.template import Template
+from google.appengine.ext import ndb
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 
 
@@ -380,9 +383,20 @@ class JsonRpc(CherryPyJsonRpc):
 
 
     @rpcmethod
-    def get_addresses(self, page = 1, page_size = 20, include = None, exclude = None):
+    def get_addresses(
+        self,
+        page = 1,
+        page_size = 20,
+        include = None,
+        exclude = None,
+        exclude_creation_metadata = True,
+        exclude_edit_metadata = True
+    ):
         """
-        Returns one page with addresses in a list
+        Returns one page with addresses in a list.
+
+        All *datetime.date*- and *datetime.datetime*-values will convert to
+        ISO date strings.
 
         :param page: Page to fetch
 
@@ -392,16 +406,35 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param exclude: Optional list of properties to exclude.
             If there is overlap between include and exclude, then exclude "wins."
+
+        :param exclude_creation_metadata: If `True`, the fields "ct" (creation timestamp)
+            and "cu" (creation user) will submitted.
+
+        :param exclude_edit_metadata: If `True`, the fields "et" (creation timestamp)
+            and "eu" (creation user) will submitted.
         """
 
         addresses = []
+        exclude = exclude or []
+        if exclude_creation_metadata:
+            exclude.extend([
+                "ct", "cu",
+                "anniversary_items.ct", "anniversary_items.cu",
+            ])
+        if exclude_edit_metadata:
+            exclude.extend([
+                "et", "eu",
+                "anniversary_items.et", "anniversary_items.eu",
+            ])
+        exclude = exclude or None
+
         for address in common.addresses.get_addresses(page, page_size):
-            to_dict_params = {}
-            if include:
-                to_dict_params["include"] = include
-            if exclude:
-                to_dict_params["exclude"] = exclude
-            addresses.append(address.to_dict(**to_dict_params))
+            address_dict = address.to_dict(include = include, exclude = exclude)
+            addresses.append(address_dict)
+
+        logging.info(repr(addresses))
+
+
 
         # Finish
         return addresses
