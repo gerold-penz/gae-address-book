@@ -4,6 +4,19 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.1
+=============
+
+2015-09-04
+
+- New *python-jsonrpc*-Version added
+
+- GZIP for JSON-RPC-Requests now allowed
+
+- New *get_addresses*-Funktion to request addresses in pages
+
+
+=============
 Version 0.1.0
 =============
 

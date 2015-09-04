@@ -421,6 +421,7 @@ def jronsrpc_help(*args, **kwargs):
             # Help strings
             extract_documentation(JsonRpc.get_info, u"get_info"),
             extract_documentation(JsonRpc.create_address, u"create_address"),
+            extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
         ]
     )
 
