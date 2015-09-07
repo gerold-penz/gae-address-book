@@ -260,10 +260,14 @@ def get_addresses_count():
     return Address.query().count()
 
 
-def get_addresses(page, page_size):
+def get_addresses(page, page_size, order_by = None):
     """
     Returns one page with addresses
     """
+
+    if order_by:
+        if isinstance(order_by, basestring):
+            order_by = [order_by]
 
     offset = (page - 1) * page_size
 

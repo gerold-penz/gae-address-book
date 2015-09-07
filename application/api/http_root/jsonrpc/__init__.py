@@ -392,7 +392,8 @@ class JsonRpc(CherryPyJsonRpc):
         exclude = None,
         exclude_creation_metadata = None,
         exclude_edit_metadata = None,
-        exclude_empty_fields = None
+        exclude_empty_fields = None,
+        order_by = None
     ):
         """
         Returns one page with addresses in a list.
@@ -414,10 +415,13 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param exclude_edit_metadata: If `True`, the fields "et" (creation timestamp)
             and "eu" (creation user) will excluded.
+
+        :param order_by: Order result, String or list with fieldnames. A "-"
+            sets descending order.
         """
 
         addresses = []
-        for address in common.addresses.get_addresses(page, page_size):
+        for address in common.addresses.get_addresses(page, page_size, order_by):
             addresses.append(address.to_dict(
                 include = include,
                 exclude = exclude,
