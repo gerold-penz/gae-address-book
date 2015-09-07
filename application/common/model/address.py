@@ -4,7 +4,7 @@
 
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
 
-
+import copy
 from google.appengine.ext import ndb
 
 
@@ -195,6 +195,7 @@ class Address(ndb.Model):
         exclude = exclude or None
 
         address_dict = self._to_dict(include = include, exclude = exclude)
+        address_dict = copy.deepcopy(address_dict)
 
         # Repeated fields
         for fieldname in [

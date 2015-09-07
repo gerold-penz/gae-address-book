@@ -390,9 +390,9 @@ class JsonRpc(CherryPyJsonRpc):
         page_size = 20,
         include = None,
         exclude = None,
-        exclude_creation_metadata = True,
-        exclude_edit_metadata = True,
-        exclude_empty_fields = True
+        exclude_creation_metadata = None,
+        exclude_edit_metadata = None,
+        exclude_empty_fields = None
     ):
         """
         Returns one page with addresses in a list.
@@ -436,9 +436,9 @@ class JsonRpc(CherryPyJsonRpc):
         address_uid,
         include = None,
         exclude = None,
-        exclude_creation_metadata = True,
-        exclude_edit_metadata = True,
-        exclude_empty_fields = True
+        exclude_creation_metadata = None,
+        exclude_edit_metadata = None,
+        exclude_empty_fields = None
     ):
         """
         Returns all data for the requested address
