@@ -277,7 +277,7 @@ class JsonRpc(CherryPyJsonRpc):
             N stands for "none or not applicable",
             U stands for "unknown"
 
-        :return: UID of the new address
+        :return: New address (dictionary)
         """
 
         # Username
@@ -380,7 +380,7 @@ class JsonRpc(CherryPyJsonRpc):
         )
 
         # Finished
-        return new_address.uid
+        return new_address.to_dict()
 
 
     @rpcmethod
