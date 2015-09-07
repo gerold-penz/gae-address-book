@@ -273,3 +273,15 @@ def get_addresses(page, page_size):
         deadline = 30  # seconds
     )
 
+
+def get_address(address_uid):
+    """
+    Returns one addresse
+    """
+
+    return Address.query(Address.uid == address_uid).fetch(
+        deadline = 30  # seconds
+    )
+
+
+

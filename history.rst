@@ -4,6 +4,19 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.2
+=============
+
+2015-09-07
+
+- Address-model: *to_dict()* returns a shortned dictionary
+
+- *get_addresses()* shortened
+
+- New function *get_address()*
+
+
+=============
 Version 0.1.1
 =============
 

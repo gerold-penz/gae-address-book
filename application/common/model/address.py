@@ -175,4 +175,67 @@ class Address(ndb.Model):
     gender = ndb.StringProperty()
 
 
+    def to_dict(
+        self,
+        include = None,
+        exclude = None,
+        exclude_creation_metadata = None,
+        exclude_edit_metadata = None,
+        exclude_empty_fields = None
+    ):
+        """
+        Return address-dict without unneeded fields
+        """
+
+        exclude = exclude or []
+        if exclude_creation_metadata:
+            exclude.extend(["ct", "cu"])
+        if exclude_edit_metadata:
+            exclude.extend(["et", "eu"])
+        exclude = exclude or None
+
+        address_dict = self._to_dict(include = include, exclude = exclude)
+
+        # Repeated fields
+        for fieldname in [
+            "phone_items",
+            "email_items",
+            "url_items",
+            "note_items",
+            "journal_items",
+            "anniversary_items",
+        ]:
+            for field_item in address_dict.get(fieldname, []):
+                # Exclude creation metadata
+                if exclude_creation_metadata:
+                    if "ct" in field_item:
+                        del field_item["ct"]
+                    if "cu" in field_item:
+                        del field_item["cu"]
+
+                # Exclude edit metadata
+                if exclude_edit_metadata:
+                    if "et" in field_item:
+                        del field_item["et"]
+                    if "eu" in field_item:
+                        del field_item["eu"]
+
+            # Exclude empty fields
+            if exclude_empty_fields:
+                field = address_dict.get(fieldname, [])
+                if not field:
+                    del address_dict[fieldname]
+
+        # Exclude empty fields
+        if exclude_empty_fields:
+            for key, value in address_dict.items():
+                if value is None:
+                    del address_dict[key]
+                elif key in ["category_items", "business_items"]:
+                    if not value:
+                        del address_dict[key]
+
+        # Finished
+        return address_dict
+
 

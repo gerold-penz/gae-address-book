@@ -10,6 +10,7 @@ import logging
 import datetime
 import docutils
 import docutils.core
+import copy
 import common.constants
 import common.format_
 import common.addresses
@@ -416,58 +417,58 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         addresses = []
-        exclude = exclude or []
-        if exclude_creation_metadata:
-            exclude.extend(["ct", "cu"])
-        if exclude_edit_metadata:
-            exclude.extend(["et", "eu"])
-        exclude = exclude or None
-
         for address in common.addresses.get_addresses(page, page_size):
-            address_dict = address.to_dict(include = include, exclude = exclude)
-            addresses.append(address_dict)
-
-            # Repeated fields
-            for fieldname in [
-                "phone_items",
-                "email_items",
-                "url_items",
-                "note_items",
-                "journal_items",
-                "anniversary_items",
-            ]:
-                for field_item in address_dict.get(fieldname, []):
-                    # Exclude creation metadata
-                    if exclude_creation_metadata:
-                        if "ct" in field_item:
-                            del field_item["ct"]
-                        if "cu" in field_item:
-                            del field_item["cu"]
-
-                    # Exclude edit metadata
-                    if exclude_edit_metadata:
-                        if "et" in field_item:
-                            del field_item["et"]
-                        if "eu" in field_item:
-                            del field_item["eu"]
-
-                # Exclude empty fields
-                if exclude_empty_fields:
-                    field = address_dict.get(fieldname, [])
-                    if not field:
-                        del address_dict[fieldname]
-
-            # Exclude empty fields
-            if exclude_empty_fields:
-                for key, value in address_dict.items():
-                    if value is None:
-                        del address_dict[key]
-                    elif key in ["category_items", "business_items"]:
-                        if not value:
-                            del address_dict[key]
+            addresses.append(address.to_dict(
+                include = include,
+                exclude = exclude,
+                exclude_creation_metadata = exclude_creation_metadata,
+                exclude_edit_metadata = exclude_edit_metadata,
+                exclude_empty_fields = exclude_empty_fields
+            ))
 
         # Finish
         return addresses
+
+
+    @rpcmethod
+    def get_address(
+        self,
+        address_uid,
+        include = None,
+        exclude = None,
+        exclude_creation_metadata = True,
+        exclude_edit_metadata = True,
+        exclude_empty_fields = True
+    ):
+        """
+        Returns all data for the requested address
+
+        :param include: Optional list of properties to include. Default: all.
+
+        :param exclude: Optional list of properties to exclude.
+            If there is overlap between include and exclude, then exclude "wins."
+
+        :param exclude_creation_metadata: If `True`, the fields "ct" (creation timestamp)
+            and "cu" (creation user) will excluded
+
+        :param exclude_edit_metadata: If `True`, the fields "et" (creation timestamp)
+            and "eu" (creation user) will excluded.
+        """
+
+        address = common.addresses.get_address(address_uid)
+        if not address:
+            return None
+
+        address_dict = address.to_dict(
+            include = include,
+            exclude = exclude,
+            exclude_creation_metadata = exclude_creation_metadata,
+            exclude_edit_metadata = exclude_edit_metadata,
+            exclude_empty_fields = exclude_empty_fields
+        )
+
+        # Finished
+        return address_dict
 
 
 def jronsrpc_help(*args, **kwargs):
