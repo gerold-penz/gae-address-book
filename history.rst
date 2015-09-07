@@ -15,6 +15,8 @@ Version 0.1.2
 
 - New function *get_address()*
 
+- *get_address* returns one record no list.
+
 
 =============
 Version 0.1.1

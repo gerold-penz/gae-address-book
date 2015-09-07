@@ -3,6 +3,7 @@
 
 import uuid
 import authorization
+from google.appengine.ext import ndb
 from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
 
 
@@ -274,14 +275,20 @@ def get_addresses(page, page_size):
     )
 
 
-def get_address(address_uid):
+def get_address(key_urlsafe = None, address_uid = None):
     """
-    Returns one addresse
+    Returns one address
     """
 
-    return Address.query(Address.uid == address_uid).fetch(
-        deadline = 30  # seconds
-    )
+    assert key_urlsafe or address_uid
 
-
+    if key_urlsafe:
+        key = ndb.Key(urlsafe = key_urlsafe)
+        return key.get(deadline = 30)
+    else:
+        addresses = Address.query(Address.uid == address_uid).fetch(
+            deadline = 30  # seconds
+        )
+        if addresses:
+            return addresses[0]
 

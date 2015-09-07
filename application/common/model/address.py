@@ -196,6 +196,7 @@ class Address(ndb.Model):
 
         address_dict = self._to_dict(include = include, exclude = exclude)
         address_dict = copy.deepcopy(address_dict)
+        address_dict["key_urlsafe"] = self.key.urlsafe()
 
         # Repeated fields
         for fieldname in [
