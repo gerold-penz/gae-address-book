@@ -455,11 +455,11 @@ class JsonRpc(CherryPyJsonRpc):
             and "eu" (creation user) will excluded.
         """
 
-        address = common.addresses.get_address(address_uid)
-        if not address:
+        addresses = common.addresses.get_address(address_uid)
+        if not addresses:
             return None
 
-        address_dict = address.to_dict(
+        address_dict = addresses[0].to_dict(
             include = include,
             exclude = exclude,
             exclude_creation_metadata = exclude_creation_metadata,
@@ -487,6 +487,7 @@ def jronsrpc_help(*args, **kwargs):
             extract_documentation(JsonRpc.get_info, u"get_info"),
             extract_documentation(JsonRpc.create_address, u"create_address"),
             extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+            extract_documentation(JsonRpc.get_address, u"get_address"),
         ]
     )
 
