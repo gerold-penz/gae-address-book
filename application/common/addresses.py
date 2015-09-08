@@ -269,6 +269,10 @@ def get_addresses(page, page_size, order_by = None):
         if isinstance(order_by, basestring):
             order_by = [order_by]
 
+
+    # ToDo: Sortierung
+
+
     offset = (page - 1) * page_size
 
     return Address.query().fetch(

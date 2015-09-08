@@ -422,6 +422,7 @@ class JsonRpc(CherryPyJsonRpc):
 
         addresses = []
         for address in common.addresses.get_addresses(page, page_size, order_by):
+
             addresses.append(address.to_dict(
                 include = include,
                 exclude = exclude,
@@ -429,6 +430,7 @@ class JsonRpc(CherryPyJsonRpc):
                 exclude_edit_metadata = exclude_edit_metadata,
                 exclude_empty_fields = exclude_empty_fields
             ))
+
 
         # Finish
         return addresses
