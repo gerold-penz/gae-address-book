@@ -4,6 +4,13 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.3
+=============
+
+- New test-security-settings added
+
+
+=============
 Version 0.1.2
 =============
 
