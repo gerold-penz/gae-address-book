@@ -34,7 +34,8 @@ def age_years(birthday, basedate = None):
     return years
 
 
-class DateTimePropertySerializable(ndb.DateTimeProperty):
+
+class DateTimeSerializable(ndb.Property):
 
     def _get_for_dict(self, entity):
 
@@ -46,16 +47,12 @@ class DateTimePropertySerializable(ndb.DateTimeProperty):
             return value
 
 
-class ComputedPropertyDateTimeSerializable(ndb.ComputedProperty):
+class DateTimePropertySerializable(ndb.DateTimeProperty, DateTimeSerializable):
+    pass
 
-    def _get_for_dict(self, entity):
 
-        value = self._get_value(entity)
-
-        if value:
-            return value.isoformat()
-        else:
-            return value
+class ComputedPropertyDateTimeSerializable(ndb.ComputedProperty, DateTimeSerializable):
+    pass
 
 
 class Tel(ndb.Model):
