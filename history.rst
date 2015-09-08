@@ -7,7 +7,11 @@ Google App Engine - Address Book - Data Backend
 Version 0.1.3
 =============
 
+2015-09-08
+
 - New test-security-settings added
+
+- Computed properties: birthday, age
 
 
 =============

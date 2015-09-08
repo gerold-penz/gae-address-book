@@ -5,28 +5,50 @@
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
 
 import copy
+import datetime
 from google.appengine.ext import ndb
+
+
+
+def age_years(birthday, basedate = None):
+    """
+    Gibt das Alter in Jahren zurück.
+
+    Wird kein Basidatum angegeben, dann wird das Alter zum heutigen Tag
+    berechnet.
+    """
+
+    if not basedate:
+        basedate = datetime.date.today()
+
+    years = basedate.year - birthday.year
+    months = basedate.month - birthday.month
+    days = basedate.day - birthday.day
+
+    if days < 0:
+        months -= 1
+
+    if months < 0:
+        years -= 1
+
+    return years
 
 
 class DateTimePropertySerializable(ndb.DateTimeProperty):
 
     def _get_for_dict(self, entity):
-        """Retrieve the value like _get_value(), processed for _to_dict().
 
-        Property subclasses can override this if they want the dictionary
-        returned by entity._to_dict() to contain a different value.  The
-        main use case is StructuredProperty and LocalStructuredProperty.
+        value = self._get_value(entity)
 
-        NOTES:
+        if value:
+            return value.isoformat()
+        else:
+            return value
 
-        - If you override _get_for_dict() to return a different type, you
-          must override _validate() to accept values of that type and
-          convert them back to the original type.
 
-        - If you override _get_for_dict(), you must handle repeated values
-          and None correctly.  (See _StructuredGetForDictMixin for an
-          example.)  However, _validate() does not need to handle these.
-        """
+class ComputedPropertyDateTimeSerializable(ndb.ComputedProperty):
+
+    def _get_for_dict(self, entity):
 
         value = self._get_value(entity)
 
@@ -139,6 +161,52 @@ class Address(ndb.Model):
     See: https://en.wikipedia.org/wiki/VCard#Properties
     """
 
+    def get_birthday(self):
+        """
+        Returns the birthday date if possible
+        """
+
+        if not self.anniversary_items:
+            return
+
+        for anniversary_item in self.anniversary_items:
+            assert isinstance(anniversary_item, Anniversary)
+            if anniversary_item.label and anniversary_item.label.lower() in [
+                u"geburtstag",
+                u"birthday"
+            ]:
+                # Birthday found
+                return datetime.date(
+                    year = (anniversary_item.year or 1900),
+                    month = anniversary_item.month,
+                    day = anniversary_item.day
+                )
+
+
+    def get_age(self):
+        """
+        Returns the age if possible
+        """
+
+        if not self.anniversary_items:
+            return
+
+        for anniversary_item in self.anniversary_items:
+            assert isinstance(anniversary_item, Anniversary)
+            if anniversary_item.label and anniversary_item.label.lower() in [
+                u"geburtstag",
+                u"birthday"
+            ]:
+                if anniversary_item.year:
+                    # Birthday found
+                    birthday = datetime.date(
+                        year = anniversary_item.year,
+                        month = anniversary_item.month,
+                        day = anniversary_item.day
+                    )
+                    return age_years(birthday)
+
+
     uid = ndb.StringProperty(required = True)
     owner = ndb.StringProperty(required = True)
 
@@ -173,6 +241,8 @@ class Address(ndb.Model):
     business_items = ndb.StringProperty(repeated = True)  # Branchen
     anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
+    birthday = ComputedPropertyDateTimeSerializable(get_birthday)
+    age = ndb.ComputedProperty(get_age)
 
 
     def to_dict(
