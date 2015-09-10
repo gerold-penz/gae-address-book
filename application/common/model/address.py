@@ -4,6 +4,7 @@
 
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
 
+import logging
 import copy
 import datetime
 from google.appengine.ext import ndb
@@ -34,7 +35,6 @@ def age_years(birthday, basedate = None):
     return years
 
 
-
 class DateTimeSerializable(ndb.Property):
 
     def _get_for_dict(self, entity):
@@ -48,10 +48,6 @@ class DateTimeSerializable(ndb.Property):
 
 
 class DateTimePropertySerializable(ndb.DateTimeProperty, DateTimeSerializable):
-    pass
-
-
-class ComputedPropertyDateTimeSerializable(ndb.ComputedProperty, DateTimeSerializable):
     pass
 
 
@@ -158,9 +154,9 @@ class Address(ndb.Model):
     See: https://en.wikipedia.org/wiki/VCard#Properties
     """
 
-    def get_birthday(self):
+    def get_birthday_iso(self):
         """
-        Returns the birthday date if possible
+        Returns the birthday date as ISO string, if possible
         """
 
         if not self.anniversary_items:
@@ -173,11 +169,17 @@ class Address(ndb.Model):
                 u"birthday"
             ]:
                 # Birthday found
-                return datetime.date(
-                    year = (anniversary_item.year or 1900),
-                    month = anniversary_item.month,
-                    day = anniversary_item.day
-                )
+                if anniversary_item.year:
+                    return u"{year}-{month}-{day}".format(
+                        year = anniversary_item.year,
+                        month = anniversary_item.month,
+                        day = anniversary_item.day
+                    )
+                else:
+                    return u"{month}-{day}".format(
+                        month = anniversary_item.month,
+                        day = anniversary_item.day
+                    )
 
 
     def get_age(self):
@@ -238,7 +240,7 @@ class Address(ndb.Model):
     business_items = ndb.StringProperty(repeated = True)  # Branchen
     anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
-    birthday = ComputedPropertyDateTimeSerializable(get_birthday)
+    birthday = ndb.ComputedProperty(get_birthday_iso)
     age = ndb.ComputedProperty(get_age)
 
 

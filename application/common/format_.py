@@ -122,6 +122,9 @@ def safe_unicode(value):
     dabei Informationen verloren gehen.
     """
 
+    if isinstance(value, unicode):
+        return value
+
     try:
         return unicode(value)
     except UnicodeDecodeError:
