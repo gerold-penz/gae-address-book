@@ -235,13 +235,14 @@ class Address(ndb.Model):
     phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern
     email_items = ndb.StructuredProperty(Email, repeated = True)  # E-Mail-Adressen
     url_items = ndb.StructuredProperty(Url, repeated = True)  # URLs
-    note_items = ndb.StructuredProperty(Note, repeated = True)  # Notizen
     journal_items = ndb.StructuredProperty(JournalItem, repeated = True)  # Journaleinträge
     business_items = ndb.StringProperty(repeated = True)  # Branchen
     anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)
     age = ndb.ComputedProperty(get_age)
+    note_items = ndb.StructuredProperty(Note, repeated = True)  # Notizen
+    agreement_items = ndb.StructuredProperty(Agreement, repeated = True)  # Vereinbarungen
 
 
     def to_dict(
