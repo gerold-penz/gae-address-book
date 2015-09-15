@@ -422,7 +422,11 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         addresses = []
-        for address in common.addresses.get_addresses(page, page_size, order_by):
+        for address in common.addresses.get_addresses(
+            page = page,
+            page_size = page_size,
+            order_by = order_by
+        ):
 
             addresses.append(address.to_dict(
                 include = include,

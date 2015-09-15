@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import uuid
+import logging
 import authorization
 from google.appengine.ext import ndb
 from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
@@ -302,9 +303,8 @@ def get_addresses(page, page_size, order_by = None):
         - "agreement_items"
     """
 
-    if order_by:
-        if isinstance(order_by, basestring):
-            order_by = [order_by]
+    if order_by and isinstance(order_by, basestring):
+        order_by = [order_by]
 
     # Query
     query = Address.query()
@@ -322,7 +322,10 @@ def get_addresses(page, page_size, order_by = None):
                 else:
                     order_fields.append(order_field)
         if order_fields:
-            query.order(*order_fields)
+
+            logging.info(order_fields)
+
+            query = query.order(*order_fields)
 
     # Start with
     offset = (page - 1) * page_size
