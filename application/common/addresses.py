@@ -263,19 +263,72 @@ def get_addresses_count():
 def get_addresses(page, page_size, order_by = None):
     """
     Returns one page with addresses
+    
+    :param order_by: List with field names. A minus (-) directly before the
+        field name reverts the sort order.
+
+        Possible field names are:
+     
+        - "uid"
+        - "owner"
+        - "ct"
+        - "cu"
+        - "et"
+        - "eu"
+        - "kind"
+        - "category_items"
+        - "organization"
+        - "position"
+        - "salutation"
+        - "first_name"
+        - "last_name"
+        - "nickname"
+        - "street"
+        - "postcode"
+        - "city"
+        - "district"
+        - "land"
+        - "country"
+        - "phone_items"
+        - "email_items"
+        - "url_items"
+        - "journal_items"
+        - "business_items"
+        - "anniversary_items"
+        - "gender"
+        - "birthday"
+        - "age"
+        - "note_items"
+        - "agreement_items"
     """
 
     if order_by:
         if isinstance(order_by, basestring):
             order_by = [order_by]
 
+    # Query
+    query = Address.query()
 
-    # ToDo: Sortierung
+    # Sorting
+    if order_by:
+        order_fields = []
+        for order_item in order_by:
+            reverse = order_item.startswith("-")
+            field_name = order_item.lstrip("-")
+            if field_name in Address._properties:
+                order_field = Address._properties[field_name]
+                if reverse:
+                    order_fields.append(-order_field)
+                else:
+                    order_fields.append(order_field)
+        if order_fields:
+            query.order(*order_fields)
 
-
+    # Start with
     offset = (page - 1) * page_size
 
-    return Address.query().fetch(
+    # Finished
+    return query.fetch(
         offset = offset,
         limit = page_size,
         batch_size = page_size,

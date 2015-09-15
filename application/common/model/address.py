@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
-# ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
-
-import logging
 import copy
 import datetime
 from google.appengine.ext import ndb
 
+
+# ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
 
 
 def age_years(birthday, basedate = None):
