@@ -216,20 +216,84 @@ class Address(ndb.Model):
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
+    # Kind
     kind = ndb.StringProperty(required = True)
+
+    # Category Items
     category_items = ndb.StringProperty(repeated = True)
-    organization = ndb.StringProperty()
-    position = ndb.StringProperty()
-    salutation = ndb.StringProperty()  # Anrede/Titel
-    first_name = ndb.StringProperty()
-    last_name = ndb.StringProperty()
-    nickname = ndb.StringProperty()
-    street = ndb.StringProperty()
-    postcode = ndb.StringProperty()
-    city = ndb.StringProperty()
-    district = ndb.StringProperty()  # Bezirk
-    land = ndb.StringProperty()  # Bundesland
-    country = ndb.StringProperty()  # Land
+
+    # Organization
+    organization = ndb.StringProperty(indexed = False)
+    organization_lower = ndb.ComputedProperty(
+        lambda self: self.organization.lower() if self.organization else None
+    )
+
+    # Position
+    position = ndb.StringProperty(indexed = False)
+    position_lower = ndb.ComputedProperty(
+        lambda self: self.position.lower() if self.position else None
+    )
+
+    # Salutation
+    salutation = ndb.StringProperty(indexed = False)
+    salutation_lower = ndb.ComputedProperty(
+        lambda self: self.salutation.lower() if self.salutation else None
+    )
+
+    # First name
+    first_name = ndb.StringProperty(indexed = False)
+    first_name_lower = ndb.ComputedProperty(
+        lambda self: self.first_name.lower() if self.first_name else None
+    )
+
+    # Last name
+    last_name = ndb.StringProperty(indexed = False)
+    last_name_lower = ndb.ComputedProperty(
+        lambda self: self.last_name.lower() if self.last_name else None
+    )
+
+    # Nickname
+    nickname = ndb.StringProperty(indexed = False)
+    nickname_lower = ndb.ComputedProperty(
+        lambda self: self.nickname.lower() if self.nickname else None
+    )
+
+    # Street
+    street = ndb.StringProperty(indexed = False)
+    street_lower = ndb.ComputedProperty(
+        lambda self: self.street.lower() if self.street else None
+    )
+
+    # Postcode
+    postcode = ndb.StringProperty(indexed = False)
+    postcode_lower = ndb.ComputedProperty(
+        lambda self: self.postcode.lower() if self.postcode else None
+    )
+
+    # City
+    city = ndb.StringProperty(indexed = False)
+    city_lower = ndb.ComputedProperty(
+        lambda self: self.city.lower() if self.city else None
+    )
+
+    # District
+    district = ndb.StringProperty(indexed = False)
+    district_lower = ndb.ComputedProperty(
+        lambda self: self.district.lower() if self.district else None
+    )
+
+    # Land (Bundesland)
+    land = ndb.StringProperty(indexed = False)
+    land_lower = ndb.ComputedProperty(
+        lambda self: self.land.lower() if self.land else None
+    )
+
+    # Country
+    country = ndb.StringProperty(indexed = False)  # Land
+    country_lower = ndb.ComputedProperty(
+        lambda self: self.country.lower() if self.country else None
+    )
+
     phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern
     email_items = ndb.StructuredProperty(Email, repeated = True)  # E-Mail-Adressen
     url_items = ndb.StructuredProperty(Url, repeated = True)  # URLs
@@ -260,8 +324,13 @@ class Address(ndb.Model):
             exclude.extend(["ct", "cu"])
         if exclude_edit_metadata:
             exclude.extend(["et", "eu"])
-        exclude = exclude or None
 
+        # Exclude _lower-Fields
+        for property in Address._properties.values():
+            if property._name.endswith("_lower"):
+                exclude.append(property._name)
+
+        # Convert address to dictionary
         address_dict = self._to_dict(include = include, exclude = exclude)
         address_dict = copy.deepcopy(address_dict)
         address_dict["key_urlsafe"] = self.key.urlsafe()

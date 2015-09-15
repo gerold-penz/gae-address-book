@@ -132,12 +132,12 @@ def create(
 
             [Anniversary(label = "Birthday", year = 1974, month = 8, day = 18), ...]
 
-    :param gender: Defines the person's gender. A single letter.
-        M stands for "male",
-        F stands for "female",
-        O stands for "other",
-        N stands for "none or not applicable",
-        U stands for "unknown"
+    :param gender: Defines the person's gender. A single lower letter.
+        m stands for "male",
+        f stands for "female",
+        o stands for "other",
+        n stands for "none or not applicable",
+        u stands for "unknown"
 
     :return: New created and saved Address-Object
 
@@ -243,7 +243,8 @@ def create(
                 anniversary_item.eu = user
         address.anniversary_items = anniversary_items
     if gender:
-        assert gender.lower() in "mfonu"
+        gender = gender.lower()
+        assert gender in "mfonu"
         address.gender = gender
 
     # Save
@@ -277,7 +278,6 @@ def get_addresses(page, page_size, order_by = None):
         - "et"
         - "eu"
         - "kind"
-        - "category_items"
         - "organization"
         - "position"
         - "salutation"
@@ -290,17 +290,9 @@ def get_addresses(page, page_size, order_by = None):
         - "district"
         - "land"
         - "country"
-        - "phone_items"
-        - "email_items"
-        - "url_items"
-        - "journal_items"
-        - "business_items"
-        - "anniversary_items"
         - "gender"
         - "birthday"
         - "age"
-        - "note_items"
-        - "agreement_items"
     """
 
     if order_by and isinstance(order_by, basestring):
@@ -313,18 +305,26 @@ def get_addresses(page, page_size, order_by = None):
     if order_by:
         order_fields = []
         for order_item in order_by:
+            # Parse
             reverse = order_item.startswith("-")
             field_name = order_item.lstrip("-")
-            if field_name in Address._properties:
+
+            # Check field name
+            if "%s_lower" % field_name in Address._properties:
+                order_field = Address._properties["%s_lower" % field_name]
+            elif field_name in Address._properties:
                 order_field = Address._properties[field_name]
-                if reverse:
-                    order_fields.append(-order_field)
-                else:
-                    order_fields.append(order_field)
+            else:
+                continue
+
+            # Add sort order
+            if reverse:
+                order_fields.append(-order_field)
+            else:
+                order_fields.append(order_field)
+
+        # Sort query
         if order_fields:
-
-            logging.info(order_fields)
-
             query = query.order(*order_fields)
 
     # Start with
