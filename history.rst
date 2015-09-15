@@ -13,6 +13,8 @@ Version 0.1.4
 
 - *get_addresses* now accept the parameter *order_by* for sorting the result.
 
+- Filtering
+
 
 =============
 Version 0.1.3

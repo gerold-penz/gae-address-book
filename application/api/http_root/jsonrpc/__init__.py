@@ -394,7 +394,12 @@ class JsonRpc(CherryPyJsonRpc):
         exclude_creation_metadata = None,
         exclude_edit_metadata = None,
         exclude_empty_fields = None,
-        order_by = None
+        order_by = None,
+        filter_by_organization = None,
+        filter_by_first_name = None,
+        filter_by_last_name = None,
+        filter_by_postcode = None,
+        filter_by_city = None
     ):
         """
         Returns one page with addresses in a list.
@@ -419,15 +424,25 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param order_by: Order result, String or list with fieldnames. A "-"
             sets descending order.
+
+        :param filter_by_name: Case insensitive filter string which filters the
+            fields "organization", "first_name", "last_name".
+
+        :param filter_by_place: Case insensitive filter string which filters the
+            fields "street", "postcode", "city", "country", "land", "district".
         """
 
         addresses = []
         for address in common.addresses.get_addresses(
             page = page,
             page_size = page_size,
-            order_by = order_by
+            order_by = order_by,
+            filter_by_organization = filter_by_organization,
+            filter_by_first_name = filter_by_first_name,
+            filter_by_last_name = filter_by_last_name,
+            filter_by_postcode = filter_by_postcode,
+            filter_by_city = filter_by_city
         ):
-
             addresses.append(address.to_dict(
                 include = include,
                 exclude = exclude,

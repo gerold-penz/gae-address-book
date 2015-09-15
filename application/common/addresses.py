@@ -262,7 +262,16 @@ def get_addresses_count():
     return Address.query().count()
 
 
-def get_addresses(page, page_size, order_by = None):
+def get_addresses(
+    page,
+    page_size,
+    order_by = None,
+    filter_by_organization = None,
+    filter_by_first_name = None,
+    filter_by_last_name = None,
+    filter_by_postcode = None,
+    filter_by_city = None
+):
     """
     Returns one page with addresses
     
@@ -293,6 +302,8 @@ def get_addresses(page, page_size, order_by = None):
         - "gender"
         - "birthday"
         - "age"
+
+    :param filter_by_xxx: Case insensitive filter strings
     """
 
     if order_by and isinstance(order_by, basestring):
@@ -300,6 +311,24 @@ def get_addresses(page, page_size, order_by = None):
 
     # Query
     query = Address.query()
+
+    # Prepare filter
+    filter_items = []
+
+    # Append filter items
+    if filter_by_organization:
+        filter_items.append(Address.organization_lower == filter_by_organization.strip().lower())
+    if filter_by_first_name:
+        filter_items.append(Address.first_name_lower == filter_by_first_name.strip().lower())
+    if filter_by_last_name:
+        filter_items.append(Address.last_name_lower == filter_by_last_name.strip().lower())
+    if filter_by_postcode:
+        filter_items.append(Address.postcode_lower == filter_by_postcode.strip().lower())
+    if filter_by_city:
+        filter_items.append(Address.city_lower == filter_by_city.strip().lower())
+
+    # Filter query
+    query = query.filter(*filter_items)
 
     # Sorting
     if order_by:
