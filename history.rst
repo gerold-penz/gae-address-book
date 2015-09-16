@@ -4,6 +4,15 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.5
+=============
+
+2015-09-16
+
+- Saving one address (not finished yet)
+
+
+=============
 Version 0.1.4
 =============
 

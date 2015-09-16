@@ -15,4 +15,4 @@ class AddressHistory(ndb.Model):
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
 
     address_key = ndb.KeyProperty()
-    address_pickle = ndb.PickleProperty()
+    address_dict = ndb.PickleProperty()

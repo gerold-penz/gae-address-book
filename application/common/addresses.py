@@ -3,10 +3,11 @@
 
 import uuid
 import logging
+import datetime
 import authorization
 from google.appengine.ext import ndb
 from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
-
+from model.address_history import AddressHistory
 
 def create(
     user,
@@ -384,4 +385,59 @@ def get_address(key_urlsafe = None, address_uid = None):
         )
         if addresses:
             return addresses[0]
+
+
+
+def save_address(user, key_urlsafe = None, address_uid = None, address_data = None):
+    """
+    Saves one address
+
+    The original address will saved before into the *address_history*-table.
+
+    :param address_data: Dictionary with fields to change. If one field doesn't
+        exist, the value will not be changed. If one filed exists and has no
+        content, the original content will erased.
+    """
+
+    assert key_urlsafe or address_uid
+    assert address_data
+
+    # Load original address
+    address = get_address(key_urlsafe = key_urlsafe, address_uid = address_uid)
+
+    # Save original address to *address_history*.
+    address_history = AddressHistory(
+        address_key = address.key(),
+        address_dict = address.to_dict()
+    )
+    address_history.put()
+
+    # Change *et* and *eu*
+    address.et = datetime.datetime.now()
+    address.eu = user
+
+    # Change field-values
+    for key, value in address_data.items():
+
+        # Read only fields
+        if key in ["key", "uid", "owner", "ct", "cu", "et", "eu"]:
+            continue
+
+        # Change
+        address[key] = value
+
+    # save changes
+    address.put()
+
+    # Return saved address
+    return address
+
+
+
+
+
+
+
+
+
 
