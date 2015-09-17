@@ -11,6 +11,12 @@ Version 0.1.6
 
 - Tag-Items added
 
+- Added three new filters:
+
+  - filter_by_category_items
+  - filter_by_tag_items
+  - filter_by_business_items
+
 
 =============
 Version 0.1.5

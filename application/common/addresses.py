@@ -9,10 +9,12 @@ from google.appengine.ext import ndb
 from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
 from model.address_history import AddressHistory
 
+
 def create(
     user,
     kind = None,
     category_items = None,
+    tag_items = None,
     organization = None,
     position = None,
     salutation = None,
@@ -40,6 +42,7 @@ def create(
     :param user: Username
     :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-*"
     :param category_items: A list of "tags" that can be used to describe the object.
+    :param tag_items: A list of "tags" that can be used to describe the object.
     :param organization: Organization name or location name
     :param position: Specifies the job title, functional position or function of
         the individual within an organization.
@@ -167,6 +170,10 @@ def create(
         if isinstance(category_items, basestring):
             category_items = [category_items]
         address.category_items = category_items
+    if tag_items:
+        if isinstance(tag_items, basestring):
+            tag_items = [tag_items]
+        address.tag_items = tag_items
     if organization:
         address.organization = organization
     if position:
@@ -271,7 +278,10 @@ def get_addresses(
     filter_by_first_name = None,
     filter_by_last_name = None,
     filter_by_postcode = None,
-    filter_by_city = None
+    filter_by_city = None,
+    filter_by_category_items = None,
+    filter_by_tag_items = None,
+    filter_by_business_items = None
 ):
     """
     Returns one page with addresses
@@ -305,6 +315,18 @@ def get_addresses(
         - "age"
 
     :param filter_by_xxx: Case insensitive filter strings
+
+    :param filter_by_category_items: List with *case sensitive* items.
+        It searches for addresses their category_items-field contains at least
+        one of those values.
+
+    :param filter_by_tag_items: List with *case sensitive* items.
+        It searches for addresses their tag_items-field contains at least one of
+        those values.
+
+    :param filter_by_business_items: List with *case sensitive* items.
+        It searches for addresses their business_items-field contains at least
+        one of those values.
     """
 
     if order_by and isinstance(order_by, basestring):
@@ -316,7 +338,7 @@ def get_addresses(
     # Prepare filter
     filter_items = []
 
-    # Append filter items
+    # Append filter items (strings)
     if filter_by_organization:
         filter_items.append(Address.organization_lower == filter_by_organization.strip().lower())
     if filter_by_first_name:
@@ -327,6 +349,20 @@ def get_addresses(
         filter_items.append(Address.postcode_lower == filter_by_postcode.strip().lower())
     if filter_by_city:
         filter_items.append(Address.city_lower == filter_by_city.strip().lower())
+
+    # Append filter items (lists) --> IN
+    if filter_by_category_items:
+        if isinstance(filter_by_category_items, basestring):
+            filter_by_category_items = [filter_by_category_items]
+        filter_items.append(Address.category_items.IN(filter_by_category_items))
+    if filter_by_tag_items:
+        if isinstance(filter_by_tag_items, basestring):
+            filter_by_tag_items = [filter_by_tag_items]
+        filter_items.append(Address.tag_items.IN(filter_by_tag_items))
+    if filter_by_business_items:
+        if isinstance(filter_by_business_items, basestring):
+            filter_by_business_items = [filter_by_business_items]
+        filter_items.append(Address.business_items.IN(filter_by_business_items))
 
     # Filter query
     query = query.filter(*filter_items)

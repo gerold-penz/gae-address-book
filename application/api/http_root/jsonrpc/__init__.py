@@ -155,6 +155,7 @@ class JsonRpc(CherryPyJsonRpc):
         self,
         kind = None,
         category_list = None,
+        tag_list = None,
         organization = None,
         position = None,
         salutation = None,
@@ -185,6 +186,7 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-\*"
         :param category_list: A list of "tags" that can be used to describe the object.
+        :param tag_list: A list of "tags" that can be used to describe the object.
         :param organization: Organization name or location name
         :param position: Specifies the job title, functional position or function of
             the individual within an organization.
@@ -358,6 +360,7 @@ class JsonRpc(CherryPyJsonRpc):
             user = user,
             kind = kind,
             category_items = category_list,
+            tag_items = tag_list,
             organization = organization,
             position = position,
             salutation = salutation,
@@ -399,7 +402,10 @@ class JsonRpc(CherryPyJsonRpc):
         filter_by_first_name = None,
         filter_by_last_name = None,
         filter_by_postcode = None,
-        filter_by_city = None
+        filter_by_city = None,
+        filter_by_category_items = None,
+        filter_by_tag_items = None,
+        filter_by_business_items = None
     ):
         """
         Returns one page with addresses in a list.
@@ -430,6 +436,18 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param filter_by_place: Case insensitive filter string which filters the
             fields "street", "postcode", "city", "country", "land", "district".
+
+        :param filter_by_category_items: List with *case sensitive* items.
+            It searches for addresses their category_items-field contains at least
+            one of those values.
+
+        :param filter_by_tag_items: List with *case sensitive* items.
+            It searches for addresses their tag_items-field contains at least one of
+            those values.
+
+        :param filter_by_business_items: List with *case sensitive* items.
+            It searches for addresses their business_items-field contains at least
+            one of those values.
         """
 
         addresses = []
@@ -441,7 +459,10 @@ class JsonRpc(CherryPyJsonRpc):
             filter_by_first_name = filter_by_first_name,
             filter_by_last_name = filter_by_last_name,
             filter_by_postcode = filter_by_postcode,
-            filter_by_city = filter_by_city
+            filter_by_city = filter_by_city,
+            filter_by_category_items = filter_by_category_items,
+            filter_by_tag_items = filter_by_tag_items,
+            filter_by_business_items = filter_by_business_items
         ):
             addresses.append(address.to_dict(
                 include = include,
@@ -450,7 +471,6 @@ class JsonRpc(CherryPyJsonRpc):
                 exclude_edit_metadata = exclude_edit_metadata,
                 exclude_empty_fields = exclude_empty_fields
             ))
-
 
         # Finish
         return addresses
