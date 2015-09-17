@@ -222,6 +222,9 @@ class Address(ndb.Model):
     # Category Items
     category_items = ndb.StringProperty(repeated = True)
 
+    # Tag Items
+    tag_items = ndb.StringProperty(repeated = True)
+
     # Organization
     organization = ndb.StringProperty(indexed = False)
     organization_lower = ndb.ComputedProperty(
@@ -370,7 +373,7 @@ class Address(ndb.Model):
             for key, value in address_dict.items():
                 if value is None:
                     del address_dict[key]
-                elif key in ["category_items", "business_items"]:
+                elif key in ["category_items", "business_items", "tag_items"]:
                     if not value:
                         del address_dict[key]
 

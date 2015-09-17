@@ -4,6 +4,15 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.6
+=============
+
+2015-09-17
+
+- Tag-Items added
+
+
+=============
 Version 0.1.5
 =============
 
