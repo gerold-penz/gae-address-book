@@ -317,16 +317,10 @@ def get_addresses(
     :param filter_by_xxx: Case insensitive filter strings
 
     :param filter_by_category_items: List with *case sensitive* items.
-        It searches for addresses their category_items-field contains at least
-        one of those values.
 
     :param filter_by_tag_items: List with *case sensitive* items.
-        It searches for addresses their tag_items-field contains at least one of
-        those values.
 
     :param filter_by_business_items: List with *case sensitive* items.
-        It searches for addresses their business_items-field contains at least
-        one of those values.
     """
 
     if order_by and isinstance(order_by, basestring):
@@ -354,15 +348,18 @@ def get_addresses(
     if filter_by_category_items:
         if isinstance(filter_by_category_items, basestring):
             filter_by_category_items = [filter_by_category_items]
-        filter_items.append(Address.category_items.IN(filter_by_category_items))
+        for category_item in filter_by_category_items:
+            filter_items.append(Address.category_items == category_item)
     if filter_by_tag_items:
         if isinstance(filter_by_tag_items, basestring):
             filter_by_tag_items = [filter_by_tag_items]
-        filter_items.append(Address.tag_items.IN(filter_by_tag_items))
+        for tag_item in filter_by_tag_items:
+            filter_items.append(Address.tag_items == tag_item)
     if filter_by_business_items:
         if isinstance(filter_by_business_items, basestring):
             filter_by_business_items = [filter_by_business_items]
-        filter_items.append(Address.business_items.IN(filter_by_business_items))
+        for business_item in filter_by_business_items:
+            filter_items.append(Address.business_items == business_item)
 
     # Filter query
     query = query.filter(*filter_items)

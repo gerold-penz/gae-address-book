@@ -4,6 +4,15 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.7
+=============
+
+2015-09-18
+
+- Filter changed
+
+
+=============
 Version 0.1.6
 =============
 

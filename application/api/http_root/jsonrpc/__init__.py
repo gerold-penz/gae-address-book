@@ -438,16 +438,10 @@ class JsonRpc(CherryPyJsonRpc):
             fields "street", "postcode", "city", "country", "land", "district".
 
         :param filter_by_category_items: List with *case sensitive* items.
-            It searches for addresses their category_items-field contains at least
-            one of those values.
 
         :param filter_by_tag_items: List with *case sensitive* items.
-            It searches for addresses their tag_items-field contains at least one of
-            those values.
 
         :param filter_by_business_items: List with *case sensitive* items.
-            It searches for addresses their business_items-field contains at least
-            one of those values.
         """
 
         addresses = []
