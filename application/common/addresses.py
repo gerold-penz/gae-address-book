@@ -474,8 +474,8 @@ def get_categories():
     categories = set()
 
     query = Address.query(projection = [Address.category_items], distinct = True)
-    for category_items in query.iter(batch_size = 1000):
-        for category_item in category_items:
+    for address in query.iter(batch_size = 1000):
+        for category_item in address.category_items:
             categories.add(category_item)
 
     # Finished
