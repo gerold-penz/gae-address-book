@@ -169,11 +169,11 @@ def create(
     if category_items:
         if isinstance(category_items, basestring):
             category_items = [category_items]
-        address.category_items = category_items
+        address.category_items = sorted(list(set(category_items)))
     if tag_items:
         if isinstance(tag_items, basestring):
             tag_items = [tag_items]
-        address.tag_items = tag_items
+        address.tag_items = sorted(list(set(tag_items)))
     if organization:
         address.organization = organization
     if position:
@@ -241,7 +241,7 @@ def create(
     if business_items:
         if isinstance(business_items, basestring):
             business_items = [business_items]
-        address.business_items = business_items
+        address.business_items = sorted(list(set(business_items)))
     if anniversary_items:
         for anniversary_item in anniversary_items:
             assert isinstance(anniversary_item, Anniversary)
