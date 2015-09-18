@@ -4,6 +4,15 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.8
+=============
+
+2015-09-18
+
+- New Function: *get_categories*
+
+
+=============
 Version 0.1.7
 =============
 

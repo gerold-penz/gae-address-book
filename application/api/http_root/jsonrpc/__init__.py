@@ -515,6 +515,15 @@ class JsonRpc(CherryPyJsonRpc):
         return address_dict
 
 
+    @rpcmethod
+    def get_categories(self):
+        """
+        Returns all used categories in an unordered list.
+        """
+
+        return list(common.addresses.get_categories())
+
+
 def jronsrpc_help(*args, **kwargs):
     """
     Gibt eine Hilfe-Seite zurück

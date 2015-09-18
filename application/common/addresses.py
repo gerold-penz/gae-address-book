@@ -466,6 +466,20 @@ def save_address(user, key_urlsafe = None, address_uid = None, address_data = No
     return address
 
 
+def get_categories():
+    """
+    Returns all used categorie-names as set.
+    """
+
+    categories = set()
+
+    query = Address.query(projection = [Address.category_items], distinct = True)
+    for category_items in query.iter(batch_size = 1000):
+        for category_item in category_items:
+            categories.add(category_item)
+
+    # Finished
+    return categories
 
 
 
