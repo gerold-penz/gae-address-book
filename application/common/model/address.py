@@ -230,11 +230,17 @@ class Address(ndb.Model):
     organization_lower = ndb.ComputedProperty(
         lambda self: self.organization.lower() if self.organization else None
     )
+    organization_char1 = ndb.ComputedProperty(
+        lambda self: self.organization[0].lower() if self.organization else None
+    )
 
     # Position
     position = ndb.StringProperty(indexed = False)
     position_lower = ndb.ComputedProperty(
         lambda self: self.position.lower() if self.position else None
+    )
+    position_char1 = ndb.ComputedProperty(
+        lambda self: self.position[0].lower() if self.position else None
     )
 
     # Salutation
@@ -242,11 +248,17 @@ class Address(ndb.Model):
     salutation_lower = ndb.ComputedProperty(
         lambda self: self.salutation.lower() if self.salutation else None
     )
+    salutation_char1 = ndb.ComputedProperty(
+        lambda self: self.salutation[0].lower() if self.salutation else None
+    )
 
     # First name
     first_name = ndb.StringProperty(indexed = False)
     first_name_lower = ndb.ComputedProperty(
         lambda self: self.first_name.lower() if self.first_name else None
+    )
+    first_name_char1 = ndb.ComputedProperty(
+        lambda self: self.first_name[0].lower() if self.first_name else None
     )
 
     # Last name
@@ -254,11 +266,17 @@ class Address(ndb.Model):
     last_name_lower = ndb.ComputedProperty(
         lambda self: self.last_name.lower() if self.last_name else None
     )
+    last_name_char1 = ndb.ComputedProperty(
+        lambda self: self.last_name[0].lower() if self.last_name else None
+    )
 
     # Nickname
     nickname = ndb.StringProperty(indexed = False)
     nickname_lower = ndb.ComputedProperty(
         lambda self: self.nickname.lower() if self.nickname else None
+    )
+    nickname_char1 = ndb.ComputedProperty(
+        lambda self: self.nickname[0].lower() if self.nickname else None
     )
 
     # Street
@@ -266,11 +284,17 @@ class Address(ndb.Model):
     street_lower = ndb.ComputedProperty(
         lambda self: self.street.lower() if self.street else None
     )
+    street_char1 = ndb.ComputedProperty(
+        lambda self: self.street[0].lower() if self.street else None
+    )
 
     # Postcode
     postcode = ndb.StringProperty(indexed = False)
     postcode_lower = ndb.ComputedProperty(
         lambda self: self.postcode.lower() if self.postcode else None
+    )
+    postcode_char1 = ndb.ComputedProperty(
+        lambda self: self.postcode[0].lower() if self.postcode else None
     )
 
     # City
@@ -278,11 +302,17 @@ class Address(ndb.Model):
     city_lower = ndb.ComputedProperty(
         lambda self: self.city.lower() if self.city else None
     )
+    city_char1 = ndb.ComputedProperty(
+        lambda self: self.city[0].lower() if self.city else None
+    )
 
     # District
     district = ndb.StringProperty(indexed = False)
     district_lower = ndb.ComputedProperty(
         lambda self: self.district.lower() if self.district else None
+    )
+    district_char1 = ndb.ComputedProperty(
+        lambda self: self.district[0].lower() if self.district else None
     )
 
     # Land (Bundesland)
@@ -290,11 +320,17 @@ class Address(ndb.Model):
     land_lower = ndb.ComputedProperty(
         lambda self: self.land.lower() if self.land else None
     )
+    land_char1 = ndb.ComputedProperty(
+        lambda self: self.land[0].lower() if self.land else None
+    )
 
     # Country
     country = ndb.StringProperty(indexed = False)  # Land
     country_lower = ndb.ComputedProperty(
         lambda self: self.country.lower() if self.country else None
+    )
+    country_char1 = ndb.ComputedProperty(
+        lambda self: self.country[0].lower() if self.country else None
     )
 
     phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern

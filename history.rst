@@ -11,6 +11,8 @@ Version 0.1.8
 
 - New Function: *get_categories*
 
+- New Fields *xxx_char1*
+
 
 =============
 Version 0.1.7
