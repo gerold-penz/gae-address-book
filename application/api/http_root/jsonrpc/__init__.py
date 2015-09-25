@@ -403,7 +403,7 @@ class JsonRpc(CherryPyJsonRpc):
         filter_by_business_items = None
     ):
         """
-        Returns one page with addresses in a list.
+        Returns a dictionary with the count of addresses and one page of addresses
 
         All *datetime.date*- and *datetime.datetime*-values will convert to
         ISO date strings.
@@ -437,10 +437,18 @@ class JsonRpc(CherryPyJsonRpc):
         :param filter_by_tag_items: List with *case sensitive* items.
 
         :param filter_by_business_items: List with *case sensitive* items.
+
+        :return: Dictionary with total quantity and one page with addresses::
+
+            {
+                "total_quantity": <Quantity>,
+                "addresses": [<Address>, ...]
+            }
         """
 
         addresses = []
-        for address in common.addresses.get_addresses(
+
+        fetched_result = common.addresses.get_addresses(
             page = page,
             page_size = page_size,
             order_by = order_by,
@@ -453,7 +461,9 @@ class JsonRpc(CherryPyJsonRpc):
             filter_by_category_items = filter_by_category_items,
             filter_by_tag_items = filter_by_tag_items,
             filter_by_business_items = filter_by_business_items
-        ):
+        )
+
+        for address in fetched_result["addresses"]:
             addresses.append(address.to_dict(
                 include = include,
                 exclude = exclude,
@@ -463,7 +473,10 @@ class JsonRpc(CherryPyJsonRpc):
             ))
 
         # Finished
-        return addresses
+        return dict(
+            total_quantity = fetched_result["total_quantity"],
+            addresses = addresses
+        )
 
 
     @rpcmethod
