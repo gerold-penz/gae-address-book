@@ -324,10 +324,10 @@ def get_addresses(
 
     :param filter_by_business_items: List with *case sensitive* items.
 
-    :return: Dictionary with quantity and a page with addresses::
+    :return: Dictionary with total quantity and one page with addresses::
 
         {
-            "count": <Quantity>,
+            "total_quantity": <Quantity>,
             "addresses": [<Address>, ...]
         }
     """
@@ -405,7 +405,7 @@ def get_addresses(
     offset = (page - 1) * page_size
 
     # Quantity
-    count = query.count()
+    quantity = query.count()
 
     # Fetch adresses
     addresses = query.fetch(
@@ -417,7 +417,7 @@ def get_addresses(
 
     # Finished
     return dict(
-        count = count,
+        total_quantity = quantity,
         addresses = addresses
     )
 
