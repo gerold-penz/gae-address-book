@@ -399,6 +399,7 @@ class JsonRpc(CherryPyJsonRpc):
         exclude_empty_fields = None,
         order_by = None,
         filter_by_organization = None,
+        filter_by_organization_char1 = None,
         filter_by_first_name = None,
         filter_by_last_name = None,
         filter_by_postcode = None,
@@ -450,6 +451,7 @@ class JsonRpc(CherryPyJsonRpc):
             page_size = page_size,
             order_by = order_by,
             filter_by_organization = filter_by_organization,
+            filter_by_organization_char1 = filter_by_organization_char1,
             filter_by_first_name = filter_by_first_name,
             filter_by_last_name = filter_by_last_name,
             filter_by_postcode = filter_by_postcode,
@@ -466,7 +468,7 @@ class JsonRpc(CherryPyJsonRpc):
                 exclude_empty_fields = exclude_empty_fields
             ))
 
-        # Finish
+        # Finished
         return addresses
 
 
@@ -521,7 +523,21 @@ class JsonRpc(CherryPyJsonRpc):
         Returns all used categories in an unordered list.
         """
 
+        # Finished
         return list(common.addresses.get_categories())
+
+
+    @rpcmethod
+    def start_refresh_index(self):
+        """
+        Starts the refresh of the index in a query (deferred)
+        """
+
+        # Address index refresh
+        common.addresses.start_refresh_index()
+
+        # Finished
+        return True
 
 
 def jronsrpc_help(*args, **kwargs):
@@ -544,7 +560,7 @@ def jronsrpc_help(*args, **kwargs):
         ]
     )
 
-    # Fertig
+    # Finished
     return rendered
 
 

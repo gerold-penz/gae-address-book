@@ -4,6 +4,15 @@ Google App Engine - Address Book - Data Backend
 
 
 =============
+Version 0.1.9
+=============
+
+2015-09-25
+
+- New API function: *start_refresh_index*.
+
+
+=============
 Version 0.1.8
 =============
 

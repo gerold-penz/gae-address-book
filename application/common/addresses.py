@@ -6,6 +6,7 @@ import logging
 import datetime
 import authorization
 from google.appengine.ext import ndb
+from google.appengine.ext import deferred
 from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
 from model.address_history import AddressHistory
 
@@ -275,6 +276,7 @@ def get_addresses(
     page_size,
     order_by = None,
     filter_by_organization = None,
+    filter_by_organization_char1 = None,
     filter_by_first_name = None,
     filter_by_last_name = None,
     filter_by_postcode = None,
@@ -335,6 +337,8 @@ def get_addresses(
     # Append filter items (strings)
     if filter_by_organization:
         filter_items.append(Address.organization_lower == filter_by_organization.strip().lower())
+    if filter_by_organization_char1:
+        filter_items.append(Address.organization_char1 == filter_by_organization_char1[0].lower())
     if filter_by_first_name:
         filter_items.append(Address.first_name_lower == filter_by_first_name.strip().lower())
     if filter_by_last_name:
@@ -482,9 +486,20 @@ def get_categories():
     return categories
 
 
+def start_refresh_index():
+    """
+    Loads every Address and saves it again.
+    """
+
+    # Start helper function with deferred
+    deferred.defer(_refresh_index)
 
 
+def _refresh_index():
+    """
+    This function will started by defered
+    """
 
-
-
-
+    query = Address().query()
+    for address in query.iter(batch_size = 1000):
+        address.put()
