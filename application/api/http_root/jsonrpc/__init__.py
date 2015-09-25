@@ -530,7 +530,7 @@ class JsonRpc(CherryPyJsonRpc):
     @rpcmethod
     def start_refresh_index(self):
         """
-        Starts the refresh of the index in a query (deferred)
+        Starts the refreshing of the index in a query (deferred)
         """
 
         # Address index refresh
@@ -557,6 +557,8 @@ def jronsrpc_help(*args, **kwargs):
             extract_documentation(JsonRpc.create_address, u"create_address"),
             extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
             extract_documentation(JsonRpc.get_address, u"get_address"),
+            extract_documentation(JsonRpc.get_categories, u"get_categories"),
+            extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
         ]
     )
 
