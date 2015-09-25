@@ -116,20 +116,6 @@ class JsonRpc(CherryPyJsonRpc):
     index = CherryPyJsonRpc.request_handler
 
 
-    # TEST
-    @rpcmethod
-    def add(self, a, b):
-        """
-        Test method
-
-        :param a: Any value
-        :param b: Any value
-        :return: Result of ``a + b``.
-        """
-
-        return a + b
-
-
     @rpcmethod
     def get_info(self):
         """
@@ -545,6 +531,40 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return True
+
+
+
+    @rpcmethod
+    def save_address(
+        self,
+        key_urlsafe = None,
+        address_uid = None,
+        address_data = None
+    ):
+        """
+        Saves one address
+
+        The original address will saved before into the *address_history*-table.
+
+        :param address_data: Dictionary with fields to change. If one field doesn't
+            exist, the value will not be changed. If one field exists and has no
+            content, the original content will erased.
+
+        :return: Saved address data
+        """
+
+        # Saving
+        address = common.addresses.save_address(
+            user = cherrypy.request.login,
+            key_urlsafe = key_urlsafe,
+            address_uid = address_uid,
+            address_data = address_data
+        )
+
+        address_dict = address.to_dict()
+
+        # Finished
+        return address_dict
 
 
 def jronsrpc_help(*args, **kwargs):

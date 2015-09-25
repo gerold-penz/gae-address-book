@@ -448,7 +448,7 @@ def save_address(user, key_urlsafe = None, address_uid = None, address_data = No
     The original address will saved before into the *address_history*-table.
 
     :param address_data: Dictionary with fields to change. If one field doesn't
-        exist, the value will not be changed. If one filed exists and has no
+        exist, the value will not be changed. If one field exists and has no
         content, the original content will erased.
     """
 

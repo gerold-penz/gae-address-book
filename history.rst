@@ -16,6 +16,8 @@ Version 0.1.9
 
 - API function *get_addresses* returns now a dictionary
 
+- New function *save_address*.
+
 
 =============
 Version 0.1.8
