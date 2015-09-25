@@ -6,18 +6,13 @@ import cherrypy
 import hashlib
 import threading
 import inspect
-import logging
-import datetime
 import docutils
 import docutils.core
-import copy
-import pyjsonrpc
 import common.constants
 import common.format_
 import common.addresses
 import common.authorization
 from mako.template import Template
-from google.appengine.ext import ndb
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 
 
@@ -31,8 +26,7 @@ _users_lock = threading.Lock()
 
 def _security_users():
     """
-    Liest die Benutzer aus der Scurity-INI aus uns speichert diese in einer
-    globalen Variable zwischen.
+    Returns the users (security.ini)
     """
 
     global _users

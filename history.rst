@@ -3,6 +3,9 @@ Google App Engine - Address Book - Data Backend
 ###############################################
 
 
+ToDo: Security: has_authorization(user_name, authorization_name)
+
+
 =============
 Version 0.1.9
 =============
