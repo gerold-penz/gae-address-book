@@ -14,6 +14,8 @@ Version 0.1.9
 
 - New API function: *start_refresh_index*.
 
+- API function *get_addresses* returns now a dictionary
+
 
 =============
 Version 0.1.8

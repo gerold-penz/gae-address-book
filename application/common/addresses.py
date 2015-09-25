@@ -286,7 +286,7 @@ def get_addresses(
     filter_by_business_items = None
 ):
     """
-    Returns one page with addresses
+    Returns a dictionary with the count of addresses and one page of addresses
     
     :param order_by: List with field names. A minus (-) directly before the
         field name reverts the sort order.
@@ -323,6 +323,13 @@ def get_addresses(
     :param filter_by_tag_items: List with *case sensitive* items.
 
     :param filter_by_business_items: List with *case sensitive* items.
+
+    :return: Dictionary with quantity and a page with addresses::
+
+        {
+            "count": <Quantity>,
+            "addresses": [<Address>, ...]
+        }
     """
 
     if order_by and isinstance(order_by, basestring):
@@ -397,12 +404,21 @@ def get_addresses(
     # Start with
     offset = (page - 1) * page_size
 
-    # Finished
-    return query.fetch(
+    # Quantity
+    count = query.count()
+
+    # Fetch adresses
+    addresses = query.fetch(
         offset = offset,
         limit = page_size,
         batch_size = page_size,
         deadline = 30  # seconds
+    )
+
+    # Finished
+    return dict(
+        count = count,
+        addresses = addresses
     )
 
 
