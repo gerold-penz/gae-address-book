@@ -533,7 +533,6 @@ class JsonRpc(CherryPyJsonRpc):
         return True
 
 
-
     @rpcmethod
     def save_address(
         self,
@@ -644,7 +643,7 @@ class JsonRpc(CherryPyJsonRpc):
 
                 [
                     {
-                        "date_time_iso": "2000-01-01T14:30",
+                        "date_time_iso": "2000-01-01T14:30:00",
                         "text": "This is a short journal item."
                     }, ...
                 ]
@@ -673,6 +672,11 @@ class JsonRpc(CherryPyJsonRpc):
 
         :return: Saved address (dictionary)
         """
+
+
+        # ToDo: Hier muss alles umgewandelt werden so wie in *create()*
+
+
 
         # Saving
         address = common.addresses.save_address(

@@ -6,6 +6,11 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
+# ToDo: Hier muss alles umgewandelt werden so wie in *create()*
+
+
+
+
 =============
 Version 0.1.9
 =============
