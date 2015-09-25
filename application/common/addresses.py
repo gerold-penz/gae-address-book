@@ -2,12 +2,15 @@
 # coding: utf-8
 
 import uuid
-import logging
 import datetime
 import authorization
+import format_
 from google.appengine.ext import ndb
 from google.appengine.ext import deferred
-from model.address import Address, Tel, Email, Url, Note, JournalItem, Anniversary
+from model.address import (
+    Address, Tel, Email, Url, Note, JournalItem, Anniversary,
+    DateTimePropertySerializable
+)
 from model.address_history import AddressHistory
 
 
@@ -440,27 +443,165 @@ def get_address(key_urlsafe = None, address_uid = None):
             return addresses[0]
 
 
-
-def save_address(user, key_urlsafe = None, address_uid = None, address_data = None):
+def save_address(
+    user,
+    key_urlsafe = None,
+    address_uid = None,
+    owner = None,
+    kind = None,
+    category_items = None,
+    tag_items = None,
+    organization = None,
+    position = None,
+    salutation = None,
+    first_name = None,
+    last_name = None,
+    nickname = None,
+    street = None,
+    postcode = None,
+    city = None,
+    district = None,
+    land = None,
+    country = None,
+    phone_items = None,
+    email_items = None,
+    url_items = None,
+    note_items = None,
+    journal_items = None,
+    business_items = None,
+    anniversary_items = None,
+    gender = None
+):
     """
     Saves one address
 
     The original address will saved before into the *address_history*-table.
 
-    :param address_data: Dictionary with fields to change. If one field doesn't
-        exist, the value will not be changed. If one field exists and has no
-        content, the original content will erased.
+    :param user: Username
+    :param owner: Username of the owner
+    :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-*"
+    :param category_items: A list of "tags" that can be used to describe the object.
+    :param tag_items: A list of "tags" that can be used to describe the object.
+    :param organization: Organization name or location name
+    :param position: Specifies the job title, functional position or function of
+        the individual within an organization.
+    :param salutation: Salutation (Dr., Prof.)
+    :param first_name: First name of a person
+    :param last_name: Last name of a person
+    :param nickname: Nickname
+    :param street: Street and number
+    :param postcode: Postcode/ZIP
+    :param city: City/town/place
+    :param district: Political district
+    :param land: Bundesland (z.B. Tirol, Bayern)
+    :param country: Staat (z.B. Österreich, Deutschland)
+
+    :param phone_items: A list with Tel-objects.
+        Syntax::
+
+            [Tel(label = "<label>", number = "<number">), ...]
+
+        Example::
+
+            [
+                Tel(label = "Mobile", number = "+43 123 456 789"),
+                Tel(label = "Fax", number = "+43 123 456 999")
+            ]
+
+    :param email_items: A list with Email-objects.
+        Syntax::
+
+            [Email(label = "<label>", email = "<email>"), ...]
+
+        Example::
+
+            [
+                Email(label = "Private", email = "max.mustermann@private.com"),
+                Email(label = "Business", email = "m.mustermann@organization.com")
+            ]
+
+    :param url_items: A list with Url-objects.
+        Syntax::
+
+            [Url(label = "<label>", url = "<url>"), ...]
+
+        Example::
+
+            [Url(label = "Homepage", url = "http://halvar.at/")]
+
+    :param note_items: A list with Note-objects.
+        Syntax::
+
+            [Note(text = "<note>", ...]
+
+        Example::
+
+            [Note(text = "This is a short note")]
+
+
+    :param journal_items: A list with JournalItem-objects.
+        Syntax::
+
+            [JournalItem(date_time = <datetime.datetime>, text = "<note>"), ...]
+
+        Example::
+
+            [
+                JournalItem(
+                    date_time = datetime.datetime(2000, 1, 1, 14, 30),
+                    text = "This is a short journal item."
+                ), ...
+            ]
+
+    :param business_items: A list with business items.
+        Example::
+
+            ["carpenter", "furniture"]
+
+
+    :param anniversary_items: A list with Anniversary-objects.
+        Syntax::
+
+            [
+                Anniversary(
+                    label = "<label>",
+                    year = <year>,
+                    month = <month [1-12]>,
+                    day = <day>
+                ), ...
+            ]
+
+        Example::
+
+            [Anniversary(label = "Birthday", year = 1974, month = 8, day = 18), ...]
+
+    :param gender: Defines the person's gender. A single lower letter.
+        m stands for "male",
+        f stands for "female",
+        o stands for "other",
+        n stands for "none or not applicable",
+        u stands for "unknown"
+
+    :return: Edited Address-Object
+
+    :rtype: model.address.Address
     """
 
     assert key_urlsafe or address_uid
-    assert address_data
 
     # Load original address
     address = get_address(key_urlsafe = key_urlsafe, address_uid = address_uid)
 
+    # Check authorization
+    if address.owner == user:
+        authorization.check_authorization(user, authorization.OWN_ADDRESS_EDIT)
+    else:
+        authorization.check_authorization(user, authorization.PUBLIC_ADDRESS_EDIT)
+
     # Save original address to *address_history*.
     address_history = AddressHistory(
-        address_key = address.key(),
+        cu = user,
+        address_key = address.key,
         address_dict = address.to_dict()
     )
     address_history.put()
@@ -469,15 +610,104 @@ def save_address(user, key_urlsafe = None, address_uid = None, address_data = No
     address.et = datetime.datetime.now()
     address.eu = user
 
-    # Change field-values
-    for key, value in address_data.items():
-
-        # Read only fields
-        if key in ["key", "uid", "owner", "ct", "cu", "et", "eu"]:
-            continue
-
-        # Change
-        address[key] = value
+    # Check arguments and set values
+    if owner is not None:
+        address.owner = owner
+    if kind is not None:
+        kind = kind.lower()
+        assert (
+            kind in (u"individual", u"organization", u"group", u"location") or
+            kind.startswith("x-")
+        )
+        address.kind = kind
+    if category_items:
+        if isinstance(category_items, basestring):
+            category_items = [category_items]
+        address.category_items = sorted(list(set(category_items)))
+    if tag_items:
+        if isinstance(tag_items, basestring):
+            tag_items = [tag_items]
+        address.tag_items = sorted(list(set(tag_items)))
+    if organization is not None:
+        address.organization = organization
+    if position is not None:
+        address.position = position
+    if salutation is not None:
+        address.salutation = salutation
+    if first_name is not None:
+        address.first_name = first_name
+    if last_name is not None:
+        address.last_name = last_name
+    if nickname is not None:
+        address.nickname = nickname
+    if street is not None:
+        address.street = street
+    if postcode is not None:
+        address.postcode = postcode
+    if city is not None:
+        address.city = city
+    if district is not None:
+        address.district = district
+    if land is not None:
+        address.land = land
+    if country is not None:
+        address.country = country
+    if phone_items:
+        for tel in phone_items:
+            assert isinstance(tel, Tel)
+            if not tel.cu:
+                tel.cu = user
+            if not tel.eu:
+                tel.eu = user
+        address.phone_items = phone_items
+    if email_items:
+        for email in email_items:
+            assert isinstance(email, Email)
+            if not email.cu:
+                email.cu = user
+            if not email.eu:
+                email.eu = user
+        address.email_items = email_items
+    if url_items:
+        for url in url_items:
+            assert isinstance(url, Url)
+            if not url.cu:
+                url.cu = user
+            if not url.eu:
+                url.eu = user
+        address.url_items = url_items
+    if note_items:
+        for note in note_items:
+            assert isinstance(note, Note)
+            if not note.cu:
+                note.cu = user
+            if not note.eu:
+                note.eu = user
+        address.note_items = note_items
+    if journal_items:
+        for journal_item in journal_items:
+            assert isinstance(journal_item, JournalItem)
+            if not journal_item.cu:
+                journal_item.cu = user
+            if not journal_item.eu:
+                journal_item.eu = user
+        address.journal_items = journal_items
+    if business_items:
+        if isinstance(business_items, basestring):
+            business_items = [business_items]
+        address.business_items = sorted(list(set(business_items)))
+    if anniversary_items:
+        for anniversary_item in anniversary_items:
+            assert isinstance(anniversary_item, Anniversary)
+            if not anniversary_item.cu:
+                anniversary_item.cu = user
+            if not anniversary_item.eu:
+                anniversary_item.eu = user
+        address.anniversary_items = anniversary_items
+    if gender is not None:
+        gender = gender.lower()
+        assert gender in "mfonu"
+        address.gender = gender
 
     # save changes
     address.put()

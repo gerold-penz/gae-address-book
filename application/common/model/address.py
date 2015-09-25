@@ -3,6 +3,7 @@
 
 import copy
 import datetime
+import common.format_
 from google.appengine.ext import ndb
 
 
@@ -33,7 +34,7 @@ def age_years(birthday, basedate = None):
     return years
 
 
-class DateTimeSerializable(ndb.Property):
+class DateTimePropertySerializable(ndb.DateTimeProperty):
 
     def _get_for_dict(self, entity):
 
@@ -44,9 +45,16 @@ class DateTimeSerializable(ndb.Property):
         else:
             return value
 
+    def _validate(self, value):
+        if isinstance(value, basestring):
+            value = common.format_.string_to_datetime(value)
+        ndb.DateTimeProperty._validate(self, value)
 
-class DateTimePropertySerializable(ndb.DateTimeProperty, DateTimeSerializable):
-    pass
+
+    def _db_set_value(self, v, p, value):
+        if isinstance(value, basestring):
+            value = common.format_.string_to_datetime(value)
+        ndb.DateTimeProperty._db_set_value(self, v, p, value)
 
 
 class Tel(ndb.Model):
@@ -118,7 +126,7 @@ class Agreement(ndb.Model):
 
 
 class JournalItem(ndb.Model):
-    date_time = ndb.DateTimeProperty()
+    date_time = DateTimePropertySerializable()
     text = ndb.TextProperty(required = True)
 
     ct = DateTimePropertySerializable(

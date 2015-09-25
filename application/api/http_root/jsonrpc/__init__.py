@@ -539,18 +539,139 @@ class JsonRpc(CherryPyJsonRpc):
         self,
         key_urlsafe = None,
         address_uid = None,
-        address_data = None
+        owner = None,
+        kind = None,
+        category_items = None,
+        tag_items = None,
+        organization = None,
+        position = None,
+        salutation = None,
+        first_name = None,
+        last_name = None,
+        nickname = None,
+        street = None,
+        postcode = None,
+        city = None,
+        district = None,
+        land = None,
+        country = None,
+        phone_items = None,
+        email_items = None,
+        url_items = None,
+        note_items = None,
+        journal_items = None,
+        business_items = None,
+        anniversary_items = None,
+        gender = None
     ):
+
         """
         Saves one address
 
         The original address will saved before into the *address_history*-table.
 
-        :param address_data: Dictionary with fields to change. If one field doesn't
-            exist, the value will not be changed. If one field exists and has no
-            content, the original content will erased.
+        ==========
+        Parameters
+        ==========
 
-        :return: Saved address data
+        :param owner: The username of the owner
+        :param kind: "application" | "individual" | "group" | "location" | "organization" | "x-\*"
+        :param category_list: A list of "tags" that can be used to describe the object.
+        :param tag_list: A list of "tags" that can be used to describe the object.
+        :param organization: Organization name or location name
+        :param position: Specifies the job title, functional position or function of
+            the individual within an organization.
+        :param salutation: Salutation (Dr., Prof.)
+        :param first_name: First name of a person
+        :param last_name: Last name of a person
+        :param nickname: Nickname
+        :param street: Street and number
+        :param postcode: Postcode/ZIP
+        :param city: City/town/place
+        :param district: Political district
+        :param land: Bundesland (z.B. Tirol, Bayern)
+        :param country: Staat (z.B. Österreich, Deutschland)
+
+        :param phone_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<name>", "number": "<number">}, ...]
+
+            Example::
+
+                [
+                    {"label": "Mobile", "number": "+43 123 456 789"},
+                    {"label": "Fax", "number": "+43 123 456 999"}
+                ]
+
+        :param email_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "email": "<email>"}, ...]
+
+            Example::
+
+                [
+                    {"label": "Private", "email": "max.mustermann@private.com"},
+                    {"label": "Business", "email": "m.mustermann@organization.com"}
+                ]
+
+        :param url_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "url": "<url>"}, ...]
+
+            Example::
+
+                [{"label": "Homepage", "url": "http://halvar.at/"}]
+
+        :param note_list: A list with dictionaries.
+            Syntax::
+
+                [{"text": "<note>"}, ...]
+
+            Example::
+
+                [{"text": "This is a short note"}]
+
+
+        :param journal_list: A list with dictionaries.
+            Syntax::
+
+                [{"date_time_iso": <DateTimeIso>, "text": "<note>"), ...]
+
+            Example::
+
+                [
+                    {
+                        "date_time_iso": "2000-01-01T14:30",
+                        "text": "This is a short journal item."
+                    }, ...
+                ]
+
+        :param business_list: A list with strings.
+            Example::
+
+                ["carpenter", "furniture"]
+
+
+        :param anniversary_list: A list with dictionaries.
+            Syntax::
+
+                [{"label": "<label>", "year": <year>, "month": <month [1-12]>, "day": <day>}, ...]
+
+            Example::
+
+                [{"label": "Birthday", "year": 1974, "month": 8, "day": 18}, ...]
+
+        :param gender: Defines the person's gender. A single letter.
+            M stands for "male",
+            F stands for "female",
+            O stands for "other",
+            N stands for "none or not applicable",
+            U stands for "unknown"
+
+        :return: Saved address (dictionary)
         """
 
         # Saving
@@ -558,7 +679,30 @@ class JsonRpc(CherryPyJsonRpc):
             user = cherrypy.request.login,
             key_urlsafe = key_urlsafe,
             address_uid = address_uid,
-            address_data = address_data
+            owner = owner,
+            kind = kind,
+            category_items = category_items,
+            tag_items = tag_items,
+            organization = organization,
+            position = position,
+            salutation = salutation,
+            first_name = first_name,
+            last_name = last_name,
+            nickname = nickname,
+            street = street,
+            postcode = postcode,
+            city = city,
+            district = district,
+            land = land,
+            country = country,
+            phone_items = phone_items,
+            email_items = email_items,
+            url_items = url_items,
+            note_items = note_items,
+            journal_items = journal_items,
+            business_items = business_items,
+            anniversary_items = anniversary_items,
+            gender = gender
         )
 
         address_dict = address.to_dict()

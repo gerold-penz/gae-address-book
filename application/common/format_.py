@@ -60,15 +60,16 @@ def string_to_datetime(datetime_string):
 
     if isinstance(datetime_string, datetime.datetime):
         return datetime_string
-    else:
-        if len(datetime_string) == 10:
-            # Wenn kein Datum angegeben ist
-            datetime_string += " 00:00:00"
-        elif "T" in datetime_string:
-            # Wenn ISO-String mit 'T'-Connector übergeben wird
-            datetime_string = datetime_string.replace("T", " ")
 
-    return datetime.datetime.strptime(datetime_string, "%Y-%m-%d %H:%M:%S")
+    if len(datetime_string) == 10:
+        # Wenn kein Datum angegeben ist
+        datetime_string += " 00:00:00"
+    elif "T" in datetime_string:
+        # Wenn ISO-String mit 'T'-Connector übergeben wird
+        datetime_string = datetime_string.replace("T", " ")
+
+    # Finished
+    return datetime.datetime.strptime(datetime_string[:19], "%Y-%m-%d %H:%M:%S")
 
 
 def date_to_iso(date_obj, empty_string_if_none = False):
