@@ -284,9 +284,9 @@ def get_addresses(
     filter_by_last_name = None,
     filter_by_postcode = None,
     filter_by_city = None,
+    filter_by_business_items = None,
     filter_by_category_items = None,
-    filter_by_tag_items = None,
-    filter_by_business_items = None
+    filter_by_tag_items = None
 ):
     """
     Returns a dictionary with the count of addresses and one page of addresses
@@ -359,6 +359,11 @@ def get_addresses(
         filter_items.append(Address.city_lower == filter_by_city.strip().lower())
 
     # Append filter items (lists) --> IN
+    if filter_by_business_items:
+        if isinstance(filter_by_business_items, basestring):
+            filter_by_business_items = [filter_by_business_items]
+        for business_item in filter_by_business_items:
+            filter_items.append(Address.business_items == business_item)
     if filter_by_category_items:
         if isinstance(filter_by_category_items, basestring):
             filter_by_category_items = [filter_by_category_items]
@@ -369,11 +374,6 @@ def get_addresses(
             filter_by_tag_items = [filter_by_tag_items]
         for tag_item in filter_by_tag_items:
             filter_items.append(Address.tag_items == tag_item)
-    if filter_by_business_items:
-        if isinstance(filter_by_business_items, basestring):
-            filter_by_business_items = [filter_by_business_items]
-        for business_item in filter_by_business_items:
-            filter_items.append(Address.business_items == business_item)
 
     # Filter query
     query = query.filter(*filter_items)

@@ -384,9 +384,9 @@ class JsonRpc(CherryPyJsonRpc):
         filter_by_last_name = None,
         filter_by_postcode = None,
         filter_by_city = None,
+        filter_by_business_items = None,
         filter_by_category_items = None,
-        filter_by_tag_items = None,
-        filter_by_business_items = None
+        filter_by_tag_items = None
     ):
         """
         Returns a dictionary with the count of addresses and one page of addresses
@@ -444,9 +444,9 @@ class JsonRpc(CherryPyJsonRpc):
             filter_by_last_name = filter_by_last_name,
             filter_by_postcode = filter_by_postcode,
             filter_by_city = filter_by_city,
+            filter_by_business_items = filter_by_business_items,
             filter_by_category_items = filter_by_category_items,
-            filter_by_tag_items = filter_by_tag_items,
-            filter_by_business_items = filter_by_business_items
+            filter_by_tag_items = filter_by_tag_items
         )
 
         for address in fetched_result["addresses"]:
