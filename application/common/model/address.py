@@ -391,6 +391,9 @@ class Address(ndb.Model):
             "journal_items",
             "anniversary_items",
         ]:
+            if fieldname not in address_dict:
+                continue
+
             for field_item in address_dict.get(fieldname, []):
                 # Exclude creation metadata
                 if exclude_creation_metadata:
