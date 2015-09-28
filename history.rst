@@ -9,6 +9,13 @@ ToDo: Security: Authorization: *common.authorization*
 # ToDo: Hier muss alles umgewandelt werden so wie in *create()*
 
 
+==============
+Version 0.1.10
+==============
+
+2015-09-28
+
+- API changed: *create_address*: *_list*-parameters replaced with *_items*.
 
 
 =============

@@ -553,7 +553,7 @@ def save_address(
                 ), ...
             ]
 
-    :param business_items: A list with business items.
+    :param business_items: A list with strings.
         Example::
 
             ["carpenter", "furniture"]
