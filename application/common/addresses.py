@@ -716,20 +716,20 @@ def save_address(
     return address
 
 
-def get_categories():
+def get_category_items():
     """
     Returns all used categorie-names as set.
     """
 
-    categories = set()
+    category_items = set()
 
     query = Address.query(projection = [Address.category_items], distinct = True)
     for address in query.iter(batch_size = 1000):
         for category_item in address.category_items:
-            categories.add(category_item)
+            category_items.add(category_item)
 
     # Finished
-    return categories
+    return category_items
 
 
 def start_refresh_index():

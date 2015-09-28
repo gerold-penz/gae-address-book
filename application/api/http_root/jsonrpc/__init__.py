@@ -511,13 +511,13 @@ class JsonRpc(CherryPyJsonRpc):
 
 
     @rpcmethod
-    def get_categories(self):
+    def get_category_items(self):
         """
-        Returns all used categories in an unordered list.
+        Returns all used categories as unordered list.
         """
 
         # Finished
-        return list(common.addresses.get_categories())
+        return list(common.addresses.get_category_items())
 
 
     @rpcmethod
