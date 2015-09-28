@@ -677,11 +677,11 @@ class JsonRpc(CherryPyJsonRpc):
         user = cherrypy.request.login
 
         # Prepare Phone-Items
-        phone_items = None
+        phone_items_ = None
         if phone_items:
-            phone_items = []
-            for data in phone_list:
-                phone_items.append(
+            phone_items_ = []
+            for data in phone_items:
+                phone_items_.append(
                     common.addresses.Tel(
                         label = data.get("label"),
                         number = data["number"]
@@ -689,11 +689,11 @@ class JsonRpc(CherryPyJsonRpc):
                 )
 
         # Prepare Email-Items
-        email_items = None
-        if email_list:
-            email_items = []
-            for data in email_list:
-                email_items.append(
+        email_items_ = None
+        if email_items:
+            email_items_ = []
+            for data in email_items:
+                email_items_.append(
                     common.addresses.Email(
                         label = data.get("label"),
                         email = data["email"]
@@ -701,11 +701,11 @@ class JsonRpc(CherryPyJsonRpc):
                 )
 
         # Prepare Url-Items
-        url_items = None
-        if url_list:
-            url_items = []
-            for data in url_list:
-                url_items.append(
+        url_items_ = None
+        if url_items:
+            url_items_ = []
+            for data in url_items:
+                url_items_.append(
                     common.addresses.Url(
                         label = data.get("label"),
                         url = data["url"]
@@ -713,18 +713,18 @@ class JsonRpc(CherryPyJsonRpc):
                 )
 
         # Prepare Note-Items
-        note_items = None
-        if note_list:
-            note_items = []
-            for data in note_list:
-                note_items.append(common.addresses.Note(text = data["text"]))
+        note_items_ = None
+        if note_items:
+            note_items_ = []
+            for data in note_items:
+                note_items_.append(common.addresses.Note(text = data["text"]))
 
         # Prepare Journal-Items
-        journal_items = None
-        if journal_list:
-            journal_items = []
-            for data in journal_list:
-                journal_items.append(
+        journal_items_ = None
+        if journal_items:
+            journal_items_ = []
+            for data in journal_items:
+                journal_items_.append(
                     common.addresses.JournalItem(
                         date_time = common.format_.string_to_datetime(data.get("date_time_iso")),
                         text = data["text"]
@@ -732,11 +732,11 @@ class JsonRpc(CherryPyJsonRpc):
                 )
 
         # Prepare Anniversary-Items
-        anniversary_items = None
-        if anniversary_list:
-            anniversary_items = []
-            for data in anniversary_list:
-                anniversary_items.append(
+        anniversary_items_ = None
+        if anniversary_items:
+            anniversary_items_ = []
+            for data in anniversary_items:
+                anniversary_items_.append(
                     common.addresses.Anniversary(
                         label = data["label"],
                         year = data.get("year"),
@@ -744,23 +744,6 @@ class JsonRpc(CherryPyJsonRpc):
                         day = data["day"],
                     )
                 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         # Saving
         address = common.addresses.save_address(
@@ -783,13 +766,13 @@ class JsonRpc(CherryPyJsonRpc):
             district = district,
             land = land,
             country = country,
-            phone_items = phone_items,
-            email_items = email_items,
-            url_items = url_items,
-            note_items = note_items,
-            journal_items = journal_items,
+            phone_items = phone_items_,
+            email_items = email_items_,
+            url_items = url_items_,
+            note_items = note_items_,
+            journal_items = journal_items_,
             business_items = business_items,
-            anniversary_items = anniversary_items,
+            anniversary_items = anniversary_items_,
             gender = gender
         )
 
