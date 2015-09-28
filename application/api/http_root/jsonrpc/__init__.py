@@ -511,16 +511,6 @@ class JsonRpc(CherryPyJsonRpc):
 
 
     @rpcmethod
-    def get_category_items(self):
-        """
-        Returns all used categories as unordered list.
-        """
-
-        # Finished
-        return list(common.addresses.get_category_items())
-
-
-    @rpcmethod
     def start_refresh_index(self):
         """
         Starts the refreshing of the index in a query (deferred)
@@ -782,6 +772,36 @@ class JsonRpc(CherryPyJsonRpc):
         return address_dict
 
 
+    @rpcmethod
+    def get_category_items(self):
+        """
+        Returns all used category items as unordered list.
+        """
+
+        # Finished
+        return list(common.addresses.get_category_items())
+
+
+    @rpcmethod
+    def get_business_items(self):
+        """
+        Returns all used business items as unordered list.
+        """
+
+        # Finished
+        return list(common.addresses.get_business_items())
+
+
+    @rpcmethod
+    def get_tag_items(self):
+        """
+        Returns all used tag items as unordered list.
+        """
+
+        # Finished
+        return list(common.addresses.get_tag_items())
+
+
 def jronsrpc_help(*args, **kwargs):
     """
     Gibt eine Hilfe-Seite zurück
@@ -797,9 +817,14 @@ def jronsrpc_help(*args, **kwargs):
             # Help strings
             extract_documentation(JsonRpc.get_info, u"get_info"),
             extract_documentation(JsonRpc.create_address, u"create_address"),
-            extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+
             extract_documentation(JsonRpc.get_address, u"get_address"),
-            extract_documentation(JsonRpc.get_categories, u"get_categories"),
+            extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+
+            extract_documentation(JsonRpc.get_category_items, u"get_category_items"),
+            extract_documentation(JsonRpc.get_business_items, u"get_business_items"),
+            extract_documentation(JsonRpc.get_tag_items, u"get_tag_items"),
+
             extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
         ]
     )
