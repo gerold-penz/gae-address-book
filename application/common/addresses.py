@@ -716,22 +716,6 @@ def save_address(
     return address
 
 
-def get_category_items():
-    """
-    Returns all used categorie-names as set.
-    """
-
-    category_items = set()
-
-    query = Address.query(projection = [Address.category_items], distinct = True)
-    for address in query.iter(batch_size = 1000):
-        for category_item in address.category_items:
-            category_items.add(category_item)
-
-    # Finished
-    return category_items
-
-
 def start_refresh_index():
     """
     Loads every Address and saves it again.
@@ -749,3 +733,53 @@ def _refresh_index():
     query = Address().query()
     for address in query.iter(batch_size = 1000):
         address.put()
+
+
+def get_category_items():
+    """
+    Returns all used categorie-names as set.
+    """
+
+    category_items = set()
+
+    query = Address.query(projection = [Address.category_items], distinct = True)
+    for address in query.iter(batch_size = 1000):
+        for category_item in address.category_items:
+            category_items.add(category_item)
+
+    # Finished
+    return category_items
+
+
+def get_business_items():
+    """
+    Returns all used business items as set.
+    """
+
+    business_items = set()
+
+    query = Address.query(projection = [Address.business_items], distinct = True)
+    for address in query.iter(batch_size = 1000):
+        for business_item in address.business_items:
+            business_items.add(business_item)
+
+    # Finished
+    return business_items
+
+
+def get_tag_items():
+    """
+    Returns all used tag items as set.
+    """
+
+    tag_items = set()
+
+    query = Address.query(projection = [Address.tag_items], distinct = True)
+    for address in query.iter(batch_size = 1000):
+        for tag_item in address.tag_items:
+            tag_items.add(tag_item)
+
+    # Finished
+    return tag_items
+
+

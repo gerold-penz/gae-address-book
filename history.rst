@@ -17,6 +17,8 @@ Version 0.1.10
 
 - API changed: *create_address*: *_list*-parameters replaced with *_items*.
 
+- New functions: *get_business_items*, *get_tag_items*
+
 
 =============
 Version 0.1.9
