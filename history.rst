@@ -10,6 +10,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.11
+==============
+
+2015-09-29
+
+- *get_addresses*: Added filter parameters.
+
+
+==============
 Version 0.1.10
 ==============
 

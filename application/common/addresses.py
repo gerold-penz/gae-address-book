@@ -4,12 +4,10 @@
 import uuid
 import datetime
 import authorization
-import format_
 from google.appengine.ext import ndb
 from google.appengine.ext import deferred
 from model.address import (
-    Address, Tel, Email, Url, Note, JournalItem, Anniversary,
-    DateTimePropertySerializable
+    Address, Tel, Email, Url, Note, JournalItem, Anniversary
 )
 from model.address_history import AddressHistory
 
@@ -281,9 +279,17 @@ def get_addresses(
     filter_by_organization = None,
     filter_by_organization_char1 = None,
     filter_by_first_name = None,
+    filter_by_first_name_char1 = None,
     filter_by_last_name = None,
+    filter_by_last_name_char1 = None,
+    filter_by_nickname = None,
+    filter_by_nickname_char1 = None,
+    filter_by_street = None,
+    filter_by_street_char1 = None,
     filter_by_postcode = None,
+    filter_by_postcode_char1 = None,
     filter_by_city = None,
+    filter_by_city_char1 = None,
     filter_by_business_items = None,
     filter_by_category_items = None,
     filter_by_tag_items = None
@@ -351,12 +357,28 @@ def get_addresses(
         filter_items.append(Address.organization_char1 == filter_by_organization_char1[0].lower())
     if filter_by_first_name:
         filter_items.append(Address.first_name_lower == filter_by_first_name.strip().lower())
+    if filter_by_first_name_char1:
+        filter_items.append(Address.first_name_char1 == filter_by_first_name_char1[0].lower())
     if filter_by_last_name:
         filter_items.append(Address.last_name_lower == filter_by_last_name.strip().lower())
+    if filter_by_last_name_char1:
+        filter_items.append(Address.last_name_char1 == filter_by_last_name_char1[0].lower())
+    if filter_by_nickname:
+        filter_items.append(Address.nickname_lower == filter_by_nickname.strip().lower())
+    if filter_by_nickname_char1:
+        filter_items.append(Address.nickname_char1 == filter_by_nickname_char1[0].lower())
+    if filter_by_street:
+        filter_items.append(Address.street_lower == filter_by_street.strip().lower())
+    if filter_by_street_char1:
+        filter_items.append(Address.street_char1 == filter_by_street_char1[0].lower())
     if filter_by_postcode:
         filter_items.append(Address.postcode_lower == filter_by_postcode.strip().lower())
+    if filter_by_postcode_char1:
+        filter_items.append(Address.postcode_char1 == filter_by_postcode_char1[0].lower())
     if filter_by_city:
         filter_items.append(Address.city_lower == filter_by_city.strip().lower())
+    if filter_by_city_char1:
+        filter_items.append(Address.city_char1 == filter_by_city_char1[0].lower())
 
     # Append filter items (lists) --> IN
     if filter_by_business_items:
