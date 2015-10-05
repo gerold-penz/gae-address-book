@@ -474,6 +474,8 @@ class Address(ndb.Model):
 
         for category_item in self.category_items:
             fields.append(search.TextField(name = u"category", value = category_item))
+        for tag_item in self.tag_items:
+            fields.append(search.TextField(name = u"tag", value = tag_item))
         for business_item in self.business_items:
             fields.append(search.TextField(name = u"business", value = business_item))
         for phone_item in self.phone_items:
