@@ -5,6 +5,8 @@ import copy
 import datetime
 import common.format_
 from google.appengine.ext import ndb
+from google.appengine.api import search
+from google.appengine.ext import deferred
 
 
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
@@ -161,6 +163,7 @@ class Address(ndb.Model):
     """
 
     def get_birthday_iso(self):
+
         """
         Returns the birthday date as ISO string, if possible
         """
@@ -428,3 +431,109 @@ class Address(ndb.Model):
         return address_dict
 
 
+    def put(self, **ctx_options):
+        """
+        Writes the address to the datastore.
+
+        Adds a document to the Search-Index.
+        """
+
+        # Save address
+        key = ndb.Model.put(self, **ctx_options)
+
+        # Gather information for the index
+        fields = []
+        if self.kind is not None:
+            fields.append(search.TextField(name = u"kind", value = self.kind))
+        if self.organization is not None:
+            fields.append(search.TextField(name = u"organization", value = self.organization))
+        if self.position is not None:
+            fields.append(search.TextField(name = u"position", value = self.position))
+        if self.salutation is not None:
+            fields.append(search.TextField(name = u"salutation", value = self.salutation))
+        if self.first_name is not None:
+            fields.append(search.TextField(name = u"first_name", value = self.first_name))
+        if self.last_name is not None:
+            fields.append(search.TextField(name = u"last_name", value = self.last_name))
+        if self.nickname is not None:
+            fields.append(search.TextField(name = u"nickname", value = self.nickname))
+        if self.street is not None:
+            fields.append(search.TextField(name = u"street", value = self.street))
+        if self.postcode is not None:
+            fields.append(search.TextField(name = u"postcode", value = self.postcode))
+        if self.city is not None:
+            fields.append(search.TextField(name = u"city", value = self.city))
+        if self.district is not None:
+            fields.append(search.TextField(name = u"district", value = self.district))
+        if self.land is not None:
+            fields.append(search.TextField(name = u"land", value = self.land))
+        if self.country is not None:
+            fields.append(search.TextField(name = u"country", value = self.country))
+        if self.gender is not None:
+            fields.append(search.TextField(name = u"gender", value = self.gender))
+
+        for category_item in self.category_items:
+            fields.append(search.TextField(name = u"category", value = category_item))
+        for business_item in self.business_items:
+            fields.append(search.TextField(name = u"business", value = business_item))
+        for phone_item in self.phone_items:
+            assert isinstance(phone_item, Tel)
+            fields.append(search.TextField(name = u"phone", value = phone_item.number))
+        for email_item in self.email_items:
+            assert isinstance(email_item, Email)
+            fields.append(search.TextField(name = u"email", value = email_item.email))
+        for url_item in self.url_items:
+            assert isinstance(url_item, Url)
+            fields.append(search.TextField(name = u"url", value = url_item.url))
+        for journal_item in self.journal_items:
+            assert isinstance(journal_item, JournalItem)
+            fields.append(search.TextField(name = u"journal", value = journal_item.text))
+        for note_item in self.note_items:
+            assert isinstance(note_item, Note)
+            fields.append(search.TextField(name = u"note", value = note_item.text))
+        for agreement_item in self.agreement_items:
+            assert isinstance(agreement_item, Agreement)
+            fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
+        for anniversary_item in self.anniversary_items:
+            assert isinstance(anniversary_item, Anniversary)
+            if anniversary_item.year:
+                fields.append(
+                    search.DateField(
+                        name = u"anniversary", value = datetime.date(
+                            anniversary_item.year,
+                            anniversary_item.month,
+                            anniversary_item.day
+                        )
+                    )
+                )
+            else:
+                fields.append(
+                    search.TextField(
+                        name = anniversary_item.label,
+                        value = unicode(anniversary_item.month) + u"-" + unicode(anniversary_item.day)
+                    )
+                )
+
+        # Document
+        document = search.Document(
+            doc_id = self.uid,
+            fields = fields
+        )
+
+        # Index (deferred)
+        deferred.defer(
+            _put_address_to_index,
+            document = document
+        )
+
+        # Finished
+        return key
+
+
+def _put_address_to_index(document):
+    """
+    Adds the address to the search_index
+    """
+
+    index = search.Index(name = "Address")
+    index.put(document)

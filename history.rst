@@ -10,6 +10,17 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.12
+==============
+
+2015-10-05
+
+- Trials with Google search
+
+- Adds a document to the search index, every time an address will saved.
+
+
+==============
 Version 0.1.11
 ==============
 
