@@ -824,8 +824,8 @@ class JsonRpc(CherryPyJsonRpc):
     def search_addresses(
         self,
         query_string,
-        page,
-        page_size = 20,
+        page = None,
+        page_size = None,
         returned_fields = None
     ):
         """
@@ -890,8 +890,8 @@ class JsonRpc(CherryPyJsonRpc):
         # Search
         search_result = common.addresses.search_addresses(
             query_string = query_string,
-            page = page,
-            page_size = page_size,
+            page = page or 1,
+            page_size = page_size or 20,
             returned_fields = returned_fields
         )
 
