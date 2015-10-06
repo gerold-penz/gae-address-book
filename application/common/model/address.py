@@ -518,7 +518,7 @@ class Address(ndb.Model):
 
         # Document
         document = search.Document(
-            doc_id = self.uid,
+            doc_id = key.urlsafe(),
             fields = fields
         )
 

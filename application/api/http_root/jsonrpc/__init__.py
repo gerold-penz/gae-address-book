@@ -8,6 +8,7 @@ import threading
 import inspect
 import docutils
 import docutils.core
+import datetime
 import common.constants
 import common.format_
 import common.addresses
@@ -817,6 +818,107 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return list(common.addresses.get_tag_items())
+
+
+    @rpcmethod
+    def search_addresses(
+        self,
+        query_string,
+        page,
+        page_size = 20,
+        returned_fields = None
+    ):
+        """
+        Searches for addresses in the "Address" index
+
+        :param query_string: Search string
+
+        :param page: Page number
+
+        :param page_size: Page size
+
+        :param returned_fields: Field names of the result.
+            Possible Field-Names:
+
+            - kind
+            - organization
+            - position
+            - salutation
+            - first_name
+            - last_name
+            - nickname
+            - street
+            - postcode
+            - city
+            - district
+            - land
+            - country
+            - gender
+            - category
+            - tag
+            - business
+            - phone
+            - email
+            - url
+            - journal
+            - note
+            - agreement
+            - anniversary
+
+        :return: Dictionary
+            ::
+
+                {
+                    results: [
+                        {
+                            "doc_id": <KeyUrlsafe>,
+                            "fields": [
+                                {
+                                    "name": <FieldName>,
+                                    "value": <FieldValue>
+                                },
+                                ...
+                            ]
+                        },
+                        ...
+                    ],
+                    "number_found": <quantity>
+                }
+
+        """
+
+        # Search
+        search_result = common.addresses.search_addresses(
+            query_string = query_string,
+            page = page,
+            page_size = page_size,
+            returned_fields = returned_fields
+        )
+
+        # Prepare result for converting to JSON
+        result = dict(
+            results = [],
+            number_found = search_result.number_found
+        )
+        for scored_document in search_result.results:
+            fields = []
+            for field in scored_document.fields:
+                value = field.value
+                if isinstance(value, (datetime.date, datetime.datetime)):
+                    value = value.isoformat()
+
+                fields.append(dict(
+                    name = field.name,
+                    value = value
+                ))
+            document = dict(
+                doc_id = scored_document.doc_id,
+                fields = fields
+            )
+            result["results"].append(document)
+
+        # Finished
+        return result
 
 
 def jronsrpc_help(*args, **kwargs):

@@ -10,6 +10,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.13
+==============
+
+2015-10-06
+
+- New API-function: *search_addresses*
+
+
+==============
 Version 0.1.12
 ==============
 

@@ -5,6 +5,7 @@ import uuid
 import datetime
 import authorization
 from google.appengine.ext import ndb
+from google.appengine.api import search
 from google.appengine.ext import deferred
 from model.address import (
     Address, Tel, Email, Url, Note, JournalItem, Anniversary
@@ -738,6 +739,22 @@ def save_address(
     return address
 
 
+def delete_address_search_index():
+    """
+    Deletes all documents in the "Address" search index
+    """
+
+    index = search.Index("Address")
+    while True:
+        document_ids = [
+            document.doc_id for document in
+            index.get_range(limit = 200, ids_only = True)
+        ]
+        if not document_ids:
+            break
+        index.delete(document_ids)
+
+
 def start_refresh_index():
     """
     Loads every Address and saves it again.
@@ -752,6 +769,10 @@ def _refresh_index():
     This function will started by defered
     """
 
+    # Delete full search index
+    delete_address_search_index()
+
+    # Resave all addresses
     query = Address().query()
     for address in query.iter(batch_size = 1000):
         address.put()
@@ -803,5 +824,79 @@ def get_tag_items():
 
     # Finished
     return tag_items
+
+
+
+def search_addresses(
+    query_string,
+    page,
+    page_size = 20,
+    returned_fields = None
+):
+    """
+    Searches for addresses in the "Address" index
+
+    :param query_string: Search string
+
+    :param page: Page number
+
+    :param page_size: Page size
+
+    :returned_fields: Field names of the result.
+        Possible Field-Names:
+
+        - kind
+        - organization
+        - position
+        - salutation
+        - first_name
+        - last_name
+        - nickname
+        - street
+        - postcode
+        - city
+        - district
+        - land
+        - country
+        - gender
+        - category
+        - tag
+        - business
+        - phone
+        - email
+        - url
+        - journal
+        - note
+        - agreement
+        - anniversary
+    """
+
+    index = search.Index("Address")
+    offset = (page - 1) * page_size
+
+    if not returned_fields:
+        returned_fields = [
+            "organization",
+            "first_name",
+            "last_name"
+        ]
+
+    query_options = search.QueryOptions(
+        limit = page_size,
+        offset = offset,
+        returned_fields = returned_fields
+    )
+
+    # Search
+    query = search.Query(query_string = query_string, options = query_options)
+    result = index.search(query)
+
+    # Finished
+    return result
+
+
+
+
+
 
 
