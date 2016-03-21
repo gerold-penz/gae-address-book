@@ -103,6 +103,37 @@ def extract_documentation(python_object, name):
     return template_str
 
 
+def jronsrpc_help(*args, **kwargs):
+    """
+    Gibt eine Hilfe-Seite zurück
+    """
+
+    # Vorlage
+    template_path = os.path.join(THISDIR, "help.mako")
+    template = Template(filename = template_path)
+    rendered = template.render_unicode(
+        version = common.constants.VERSION,
+        appname = cherrypy.config["APPNAME"],
+        function_help_strings = [
+            # Help strings
+            extract_documentation(JsonRpc.get_info, u"get_info"),
+            extract_documentation(JsonRpc.create_address, u"create_address"),
+
+            extract_documentation(JsonRpc.get_address, u"get_address"),
+            extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+
+            extract_documentation(JsonRpc.get_category_items, u"get_category_items"),
+            extract_documentation(JsonRpc.get_business_items, u"get_business_items"),
+            extract_documentation(JsonRpc.get_tag_items, u"get_tag_items"),
+
+            extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
+        ]
+    )
+
+    # Finished
+    return rendered
+
+
 class JsonRpc(CherryPyJsonRpc):
     """
     JsonRpc-Api-Zugang
@@ -921,35 +952,25 @@ class JsonRpc(CherryPyJsonRpc):
         return result
 
 
-def jronsrpc_help(*args, **kwargs):
-    """
-    Gibt eine Hilfe-Seite zurück
-    """
+    @rpcmethod
+    def delete_address(
+        self,
+        key_urlsafe = None,
+        address_uid = None
+    ):
+        """
+        Deletes one address
+        """
 
-    # Vorlage
-    template_path = os.path.join(THISDIR, "help.mako")
-    template = Template(filename = template_path)
-    rendered = template.render_unicode(
-        version = common.constants.VERSION,
-        appname = cherrypy.config["APPNAME"],
-        function_help_strings = [
-            # Help strings
-            extract_documentation(JsonRpc.get_info, u"get_info"),
-            extract_documentation(JsonRpc.create_address, u"create_address"),
+        common.addresses.delete_address(
+            key_urlsafe = key_urlsafe,
+            address_uid = address_uid
+        )
 
-            extract_documentation(JsonRpc.get_address, u"get_address"),
-            extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+        # Finished
+        return True
 
-            extract_documentation(JsonRpc.get_category_items, u"get_category_items"),
-            extract_documentation(JsonRpc.get_business_items, u"get_business_items"),
-            extract_documentation(JsonRpc.get_tag_items, u"get_tag_items"),
 
-            extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
-        ]
-    )
-
-    # Finished
-    return rendered
 
 
 jsonrpc = JsonRpc()

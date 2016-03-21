@@ -895,6 +895,28 @@ def search_addresses(
     return result
 
 
+def delete_address(key_urlsafe = None, address_uid = None):
+    """
+    Deletes one address
+    """
+
+    assert key_urlsafe or address_uid
+
+    # Get key
+    if key_urlsafe:
+        key = ndb.Key(urlsafe = key_urlsafe)
+    else:
+        keys = Address.query(Address.uid == address_uid).fetch(
+            deadline = 30,  # seconds
+            keys_only = True
+        )
+        if not keys:
+            return
+        key = keys[0]
+
+    # Delete
+    key.delete()
+
 
 
 

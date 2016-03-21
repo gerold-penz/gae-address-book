@@ -10,6 +10,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.14
+==============
+
+2016-03-21
+
+- New API-function: *delete_address*
+
+
+==============
 Version 0.1.13
 ==============
 
