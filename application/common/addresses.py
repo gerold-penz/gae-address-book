@@ -277,6 +277,7 @@ def get_addresses(
     page,
     page_size,
     order_by = None,
+    deleted = False,
     filter_by_organization = None,
     filter_by_organization_char1 = None,
     filter_by_first_name = None,
@@ -326,6 +327,9 @@ def get_addresses(
         - "birthday"
         - "age"
 
+    :param deleted: If `True`: returns only deleted addresses.
+        If `False`: returns only undeleted addresses.
+
     :param filter_by_xxx: Case insensitive filter strings
 
     :param filter_by_category_items: List with *case sensitive* items.
@@ -349,7 +353,9 @@ def get_addresses(
     query = Address.query()
 
     # Prepare filter
-    filter_items = []
+    filter_items = [
+        Address.deleted == deleted
+    ]
 
     # Append filter items (strings)
     if filter_by_organization:
@@ -895,30 +901,33 @@ def search_addresses(
     return result
 
 
-def delete_address(key_urlsafe = None, address_uid = None):
+def delete_address(key_urlsafe = None, address_uid = None, force = False):
     """
     Deletes one address
+
+    Only the "deletion_timestamp" will set.
+
+    :param force: If `True`, address will deleted full.
     """
 
     assert key_urlsafe or address_uid
 
-    # Get key
-    if key_urlsafe:
+    if force and key_urlsafe:
+        # Delete address unsafe (only with key)
         key = ndb.Key(urlsafe = key_urlsafe)
+        key.delete()
     else:
-        keys = Address.query(Address.uid == address_uid).fetch(
-            deadline = 30,  # seconds
-            keys_only = True
+        # Load address
+        address = get_address(
+            key_urlsafe = key_urlsafe,
+            address_uid = address_uid
         )
-        if not keys:
-            return
-        key = keys[0]
 
-    # Delete
-    key.delete()
-
-
-
-
-
+        if force:
+            # Delete address unsafe
+            address.key.delete()
+        else:
+            # Safe delete
+            address.dt = datetime.datetime.utcnow()
+            address.put()
 

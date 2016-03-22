@@ -17,6 +17,8 @@ Version 0.1.15
 
 - Datetime-serializable JSON-module (jsonx) added
 
+- *delete_address*-function: *force*-parameter added
+
 
 ==============
 Version 0.1.14
