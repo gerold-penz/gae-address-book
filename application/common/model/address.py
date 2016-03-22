@@ -226,6 +226,7 @@ class Address(ndb.Model):
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+    dt = ndb.DateTimeProperty()  # Zeitpunkt der Löschung
 
     # Kind
     kind = ndb.StringProperty(required = True)

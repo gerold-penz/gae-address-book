@@ -10,6 +10,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.15
+==============
+
+2016-03-22
+
+- Datetime-serializable JSON-module (jsonx) added
+
+
+==============
 Version 0.1.14
 ==============
 
