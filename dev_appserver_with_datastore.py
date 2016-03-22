@@ -22,6 +22,7 @@ subprocess.call(
         "--admin_port", "8001",
         "--require_indexes", "yes",
         "--storage_path", STORAGEDIR,
+        "--log_level", "debug",
         "./app.yaml",
         # "./backend.yaml",
         # "./dispatch.yaml",
