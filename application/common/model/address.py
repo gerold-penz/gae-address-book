@@ -60,6 +60,7 @@ class DateTimePropertySerializable(ndb.DateTimeProperty):
 
 
 class Tel(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     label = ndb.StringProperty()
     number = ndb.StringProperty(required = True)
 
@@ -74,6 +75,7 @@ class Tel(ndb.Model):
 
 
 class Email(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     label = ndb.StringProperty()
     email = ndb.StringProperty(required = True)
 
@@ -88,6 +90,7 @@ class Email(ndb.Model):
 
 
 class Url(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     label = ndb.StringProperty()
     url = ndb.StringProperty(required = True)
 
@@ -102,6 +105,7 @@ class Url(ndb.Model):
 
 
 class Note(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
     ct = DateTimePropertySerializable(
@@ -115,6 +119,7 @@ class Note(ndb.Model):
 
 
 class Agreement(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
     ct = DateTimePropertySerializable(
@@ -128,6 +133,7 @@ class Agreement(ndb.Model):
 
 
 class JournalItem(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     date_time = DateTimePropertySerializable()
     text = ndb.TextProperty(required = True)
 
@@ -142,6 +148,7 @@ class JournalItem(ndb.Model):
 
 
 class Anniversary(ndb.Model):
+    uid = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
     year = ndb.IntegerProperty()
     month = ndb.IntegerProperty(required = True, choices = range(1, 13))

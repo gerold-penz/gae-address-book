@@ -25,6 +25,8 @@ Version 0.1.15
 
 - New Version of *mako.zip* added
 
+- Datamodel changed: *uid*-fields added
+
 
 ==============
 Version 0.1.14
