@@ -9,6 +9,14 @@ ToDo: Security: Authorization: *common.authorization*
 # ToDo: Hier muss alles umgewandelt werden so wie in *create()*
 
 
+
+
+# ToDo: Beim Speichern muss auf None geprüft werden und wenn nicht None, dann
+# auch leere Listen speichern.
+
+# ToDo: Beim Speichern müssen alte CT und CU übernommen werden, wenn es eine UUID gibt.
+
+
 ==============
 Version 0.1.15
 ==============

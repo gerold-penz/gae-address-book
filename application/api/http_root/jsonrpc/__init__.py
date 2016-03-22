@@ -716,9 +716,11 @@ class JsonRpc(CherryPyJsonRpc):
         user = cherrypy.request.login
 
         # Prepare Phone-Items
-        phone_items_ = None
-        if phone_items:
+        if phone_items is None:
+            phone_items_ = None
+        else:
             phone_items_ = []
+        if phone_items:
             for data in phone_items:
                 phone_items_.append(
                     common.addresses.Tel(

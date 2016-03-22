@@ -204,10 +204,21 @@ def create(
     if phone_items:
         for tel in phone_items:
             assert isinstance(tel, Tel)
-            if not tel.cu:
-                tel.cu = user
-            if not tel.eu:
-                tel.eu = user
+            if tel.uid:
+                for old_tel in address.phone_items:
+                    if old_tel.uid == tel.uid:
+                        tel.ct = old_tel.ct
+                        tel.cu = old_tel.cu
+                        tel.et = old_tel.et
+                        tel.eu = old_tel.eu
+                        if (
+                            old_tel.label != tel.label or
+                            old_tel.number != tel.number
+                        ):
+                            tel.et = datetime.datetime.utcnow()
+                            tel.eu = user
+            else:
+                tel.uid = unicode(uuid.uuid4())
         address.phone_items = phone_items
     if email_items:
         for email in email_items:
@@ -228,10 +239,18 @@ def create(
     if note_items:
         for note in note_items:
             assert isinstance(note, Note)
-            if not note.cu:
-                note.cu = user
-            if not note.eu:
-                note.eu = user
+            if note.uid:
+                for old_note in address.note_items:
+                    if old_note.uid == note.uid:
+                        note.ct = old_note.ct
+                        note.cu = old_note.cu
+                        note.et = old_note.et
+                        note.eu = old_note.eu
+                        if old_note.text != note.text:
+                            note.et = datetime.datetime.utcnow()
+                            note.eu = user
+            else:
+                note.uid = unicode(uuid.uuid4())
         address.note_items = note_items
     if journal_items:
         for journal_item in journal_items:
@@ -649,7 +668,7 @@ def save_address(
             kind.startswith("x-")
         )
         address.kind = kind
-    if category_items:
+    if category_items is not None:
         if isinstance(category_items, basestring):
             category_items = [category_items]
         address.category_items = sorted(list(set(category_items)))
@@ -681,7 +700,7 @@ def save_address(
         address.land = land
     if country is not None:
         address.country = country
-    if phone_items:
+    if phone_items is not None:
         for tel in phone_items:
             assert isinstance(tel, Tel)
             if not tel.cu:
