@@ -832,7 +832,6 @@ def get_tag_items():
     return tag_items
 
 
-
 def search_addresses(
     query_string,
     page,

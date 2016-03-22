@@ -21,6 +21,8 @@ Version 0.1.15
 
 - New Version of *pyjsonrpc.zip* added
 
+- New Version of *cherrypy.zip* added
+
 
 ==============
 Version 0.1.14
