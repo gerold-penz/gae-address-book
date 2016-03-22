@@ -23,6 +23,8 @@ Version 0.1.15
 
 - New Version of *cherrypy.zip* added
 
+- New Version of *mako.zip* added
+
 
 ==============
 Version 0.1.14
