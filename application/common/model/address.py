@@ -456,37 +456,93 @@ class Address(ndb.Model):
         if self.kind is not None:
             fields.append(search.TextField(name = u"kind", value = self.kind))
         if self.organization is not None:
+            if common.format_.has_umlauts(self.organization):
+                fields.append(search.TextField(
+                    name = u"organization", value = common.format_.replace_umlauts(self.organization)
+                ))
             fields.append(search.TextField(name = u"organization", value = self.organization))
         if self.position is not None:
+            if common.format_.has_umlauts(self.position):
+                fields.append(search.TextField(
+                    name = u"position", value = common.format_.replace_umlauts(self.position)
+                ))
             fields.append(search.TextField(name = u"position", value = self.position))
         if self.salutation is not None:
+            if common.format_.has_umlauts(self.salutation):
+                fields.append(search.TextField(
+                    name = u"salutation", value = common.format_.replace_umlauts(self.salutation)
+                ))
             fields.append(search.TextField(name = u"salutation", value = self.salutation))
         if self.first_name is not None:
+            if common.format_.has_umlauts(self.first_name):
+                fields.append(search.TextField(
+                    name = u"first_name", value = common.format_.replace_umlauts(self.first_name)
+                ))
             fields.append(search.TextField(name = u"first_name", value = self.first_name))
         if self.last_name is not None:
+            if common.format_.has_umlauts(self.last_name):
+                fields.append(search.TextField(
+                    name = u"last_name", value = common.format_.replace_umlauts(self.last_name)
+                ))
             fields.append(search.TextField(name = u"last_name", value = self.last_name))
         if self.nickname is not None:
+            if common.format_.has_umlauts(self.nickname):
+                fields.append(search.TextField(
+                    name = u"nickname", value = common.format_.replace_umlauts(self.nickname)
+                ))
             fields.append(search.TextField(name = u"nickname", value = self.nickname))
         if self.street is not None:
+            if common.format_.has_umlauts(self.street):
+                fields.append(search.TextField(
+                    name = u"street", value = common.format_.replace_umlauts(self.street)
+                ))
             fields.append(search.TextField(name = u"street", value = self.street))
         if self.postcode is not None:
             fields.append(search.TextField(name = u"postcode", value = self.postcode))
         if self.city is not None:
+            if common.format_.has_umlauts(self.city):
+                fields.append(search.TextField(
+                    name = u"city", value = common.format_.replace_umlauts(self.city)
+                ))
             fields.append(search.TextField(name = u"city", value = self.city))
         if self.district is not None:
+            if common.format_.has_umlauts(self.district):
+                fields.append(search.TextField(
+                    name = u"district", value = common.format_.replace_umlauts(self.district)
+                ))
             fields.append(search.TextField(name = u"district", value = self.district))
         if self.land is not None:
+            if common.format_.has_umlauts(self.land):
+                fields.append(search.TextField(
+                    name = u"land", value = common.format_.replace_umlauts(self.land)
+                ))
             fields.append(search.TextField(name = u"land", value = self.land))
         if self.country is not None:
+            if common.format_.has_umlauts(self.country):
+                fields.append(search.TextField(
+                    name = u"country", value = common.format_.replace_umlauts(self.country)
+                ))
             fields.append(search.TextField(name = u"country", value = self.country))
         if self.gender is not None:
             fields.append(search.TextField(name = u"gender", value = self.gender))
 
         for category_item in self.category_items:
+            if common.format_.has_umlauts(category_item):
+                fields.append(search.TextField(
+                    name = u"category", value = common.format_.replace_umlauts(category_item)
+                ))
             fields.append(search.TextField(name = u"category", value = category_item))
         for tag_item in self.tag_items:
+            if common.format_.has_umlauts(tag_item):
+                fields.append(search.TextField(
+                    name = u"tag", value = common.format_.replace_umlauts(tag_item)
+                ))
             fields.append(search.TextField(name = u"tag", value = tag_item))
         for business_item in self.business_items:
+            if common.format_.has_umlauts(business_item):
+                fields.append(search.TextField(
+                    name = u"business", value = common.format_.replace_umlauts(business_item)
+                ))
             fields.append(search.TextField(name = u"business", value = business_item))
         for phone_item in self.phone_items:
             assert isinstance(phone_item, Tel)
@@ -498,12 +554,24 @@ class Address(ndb.Model):
             assert isinstance(url_item, Url)
             fields.append(search.TextField(name = u"url", value = url_item.url))
         for journal_item in self.journal_items:
+            if common.format_.has_umlauts(journal_item):
+                fields.append(search.TextField(
+                    name = u"journal", value = common.format_.replace_umlauts(journal_item)
+                ))
             assert isinstance(journal_item, JournalItem)
             fields.append(search.TextField(name = u"journal", value = journal_item.text))
         for note_item in self.note_items:
+            if common.format_.has_umlauts(note_item.text):
+                fields.append(search.TextField(
+                    name = u"note", value = common.format_.replace_umlauts(note_item.text)
+                ))
             assert isinstance(note_item, Note)
             fields.append(search.TextField(name = u"note", value = note_item.text))
         for agreement_item in self.agreement_items:
+            if common.format_.has_umlauts(agreement_item):
+                fields.append(search.TextField(
+                    name = u"agreement", value = common.format_.replace_umlauts(agreement_item)
+                ))
             assert isinstance(agreement_item, Agreement)
             fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
         for anniversary_item in self.anniversary_items:
@@ -521,10 +589,11 @@ class Address(ndb.Model):
             else:
                 fields.append(
                     search.TextField(
-                        name = anniversary_item.label,
+                        name = u"anniversary",
                         value = unicode(anniversary_item.month) + u"-" + unicode(anniversary_item.day)
                     )
                 )
+            fields.append(search.TextField(name = u"anniversary", value = anniversary_item.label))
 
         # Document
         document = search.Document(

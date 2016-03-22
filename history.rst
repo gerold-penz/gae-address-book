@@ -19,6 +19,8 @@ Version 0.1.15
 
 - *delete_address*-function: *force*-parameter added
 
+- New Version of *pyjsonrpc.zip* added
+
 
 ==============
 Version 0.1.14

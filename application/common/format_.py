@@ -489,3 +489,42 @@ def email_address(email):
 
     # Fertig
     return email
+
+
+def has_umlauts(text):
+    """
+    Prüft ob im übergebenen Text deutsche Umlaute enthalten sind
+    """
+
+    if not text:
+        return False
+
+    for umlaut in u"öäüÖÄÜß":
+        if text.find(umlaut) > -1:
+            return True
+
+    # Fertig
+    return False
+
+
+def replace_umlauts(text):
+    """
+    Ersetzt Umlaute
+    """
+
+    if not text:
+        return text
+
+    for umlaut, replacement in (
+        (u"ö", u"oe"),
+        (u"ä", u"ae"),
+        (u"ü", u"ue"),
+        (u"Ö", u"Oe"),
+        (u"Ä", u"Ae"),
+        (u"Ü", u"Ue"),
+        (u"ß", u"ss"),
+    ):
+        text = text.replace(umlaut, replacement)
+
+    # Fertig
+    return text
