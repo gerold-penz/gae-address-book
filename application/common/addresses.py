@@ -905,9 +905,8 @@ def delete_address(key_urlsafe = None, address_uid = None, force = False):
     """
     Deletes one address
 
-    Only the "deletion_timestamp" will set.
-
     :param force: If `True`, address will deleted full.
+        Else, only the "deletion_timestamp" will set.
     """
 
     assert key_urlsafe or address_uid

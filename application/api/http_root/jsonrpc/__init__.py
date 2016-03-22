@@ -956,7 +956,8 @@ class JsonRpc(CherryPyJsonRpc):
     def delete_address(
         self,
         key_urlsafe = None,
-        address_uid = None
+        address_uid = None,
+        force = None
     ):
         """
         Deletes one address
@@ -964,7 +965,8 @@ class JsonRpc(CherryPyJsonRpc):
 
         common.addresses.delete_address(
             key_urlsafe = key_urlsafe,
-            address_uid = address_uid
+            address_uid = address_uid,
+            force = force
         )
 
         # Finished
