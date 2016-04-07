@@ -157,7 +157,8 @@ def create(
     # Kind
     kind = kind or u"individual"
     assert (
-        kind.lower() in (u"individual", u"organization", u"group", u"location") or
+        kind.lower() in (
+        u"individual", u"organization", u"group", u"location") or
         kind.lower().startswith("x-")
     )
 
@@ -169,39 +170,27 @@ def create(
         eu = user,
         kind = kind,
     )
-    if category_items:
+    if category_items is not None:
         if isinstance(category_items, basestring):
             category_items = [category_items]
         address.category_items = sorted(list(set(category_items)))
-    if tag_items:
+    if tag_items is not None:
         if isinstance(tag_items, basestring):
             tag_items = [tag_items]
         address.tag_items = sorted(list(set(tag_items)))
-    if organization:
-        address.organization = organization
-    if position:
-        address.position = position
-    if salutation:
-        address.salutation = salutation
-    if first_name:
-        address.first_name = first_name
-    if last_name:
-        address.last_name = last_name
-    if nickname:
-        address.nickname = nickname
-    if street:
-        address.street = street
-    if postcode:
-        address.postcode = postcode
-    if city:
-        address.city = city
-    if district:
-        address.district = district
-    if land:
-        address.land = land
-    if country:
-        address.country = country
-    if phone_items:
+    address.organization = organization
+    address.position = position
+    address.salutation = salutation
+    address.first_name = first_name
+    address.last_name = last_name
+    address.nickname = nickname
+    address.street = street
+    address.postcode = postcode
+    address.city = city
+    address.district = district
+    address.land = land
+    address.country = country
+    if phone_items is not None:
         for tel in phone_items:
             assert isinstance(tel, Tel)
             if tel.uid:
@@ -220,7 +209,7 @@ def create(
             else:
                 tel.uid = unicode(uuid.uuid4())
         address.phone_items = phone_items
-    if email_items:
+    if email_items is not None:
         for email in email_items:
             assert isinstance(email, Email)
             if email.uid:
@@ -239,7 +228,7 @@ def create(
             else:
                 email.uid = unicode(uuid.uuid4())
         address.email_items = email_items
-    if url_items:
+    if url_items is not None:
         for url in url_items:
             assert isinstance(url, Url)
             if url.uid:
@@ -258,7 +247,7 @@ def create(
             else:
                 url.uid = unicode(uuid.uuid4())
         address.url_items = url_items
-    if note_items:
+    if note_items is not None:
         for note in note_items:
             assert isinstance(note, Note)
             if note.uid:
@@ -274,7 +263,7 @@ def create(
             else:
                 note.uid = unicode(uuid.uuid4())
         address.note_items = note_items
-    if journal_items:
+    if journal_items is not None:
         for journal in journal_items:
             assert isinstance(journal, JournalItem)
             if journal.uid:
@@ -290,11 +279,11 @@ def create(
             else:
                 journal.uid = unicode(uuid.uuid4())
         address.journal_items = journal_items
-    if business_items:
+    if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
         address.business_items = sorted(list(set(business_items)))
-    if anniversary_items:
+    if anniversary_items is not None:
         for anniversary in anniversary_items:
             assert isinstance(anniversary, Anniversary)
             if anniversary.uid:
@@ -315,7 +304,7 @@ def create(
             else:
                 anniversary.uid = unicode(uuid.uuid4())
         address.anniversary_items = anniversary_items
-    if gender:
+    if gender is not None:
         gender = gender.lower()
         assert gender in "mfonu"
         address.gender = gender
@@ -421,33 +410,48 @@ def get_addresses(
 
     # Append filter items (strings)
     if filter_by_organization:
-        filter_items.append(Address.organization_lower == filter_by_organization.strip().lower())
+        filter_items.append(
+            Address.organization_lower == filter_by_organization.strip().lower())
     if filter_by_organization_char1:
-        filter_items.append(Address.organization_char1 == filter_by_organization_char1[0].lower())
+        filter_items.append(
+            Address.organization_char1 == filter_by_organization_char1[
+                0].lower())
     if filter_by_first_name:
-        filter_items.append(Address.first_name_lower == filter_by_first_name.strip().lower())
+        filter_items.append(
+            Address.first_name_lower == filter_by_first_name.strip().lower())
     if filter_by_first_name_char1:
-        filter_items.append(Address.first_name_char1 == filter_by_first_name_char1[0].lower())
+        filter_items.append(
+            Address.first_name_char1 == filter_by_first_name_char1[0].lower())
     if filter_by_last_name:
-        filter_items.append(Address.last_name_lower == filter_by_last_name.strip().lower())
+        filter_items.append(
+            Address.last_name_lower == filter_by_last_name.strip().lower())
     if filter_by_last_name_char1:
-        filter_items.append(Address.last_name_char1 == filter_by_last_name_char1[0].lower())
+        filter_items.append(
+            Address.last_name_char1 == filter_by_last_name_char1[0].lower())
     if filter_by_nickname:
-        filter_items.append(Address.nickname_lower == filter_by_nickname.strip().lower())
+        filter_items.append(
+            Address.nickname_lower == filter_by_nickname.strip().lower())
     if filter_by_nickname_char1:
-        filter_items.append(Address.nickname_char1 == filter_by_nickname_char1[0].lower())
+        filter_items.append(
+            Address.nickname_char1 == filter_by_nickname_char1[0].lower())
     if filter_by_street:
-        filter_items.append(Address.street_lower == filter_by_street.strip().lower())
+        filter_items.append(
+            Address.street_lower == filter_by_street.strip().lower())
     if filter_by_street_char1:
-        filter_items.append(Address.street_char1 == filter_by_street_char1[0].lower())
+        filter_items.append(
+            Address.street_char1 == filter_by_street_char1[0].lower())
     if filter_by_postcode:
-        filter_items.append(Address.postcode_lower == filter_by_postcode.strip().lower())
+        filter_items.append(
+            Address.postcode_lower == filter_by_postcode.strip().lower())
     if filter_by_postcode_char1:
-        filter_items.append(Address.postcode_char1 == filter_by_postcode_char1[0].lower())
+        filter_items.append(
+            Address.postcode_char1 == filter_by_postcode_char1[0].lower())
     if filter_by_city:
-        filter_items.append(Address.city_lower == filter_by_city.strip().lower())
+        filter_items.append(
+            Address.city_lower == filter_by_city.strip().lower())
     if filter_by_city_char1:
-        filter_items.append(Address.city_char1 == filter_by_city_char1[0].lower())
+        filter_items.append(
+            Address.city_char1 == filter_by_city_char1[0].lower())
 
     # Append filter items (lists) --> IN
     if filter_by_business_items:
@@ -687,7 +691,8 @@ def save_address(
     if address.owner == user:
         authorization.check_authorization(user, authorization.OWN_ADDRESS_EDIT)
     else:
-        authorization.check_authorization(user, authorization.PUBLIC_ADDRESS_EDIT)
+        authorization.check_authorization(user,
+                                          authorization.PUBLIC_ADDRESS_EDIT)
 
     # Save original address to *address_history*.
     address_history = AddressHistory(
@@ -715,7 +720,7 @@ def save_address(
         if isinstance(category_items, basestring):
             category_items = [category_items]
         address.category_items = sorted(list(set(category_items)))
-    if tag_items:
+    if tag_items is not None:
         if isinstance(tag_items, basestring):
             tag_items = [tag_items]
         address.tag_items = sorted(list(set(tag_items)))
@@ -746,54 +751,116 @@ def save_address(
     if phone_items is not None:
         for tel in phone_items:
             assert isinstance(tel, Tel)
-            if not tel.cu:
-                tel.cu = user
-            if not tel.eu:
-                tel.eu = user
+            if tel.uid:
+                for old_tel in address.phone_items:
+                    if old_tel.uid == tel.uid:
+                        tel.ct = old_tel.ct
+                        tel.cu = old_tel.cu
+                        tel.et = old_tel.et
+                        tel.eu = old_tel.eu
+                        if (
+                            old_tel.label != tel.label or
+                            old_tel.number != tel.number
+                        ):
+                            tel.et = datetime.datetime.utcnow()
+                            tel.eu = user
+            else:
+                tel.uid = unicode(uuid.uuid4())
         address.phone_items = phone_items
-    if email_items:
+    if email_items is not None:
         for email in email_items:
             assert isinstance(email, Email)
-            if not email.cu:
-                email.cu = user
-            if not email.eu:
-                email.eu = user
+            if email.uid:
+                for old_email in address.email_items:
+                    if old_email.uid == email.uid:
+                        email.ct = old_email.ct
+                        email.cu = old_email.cu
+                        email.et = old_email.et
+                        email.eu = old_email.eu
+                        if (
+                            old_email.label != email.label or
+                            old_email.email != email.email
+                        ):
+                            email.et = datetime.datetime.utcnow()
+                            email.eu = user
+            else:
+                email.uid = unicode(uuid.uuid4())
         address.email_items = email_items
     if url_items:
         for url in url_items:
             assert isinstance(url, Url)
-            if not url.cu:
-                url.cu = user
-            if not url.eu:
-                url.eu = user
+            if url.uid:
+                for old_url in address.url_items:
+                    if old_url.uid == url.uid:
+                        url.ct = old_url.ct
+                        url.cu = old_url.cu
+                        url.et = old_url.et
+                        url.eu = old_url.eu
+                        if (
+                            old_url.label != url.label or
+                            old_url.url != url.url
+                        ):
+                            url.et = datetime.datetime.utcnow()
+                            url.eu = user
+            else:
+                url.uid = unicode(uuid.uuid4())
         address.url_items = url_items
-    if note_items:
+    if note_items is not None:
         for note in note_items:
             assert isinstance(note, Note)
-            if not note.cu:
-                note.cu = user
-            if not note.eu:
-                note.eu = user
+            if note.uid:
+                for old_note in address.note_items:
+                    if old_note.uid == note.uid:
+                        note.ct = old_note.ct
+                        note.cu = old_note.cu
+                        note.et = old_note.et
+                        note.eu = old_note.eu
+                        if old_note.text != note.text:
+                            note.et = datetime.datetime.utcnow()
+                            note.eu = user
+            else:
+                note.uid = unicode(uuid.uuid4())
         address.note_items = note_items
-    if journal_items:
-        for journal_item in journal_items:
-            assert isinstance(journal_item, JournalItem)
-            if not journal_item.cu:
-                journal_item.cu = user
-            if not journal_item.eu:
-                journal_item.eu = user
+    if journal_items is not None:
+        for journal in journal_items:
+            assert isinstance(journal, JournalItem)
+            if journal.uid:
+                for old_journal in address.journal_items:
+                    if old_journal.uid == journal.uid:
+                        journal.ct = old_journal.ct
+                        journal.cu = old_journal.cu
+                        journal.et = old_journal.et
+                        journal.eu = old_journal.eu
+                        if old_journal.text != journal.text:
+                            journal.et = datetime.datetime.utcnow()
+                            journal.eu = user
+            else:
+                journal.uid = unicode(uuid.uuid4())
         address.journal_items = journal_items
-    if business_items:
+    if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
         address.business_items = sorted(list(set(business_items)))
-    if anniversary_items:
-        for anniversary_item in anniversary_items:
-            assert isinstance(anniversary_item, Anniversary)
-            if not anniversary_item.cu:
-                anniversary_item.cu = user
-            if not anniversary_item.eu:
-                anniversary_item.eu = user
+    if anniversary_items is not None:
+        for anniversary in anniversary_items:
+            assert isinstance(anniversary, Anniversary)
+            if anniversary.uid:
+                for old_anniversary in address.anniversary_items:
+                    if old_anniversary.uid == anniversary.uid:
+                        anniversary.ct = old_anniversary.ct
+                        anniversary.cu = old_anniversary.cu
+                        anniversary.et = old_anniversary.et
+                        anniversary.eu = old_anniversary.eu
+                        if (
+                            old_anniversary.label != anniversary.label or
+                            old_anniversary.year != anniversary.year or
+                            old_anniversary.month != anniversary.month or
+                            old_anniversary.day != anniversary.day
+                        ):
+                            anniversary.et = datetime.datetime.utcnow()
+                            anniversary.eu = user
+            else:
+                anniversary.uid = unicode(uuid.uuid4())
         address.anniversary_items = anniversary_items
     if gender is not None:
         gender = gender.lower()
@@ -817,7 +884,7 @@ def delete_address_search_index():
         document_ids = [
             document.doc_id for document in
             index.get_range(limit = 200, ids_only = True)
-        ]
+            ]
         if not document_ids:
             break
         index.delete(document_ids)
@@ -853,7 +920,8 @@ def get_category_items():
 
     category_items = set()
 
-    query = Address.query(projection = [Address.category_items], distinct = True)
+    query = Address.query(projection = [Address.category_items],
+                          distinct = True)
     for address in query.iter(batch_size = 1000):
         for category_item in address.category_items:
             category_items.add(category_item)
@@ -869,7 +937,8 @@ def get_business_items():
 
     business_items = set()
 
-    query = Address.query(projection = [Address.business_items], distinct = True)
+    query = Address.query(projection = [Address.business_items],
+                          distinct = True)
     for address in query.iter(batch_size = 1000):
         for business_item in address.business_items:
             business_items.add(business_item)
@@ -990,4 +1059,3 @@ def delete_address(key_urlsafe = None, address_uid = None, force = False):
             # Safe delete
             address.dt = datetime.datetime.utcnow()
             address.put()
-

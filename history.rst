@@ -6,17 +6,6 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
-# ToDo: Hier muss alles umgewandelt werden so wie in *create()*
-
-
-
-
-# ToDo: Beim Speichern muss auf None geprüft werden und wenn nicht None, dann
-# auch leere Listen speichern.
-
-
-
-
 ==============
 Version 0.1.16
 ==============
@@ -24,6 +13,9 @@ Version 0.1.16
 2016-04-07
 
 - Beim Speichern der Adresse werden alte CT und CU übernommen, wenn es eine UUID gibt.
+
+- Beim Speichern der Adresse wird jetzt auf None geprüft um auch leere Listen
+  speichern zu können.
 
 
 ==============
