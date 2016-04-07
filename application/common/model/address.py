@@ -360,7 +360,7 @@ class Address(ndb.Model):
     anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)
-    age = ndb.ComputedProperty(get_age)
+    age = property(fget = get_age)
     note_items = ndb.StructuredProperty(Note, repeated = True)  # Notizen
     agreement_items = ndb.StructuredProperty(Agreement, repeated = True)  # Vereinbarungen
 
