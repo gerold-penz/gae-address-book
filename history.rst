@@ -17,6 +17,8 @@ Version 0.1.16
 - Beim Speichern der Adresse wird jetzt auf None geprüft um auch leere Listen
   speichern zu können.
 
+- Saving ET and EU corrected.
+
 
 ==============
 Version 0.1.15

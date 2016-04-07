@@ -170,6 +170,11 @@ def create(
         eu = user,
         kind = kind,
     )
+
+    # Now
+    utcnow = datetime.datetime.utcnow()
+
+    # Get data
     if category_items is not None:
         if isinstance(category_items, basestring):
             category_items = [category_items]
@@ -204,10 +209,14 @@ def create(
                             old_tel.label != tel.label or
                             old_tel.number != tel.number
                         ):
-                            tel.et = datetime.datetime.utcnow()
+                            tel.et = utcnow
                             tel.eu = user
             else:
                 tel.uid = unicode(uuid.uuid4())
+            if not tel.et:
+                tel.et = utcnow
+            if not tel.eu:
+                tel.eu = user
         address.phone_items = phone_items
     if email_items is not None:
         for email in email_items:
@@ -223,10 +232,14 @@ def create(
                             old_email.label != email.label or
                             old_email.email != email.email
                         ):
-                            email.et = datetime.datetime.utcnow()
+                            email.et = utcnow
                             email.eu = user
             else:
                 email.uid = unicode(uuid.uuid4())
+            if not email.et:
+                email.et = utcnow
+            if not email.eu:
+                email.eu = user
         address.email_items = email_items
     if url_items is not None:
         for url in url_items:
@@ -242,10 +255,14 @@ def create(
                             old_url.label != url.label or
                             old_url.url != url.url
                         ):
-                            url.et = datetime.datetime.utcnow()
+                            url.et = utcnow
                             url.eu = user
             else:
                 url.uid = unicode(uuid.uuid4())
+            if not url.et:
+                url.et = utcnow
+            if not url.eu:
+                url.eu = user
         address.url_items = url_items
     if note_items is not None:
         for note in note_items:
@@ -258,10 +275,14 @@ def create(
                         note.et = old_note.et
                         note.eu = old_note.eu
                         if old_note.text != note.text:
-                            note.et = datetime.datetime.utcnow()
+                            note.et = utcnow
                             note.eu = user
             else:
                 note.uid = unicode(uuid.uuid4())
+            if not note.et:
+                note.et = utcnow
+            if not note.eu:
+                note.eu = user
         address.note_items = note_items
     if journal_items is not None:
         for journal in journal_items:
@@ -274,10 +295,14 @@ def create(
                         journal.et = old_journal.et
                         journal.eu = old_journal.eu
                         if old_journal.text != journal.text:
-                            journal.et = datetime.datetime.utcnow()
+                            journal.et = utcnow
                             journal.eu = user
             else:
                 journal.uid = unicode(uuid.uuid4())
+            if not journal.et:
+                journal.et = utcnow
+            if not journal.eu:
+                journal.eu = user
         address.journal_items = journal_items
     if business_items is not None:
         if isinstance(business_items, basestring):
@@ -299,10 +324,14 @@ def create(
                             old_anniversary.month != anniversary.month or
                             old_anniversary.day != anniversary.day
                         ):
-                            anniversary.et = datetime.datetime.utcnow()
+                            anniversary.et = utcnow
                             anniversary.eu = user
             else:
                 anniversary.uid = unicode(uuid.uuid4())
+            if not anniversary.et:
+                anniversary.et = utcnow
+            if not anniversary.eu:
+                anniversary.eu = user
         address.anniversary_items = anniversary_items
     if gender is not None:
         gender = gender.lower()
@@ -691,8 +720,7 @@ def save_address(
     if address.owner == user:
         authorization.check_authorization(user, authorization.OWN_ADDRESS_EDIT)
     else:
-        authorization.check_authorization(user,
-                                          authorization.PUBLIC_ADDRESS_EDIT)
+        authorization.check_authorization(user, authorization.PUBLIC_ADDRESS_EDIT)
 
     # Save original address to *address_history*.
     address_history = AddressHistory(
@@ -702,8 +730,11 @@ def save_address(
     )
     address_history.put()
 
+    # Now
+    utcnow = datetime.datetime.utcnow()
+
     # Change *et* and *eu*
-    address.et = datetime.datetime.now()
+    address.et = utcnow
     address.eu = user
 
     # Check arguments and set values
@@ -762,10 +793,14 @@ def save_address(
                             old_tel.label != tel.label or
                             old_tel.number != tel.number
                         ):
-                            tel.et = datetime.datetime.utcnow()
+                            tel.et = utcnow
                             tel.eu = user
             else:
                 tel.uid = unicode(uuid.uuid4())
+            if not tel.et:
+                tel.et = utcnow
+            if not tel.eu:
+                tel.eu = user
         address.phone_items = phone_items
     if email_items is not None:
         for email in email_items:
@@ -781,10 +816,14 @@ def save_address(
                             old_email.label != email.label or
                             old_email.email != email.email
                         ):
-                            email.et = datetime.datetime.utcnow()
+                            email.et = utcnow
                             email.eu = user
             else:
                 email.uid = unicode(uuid.uuid4())
+            if not email.et:
+                email.et = utcnow
+            if not email.eu:
+                email.eu = user
         address.email_items = email_items
     if url_items:
         for url in url_items:
@@ -800,10 +839,14 @@ def save_address(
                             old_url.label != url.label or
                             old_url.url != url.url
                         ):
-                            url.et = datetime.datetime.utcnow()
+                            url.et = utcnow
                             url.eu = user
             else:
                 url.uid = unicode(uuid.uuid4())
+            if not url.et:
+                url.et = utcnow
+            if not url.eu:
+                url.eu = user
         address.url_items = url_items
     if note_items is not None:
         for note in note_items:
@@ -816,10 +859,14 @@ def save_address(
                         note.et = old_note.et
                         note.eu = old_note.eu
                         if old_note.text != note.text:
-                            note.et = datetime.datetime.utcnow()
+                            note.et = utcnow
                             note.eu = user
             else:
                 note.uid = unicode(uuid.uuid4())
+            if not note.et:
+                note.et = utcnow
+            if not note.eu:
+                note.eu = user
         address.note_items = note_items
     if journal_items is not None:
         for journal in journal_items:
@@ -832,10 +879,14 @@ def save_address(
                         journal.et = old_journal.et
                         journal.eu = old_journal.eu
                         if old_journal.text != journal.text:
-                            journal.et = datetime.datetime.utcnow()
+                            journal.et = utcnow
                             journal.eu = user
             else:
                 journal.uid = unicode(uuid.uuid4())
+            if not journal.et:
+                journal.et = utcnow
+            if not journal.eu:
+                journal.eu = user
         address.journal_items = journal_items
     if business_items is not None:
         if isinstance(business_items, basestring):
@@ -857,10 +908,14 @@ def save_address(
                             old_anniversary.month != anniversary.month or
                             old_anniversary.day != anniversary.day
                         ):
-                            anniversary.et = datetime.datetime.utcnow()
+                            anniversary.et = utcnow
                             anniversary.eu = user
             else:
                 anniversary.uid = unicode(uuid.uuid4())
+            if not anniversary.et:
+                anniversary.et = utcnow
+            if not anniversary.eu:
+                anniversary.eu = user
         address.anniversary_items = anniversary_items
     if gender is not None:
         gender = gender.lower()
