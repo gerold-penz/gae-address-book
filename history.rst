@@ -14,7 +14,16 @@ ToDo: Security: Authorization: *common.authorization*
 # ToDo: Beim Speichern muss auf None geprüft werden und wenn nicht None, dann
 # auch leere Listen speichern.
 
-# ToDo: Beim Speichern müssen alte CT und CU übernommen werden, wenn es eine UUID gibt.
+
+
+
+==============
+Version 0.1.16
+==============
+
+2016-04-07
+
+- Beim Speichern der Adresse werden alte CT und CU übernommen, wenn es eine UUID gibt.
 
 
 ==============

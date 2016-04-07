@@ -223,18 +223,40 @@ def create(
     if email_items:
         for email in email_items:
             assert isinstance(email, Email)
-            if not email.cu:
-                email.cu = user
-            if not email.eu:
-                email.eu = user
+            if email.uid:
+                for old_email in address.email_items:
+                    if old_email.uid == email.uid:
+                        email.ct = old_email.ct
+                        email.cu = old_email.cu
+                        email.et = old_email.et
+                        email.eu = old_email.eu
+                        if (
+                            old_email.label != email.label or
+                            old_email.email != email.email
+                        ):
+                            email.et = datetime.datetime.utcnow()
+                            email.eu = user
+            else:
+                email.uid = unicode(uuid.uuid4())
         address.email_items = email_items
     if url_items:
         for url in url_items:
             assert isinstance(url, Url)
-            if not url.cu:
-                url.cu = user
-            if not url.eu:
-                url.eu = user
+            if url.uid:
+                for old_url in address.url_items:
+                    if old_url.uid == url.uid:
+                        url.ct = old_url.ct
+                        url.cu = old_url.cu
+                        url.et = old_url.et
+                        url.eu = old_url.eu
+                        if (
+                            old_url.label != url.label or
+                            old_url.url != url.url
+                        ):
+                            url.et = datetime.datetime.utcnow()
+                            url.eu = user
+            else:
+                url.uid = unicode(uuid.uuid4())
         address.url_items = url_items
     if note_items:
         for note in note_items:
@@ -253,24 +275,45 @@ def create(
                 note.uid = unicode(uuid.uuid4())
         address.note_items = note_items
     if journal_items:
-        for journal_item in journal_items:
-            assert isinstance(journal_item, JournalItem)
-            if not journal_item.cu:
-                journal_item.cu = user
-            if not journal_item.eu:
-                journal_item.eu = user
+        for journal in journal_items:
+            assert isinstance(journal, JournalItem)
+            if journal.uid:
+                for old_journal in address.journal_items:
+                    if old_journal.uid == journal.uid:
+                        journal.ct = old_journal.ct
+                        journal.cu = old_journal.cu
+                        journal.et = old_journal.et
+                        journal.eu = old_journal.eu
+                        if old_journal.text != journal.text:
+                            journal.et = datetime.datetime.utcnow()
+                            journal.eu = user
+            else:
+                journal.uid = unicode(uuid.uuid4())
         address.journal_items = journal_items
     if business_items:
         if isinstance(business_items, basestring):
             business_items = [business_items]
         address.business_items = sorted(list(set(business_items)))
     if anniversary_items:
-        for anniversary_item in anniversary_items:
-            assert isinstance(anniversary_item, Anniversary)
-            if not anniversary_item.cu:
-                anniversary_item.cu = user
-            if not anniversary_item.eu:
-                anniversary_item.eu = user
+        for anniversary in anniversary_items:
+            assert isinstance(anniversary, Anniversary)
+            if anniversary.uid:
+                for old_anniversary in address.anniversary_items:
+                    if old_anniversary.uid == anniversary.uid:
+                        anniversary.ct = old_anniversary.ct
+                        anniversary.cu = old_anniversary.cu
+                        anniversary.et = old_anniversary.et
+                        anniversary.eu = old_anniversary.eu
+                        if (
+                            old_anniversary.label != anniversary.label or
+                            old_anniversary.year != anniversary.year or
+                            old_anniversary.month != anniversary.month or
+                            old_anniversary.day != anniversary.day
+                        ):
+                            anniversary.et = datetime.datetime.utcnow()
+                            anniversary.eu = user
+            else:
+                anniversary.uid = unicode(uuid.uuid4())
         address.anniversary_items = anniversary_items
     if gender:
         gender = gender.lower()
