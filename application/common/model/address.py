@@ -36,27 +36,27 @@ def age_years(birthday, basedate = None):
     return years
 
 
-class DateTimePropertySerializable(ndb.DateTimeProperty):
-
-    def _get_for_dict(self, entity):
-
-        value = self._get_value(entity)
-
-        if value:
-            return value.isoformat()
-        else:
-            return value
-
-    def _validate(self, value):
-        if isinstance(value, basestring):
-            value = common.format_.string_to_datetime(value)
-        ndb.DateTimeProperty._validate(self, value)
-
-
-    def _db_set_value(self, v, p, value):
-        if isinstance(value, basestring):
-            value = common.format_.string_to_datetime(value)
-        ndb.DateTimeProperty._db_set_value(self, v, p, value)
+# class DateTimePropertySerializable(ndb.DateTimeProperty):
+#
+#     def _get_for_dict(self, entity):
+#
+#         value = self._get_value(entity)
+#
+#         if value:
+#             return value.isoformat()
+#         else:
+#             return value
+#
+#     def _validate(self, value):
+#         if isinstance(value, basestring):
+#             value = common.format_.string_to_datetime(value)
+#         ndb.DateTimeProperty._validate(self, value)
+#
+#
+#     def _db_set_value(self, v, p, value):
+#         if isinstance(value, basestring):
+#             value = common.format_.string_to_datetime(value)
+#         ndb.DateTimeProperty._db_set_value(self, v, p, value)
 
 
 class Tel(ndb.Model):
@@ -64,11 +64,11 @@ class Tel(ndb.Model):
     label = ndb.StringProperty()
     number = ndb.StringProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
@@ -79,11 +79,11 @@ class Email(ndb.Model):
     label = ndb.StringProperty()
     email = ndb.StringProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
@@ -94,11 +94,11 @@ class Url(ndb.Model):
     label = ndb.StringProperty()
     url = ndb.StringProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
@@ -108,11 +108,11 @@ class Note(ndb.Model):
     uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
@@ -122,29 +122,40 @@ class Agreement(ndb.Model):
     uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
 class JournalItem(ndb.Model):
+
     uid = ndb.StringProperty(required = True)
-    date_time = DateTimePropertySerializable()
+    date_time = ndb.DateTimeProperty()
     text = ndb.TextProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+    def set_date_time_iso(self, value):
+        """
+        Übernimmt einen ISO-Datumsstring und konvertiert diesen nach DateTime
+        """
+
+        self.date_time = common.format_.string_to_datetime(value)
+
+    date_time_iso = property(fget = None, fset = set_date_time_iso)
 
 
 class Anniversary(ndb.Model):
@@ -154,11 +165,11 @@ class Anniversary(ndb.Model):
     month = ndb.IntegerProperty(required = True, choices = range(1, 13))
     day = ndb.IntegerProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
@@ -225,15 +236,15 @@ class Address(ndb.Model):
     uid = ndb.StringProperty(required = True)
     owner = ndb.StringProperty(required = True)
 
-    ct = DateTimePropertySerializable(
+    ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = DateTimePropertySerializable(
+    et = ndb.DateTimeProperty(
         auto_now = True, verbose_name = u"edit_timestamp"
     )
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
-    dt = DateTimePropertySerializable(verbose_name = u"deletion_timestamp")
+    dt = ndb.DateTimeProperty(verbose_name = u"deletion_timestamp")
 
     # Kind
     kind = ndb.StringProperty(required = True)
