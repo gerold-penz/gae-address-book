@@ -16,6 +16,8 @@ Version 0.1.17
 
 - On address creation: CT will no set correct
 
+- Only save not emtpy item_lists (notes, journal, ...)
+
 
 ==============
 Version 0.1.16
@@ -29,8 +31,6 @@ Version 0.1.16
   speichern zu können.
 
 - Saving ET and EU corrected.
-
-- Only save not emtpy item_lists (notes, journal, ...)
 
 
 ==============
