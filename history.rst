@@ -14,6 +14,8 @@ Version 0.1.17
 
 - Python-JsonRPC-Version 0.9.0
 
+- On address creation: CT will no set correct
+
 
 ==============
 Version 0.1.16

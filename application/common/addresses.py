@@ -161,17 +161,19 @@ def create(
         kind.lower().startswith("x-")
     )
 
+    # Now
+    utcnow = datetime.datetime.utcnow()
+
     # Create address
     address = Address(
         uid = unicode(uuid.uuid4()),
         owner = user,
+        ct = utcnow,
         cu = user,
+        et = utcnow,
         eu = user,
-        kind = kind,
+        kind = kind
     )
-
-    # Now
-    utcnow = datetime.datetime.utcnow()
 
     # Get data
     if category_items is not None:
@@ -216,6 +218,10 @@ def create(
                 tel.et = utcnow
             if not tel.eu:
                 tel.eu = user
+            if not tel.ct:
+                tel.ct = utcnow
+            if not tel.cu:
+                tel.cu = user
         address.phone_items = phone_items
     if email_items is not None:
         for email in email_items:
@@ -239,6 +245,10 @@ def create(
                 email.et = utcnow
             if not email.eu:
                 email.eu = user
+            if not email.ct:
+                email.ct = utcnow
+            if not email.cu:
+                email.cu = user
         address.email_items = email_items
     if url_items is not None:
         for url in url_items:
@@ -262,6 +272,10 @@ def create(
                 url.et = utcnow
             if not url.eu:
                 url.eu = user
+            if not url.ct:
+                url.ct = utcnow
+            if not url.cu:
+                url.cu = user
         address.url_items = url_items
     if note_items is not None:
         for note in note_items:
@@ -282,6 +296,10 @@ def create(
                 note.et = utcnow
             if not note.eu:
                 note.eu = user
+            if not note.ct:
+                note.ct = utcnow
+            if not note.cu:
+                note.cu = user
         address.note_items = note_items
     if journal_items is not None:
         for journal in journal_items:
@@ -302,6 +320,10 @@ def create(
                 journal.et = utcnow
             if not journal.eu:
                 journal.eu = user
+            if not journal.ct:
+                journal.ct = utcnow
+            if not journal.cu:
+                journal.cu = user
         address.journal_items = journal_items
     if business_items is not None:
         if isinstance(business_items, basestring):
@@ -331,6 +353,10 @@ def create(
                 anniversary.et = utcnow
             if not anniversary.eu:
                 anniversary.eu = user
+            if not anniversary.ct:
+                anniversary.ct = utcnow
+            if not anniversary.cu:
+                anniversary.cu = user
         address.anniversary_items = anniversary_items
     if gender is not None:
         gender = gender.lower()
