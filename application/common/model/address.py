@@ -138,8 +138,8 @@ class Anniversary(ndb.Model):
     uid = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
     year = ndb.IntegerProperty()
-    month = ndb.IntegerProperty(required = True, choices = range(1, 13))
-    day = ndb.IntegerProperty(required = True)
+    month = ndb.IntegerProperty(choices = range(1, 13))
+    day = ndb.IntegerProperty(choices = range(1, 32))
 
     ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
@@ -562,7 +562,7 @@ class Address(ndb.Model):
             fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
         for anniversary_item in self.anniversary_items:
             assert isinstance(anniversary_item, Anniversary)
-            if anniversary_item.year:
+            if anniversary_item.year and anniversary_item.month and anniversary_item.day:
                 fields.append(
                     search.DateField(
                         name = u"anniversary", value = datetime.date(
@@ -572,7 +572,7 @@ class Address(ndb.Model):
                         )
                     )
                 )
-            else:
+            elif anniversary_item.month and anniversary_item.day:
                 fields.append(
                     search.TextField(
                         name = u"anniversary",
@@ -580,7 +580,6 @@ class Address(ndb.Model):
                     )
                 )
             fields.append(search.TextField(name = u"anniversary", value = anniversary_item.label))
-
         # Document
         document = search.Document(
             doc_id = key.urlsafe(),
