@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.17
+==============
+
+2016-04-08
+
+- Python-JsonRPC-Version 0.9.0
+
+
+==============
 Version 0.1.16
 ==============
 
