@@ -30,6 +30,8 @@ Version 0.1.16
 
 - Saving ET and EU corrected.
 
+- Only save not emtpy item_lists (notes, journal, ...)
+
 
 ==============
 Version 0.1.15

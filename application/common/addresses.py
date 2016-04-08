@@ -725,7 +725,9 @@ def save_address(
                 tel.et = utcnow
             if not tel.eu:
                 tel.eu = user
-        address.phone_items = phone_items
+        address.phone_items = [
+            phone_item for phone_item in phone_items if phone_item.number
+        ]
     if email_items is not None:
         for email in email_items:
             assert isinstance(email, Email)
@@ -752,7 +754,9 @@ def save_address(
                 email.et = utcnow
             if not email.eu:
                 email.eu = user
-        address.email_items = email_items
+        address.email_items = [
+            email_item for email_item in email_items if email_item.email
+        ]
     if url_items is not None:
         for url in url_items:
             assert isinstance(url, Url)
@@ -779,7 +783,9 @@ def save_address(
                 url.et = utcnow
             if not url.eu:
                 url.eu = user
-        address.url_items = url_items
+        address.url_items = [
+            url_item for url_item in url_items if url_item.url
+        ]
     if note_items is not None:
         for note in note_items:
             assert isinstance(note, Note)
@@ -803,7 +809,9 @@ def save_address(
                 note.et = utcnow
             if not note.eu:
                 note.eu = user
-        address.note_items = note_items
+        address.note_items = [
+            note_item for note_item in note_items if note_item.text
+        ]
     if journal_items is not None:
         for journal in journal_items:
             assert isinstance(journal, JournalItem)
@@ -827,7 +835,9 @@ def save_address(
                 journal.et = utcnow
             if not journal.eu:
                 journal.eu = user
-        address.journal_items = journal_items
+        address.journal_items = [
+            journal_item for journal_item in journal_items if journal_item.text
+        ]
     if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
@@ -860,7 +870,10 @@ def save_address(
                 anniversary.et = utcnow
             if not anniversary.eu:
                 anniversary.eu = user
-        address.anniversary_items = anniversary_items
+        address.anniversary_items = [
+            anniversary_item for anniversary_item in anniversary_items if
+            anniversary_item.year or anniversary_item.month or anniversary_item.day
+        ]
     if gender is not None:
         gender = gender.lower()
         assert gender in "mfonu"

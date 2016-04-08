@@ -540,9 +540,9 @@ class Address(ndb.Model):
             assert isinstance(url_item, Url)
             fields.append(search.TextField(name = u"url", value = url_item.url))
         for journal_item in self.journal_items:
-            if common.format_.has_umlauts(journal_item):
+            if common.format_.has_umlauts(journal_item.text):
                 fields.append(search.TextField(
-                    name = u"journal", value = common.format_.replace_umlauts(journal_item)
+                    name = u"journal", value = common.format_.replace_umlauts(journal_item.text)
                 ))
             assert isinstance(journal_item, JournalItem)
             fields.append(search.TextField(name = u"journal", value = journal_item.text))
@@ -554,9 +554,9 @@ class Address(ndb.Model):
             assert isinstance(note_item, Note)
             fields.append(search.TextField(name = u"note", value = note_item.text))
         for agreement_item in self.agreement_items:
-            if common.format_.has_umlauts(agreement_item):
+            if common.format_.has_umlauts(agreement_item.text):
                 fields.append(search.TextField(
-                    name = u"agreement", value = common.format_.replace_umlauts(agreement_item)
+                    name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
                 ))
             assert isinstance(agreement_item, Agreement)
             fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
