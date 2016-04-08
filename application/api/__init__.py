@@ -14,11 +14,16 @@ import logging
 import common.constants
 import common.email
 import lib.constants
+import pyjsonrpc.rpcjson
 
 
 # Namespace-Imports
 import http_root
 import error_pages
+
+
+# Global: Activate encoder and decoder for DateTime-ISO strings and NDB keys
+pyjsonrpc.rpcjson.activate_iso_date_and_ndb_conversion()
 
 
 def email_tracebacks(severity = logging.CRITICAL):

@@ -259,13 +259,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param journal_items: A list with dictionaries.
             Syntax::
 
-                [{"date_time_iso": <DateTimeIso>, "text": "<note>"), ...]
+                [{"date_time": <DateTimeIso>, "text": "<note>"), ...]
 
             Example::
 
                 [
                     {
-                        "date_time_iso": "2000-01-01T14:30",
+                        "date_time": "2000-01-01T14:30:00",
                         "text": "This is a short journal item."
                     }, ...
                 ]
@@ -299,73 +299,42 @@ class JsonRpc(CherryPyJsonRpc):
         user = cherrypy.request.login
 
         # Prepare Phone-Items
-        phone_items_ = None
         if phone_items:
-            phone_items_ = []
-            for data in phone_items:
-                phone_items_.append(
-                    common.addresses.Tel(
-                        label = data.get("label"),
-                        number = data["number"]
-                    )
-                )
+            phone_items = [
+                common.addresses.Tel(**phone_item) for phone_item in phone_items
+            ]
 
         # Prepare Email-Items
-        email_items_ = None
         if email_items:
-            email_items_ = []
-            for data in email_items:
-                email_items_.append(
-                    common.addresses.Email(
-                        label = data.get("label"),
-                        email = data["email"]
-                    )
-                )
+            email_items = [
+                common.addresses.Email(**email_item) for email_item in email_items
+            ]
 
         # Prepare Url-Items
-        url_items_ = None
         if url_items:
-            url_items_ = []
-            for data in url_items:
-                url_items_.append(
-                    common.addresses.Url(
-                        label = data.get("label"),
-                        url = data["url"]
-                    )
-                )
+            url_items = [
+                common.addresses.Url(**url_item) for url_item in url_items
+            ]
 
         # Prepare Note-Items
-        note_items_ = None
         if note_items:
-            note_items_ = []
-            for data in note_items:
-                note_items_.append(common.addresses.Note(text = data["text"]))
+            note_items = [
+                common.addresses.Note(**note_item) for note_item in note_items
+            ]
 
         # Prepare Journal-Items
-        journal_items_ = None
         if journal_items:
-            journal_items_ = []
-            for data in journal_items:
-                journal_items_.append(
-                    common.addresses.JournalItem(
-                        date_time = common.format_.string_to_datetime(data.get("date_time_iso")),
-                        text = data["text"]
-                    )
-                )
+            journal_items = [
+                common.addresses.JournalItem(**journal_item) for
+                journal_item in journal_items
+            ]
 
         # Prepare Anniversary-Items
-        anniversary_items_ = None
         if anniversary_items:
-            anniversary_items_ = []
-            for data in anniversary_items:
-                anniversary_items_.append(
-                    common.addresses.Anniversary(
-                        label = data["label"],
-                        year = data.get("year"),
-                        month = data["month"],
-                        day = data["day"],
-                    )
-                )
+            anniversary_items = [
+                common.addresses.Anniversary(**anniversary_item) for
+                anniversary_item in anniversary_items
+            ]
 
         # Create new address
         new_address = common.addresses.create(
@@ -385,13 +354,13 @@ class JsonRpc(CherryPyJsonRpc):
             district = district,
             land = land,
             country = country,
-            phone_items = phone_items_,
-            email_items = email_items_,
-            url_items = url_items_,
-            note_items = note_items_,
-            journal_items = journal_items_,
+            phone_items = phone_items,
+            email_items = email_items,
+            url_items = url_items,
+            note_items = note_items,
+            journal_items = journal_items,
             business_items = business_items,
-            anniversary_items = anniversary_items_,
+            anniversary_items = anniversary_items,
             gender = gender
         )
 
@@ -676,13 +645,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param journal_items: A list with dictionaries.
             Syntax::
 
-                [{"date_time_iso": <DateTimeIso>, "text": "<note>"), ...]
+                [{"date_time": <DateTimeIso>, "text": "<note>"), ...]
 
             Example::
 
                 [
                     {
-                        "date_time_iso": "2000-01-01T14:30:00",
+                        "date_time": "2000-01-01T14:30:00",
                         "text": "This is a short journal item."
                     }, ...
                 ]
@@ -749,7 +718,7 @@ class JsonRpc(CherryPyJsonRpc):
         # Prepare Anniversary-Items
         if anniversary_items:
             anniversary_items = [
-                common.addresses.Anniversary(anniversary_item) for
+                common.addresses.Anniversary(**anniversary_item) for
                 anniversary_item in anniversary_items
             ]
 

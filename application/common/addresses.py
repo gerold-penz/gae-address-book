@@ -157,8 +157,7 @@ def create(
     # Kind
     kind = kind or u"individual"
     assert (
-        kind.lower() in (
-        u"individual", u"organization", u"group", u"location") or
+        kind.lower() in (u"individual", u"organization", u"group", u"location") or
         kind.lower().startswith("x-")
     )
 
@@ -443,8 +442,7 @@ def get_addresses(
             Address.organization_lower == filter_by_organization.strip().lower())
     if filter_by_organization_char1:
         filter_items.append(
-            Address.organization_char1 == filter_by_organization_char1[
-                0].lower())
+            Address.organization_char1 == filter_by_organization_char1[0].lower())
     if filter_by_first_name:
         filter_items.append(
             Address.first_name_lower == filter_by_first_name.strip().lower())
@@ -825,7 +823,7 @@ def save_address(
             if not email.eu:
                 email.eu = user
         address.email_items = email_items
-    if url_items:
+    if url_items is not None:
         for url in url_items:
             assert isinstance(url, Url)
             if url.uid:
@@ -939,7 +937,7 @@ def delete_address_search_index():
         document_ids = [
             document.doc_id for document in
             index.get_range(limit = 200, ids_only = True)
-            ]
+        ]
         if not document_ids:
             break
         index.delete(document_ids)
@@ -975,8 +973,10 @@ def get_category_items():
 
     category_items = set()
 
-    query = Address.query(projection = [Address.category_items],
-                          distinct = True)
+    query = Address.query(
+        projection = [Address.category_items],
+        distinct = True
+    )
     for address in query.iter(batch_size = 1000):
         for category_item in address.category_items:
             category_items.add(category_item)
@@ -992,8 +992,10 @@ def get_business_items():
 
     business_items = set()
 
-    query = Address.query(projection = [Address.business_items],
-                          distinct = True)
+    query = Address.query(
+        projection = [Address.business_items],
+        distinct = True
+    )
     for address in query.iter(batch_size = 1000):
         for business_item in address.business_items:
             business_items.add(business_item)
