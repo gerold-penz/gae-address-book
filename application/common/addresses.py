@@ -199,131 +199,47 @@ def create(
     if phone_items is not None:
         for tel in phone_items:
             assert isinstance(tel, Tel)
-            if tel.uid:
-                for old_tel in address.phone_items:
-                    if old_tel.uid == tel.uid:
-                        tel.ct = old_tel.ct
-                        tel.cu = old_tel.cu
-                        tel.et = old_tel.et
-                        tel.eu = old_tel.eu
-                        if (
-                            old_tel.label != tel.label or
-                            old_tel.number != tel.number
-                        ):
-                            tel.et = utcnow
-                            tel.eu = user
-            else:
-                tel.uid = unicode(uuid.uuid4())
-            if not tel.et:
-                tel.et = utcnow
-            if not tel.eu:
-                tel.eu = user
-            if not tel.ct:
-                tel.ct = utcnow
-            if not tel.cu:
-                tel.cu = user
+            tel.uid = unicode(uuid.uuid4())
+            tel.ct = utcnow
+            tel.cu = user
+            tel.et = utcnow
+            tel.eu = user
         address.phone_items = phone_items
     if email_items is not None:
         for email in email_items:
             assert isinstance(email, Email)
-            if email.uid:
-                for old_email in address.email_items:
-                    if old_email.uid == email.uid:
-                        email.ct = old_email.ct
-                        email.cu = old_email.cu
-                        email.et = old_email.et
-                        email.eu = old_email.eu
-                        if (
-                            old_email.label != email.label or
-                            old_email.email != email.email
-                        ):
-                            email.et = utcnow
-                            email.eu = user
-            else:
-                email.uid = unicode(uuid.uuid4())
-            if not email.et:
-                email.et = utcnow
-            if not email.eu:
-                email.eu = user
-            if not email.ct:
-                email.ct = utcnow
-            if not email.cu:
-                email.cu = user
+            email.uid = unicode(uuid.uuid4())
+            email.ct = utcnow
+            email.cu = user
+            email.et = utcnow
+            email.eu = user
         address.email_items = email_items
     if url_items is not None:
         for url in url_items:
             assert isinstance(url, Url)
-            if url.uid:
-                for old_url in address.url_items:
-                    if old_url.uid == url.uid:
-                        url.ct = old_url.ct
-                        url.cu = old_url.cu
-                        url.et = old_url.et
-                        url.eu = old_url.eu
-                        if (
-                            old_url.label != url.label or
-                            old_url.url != url.url
-                        ):
-                            url.et = utcnow
-                            url.eu = user
-            else:
-                url.uid = unicode(uuid.uuid4())
-            if not url.et:
-                url.et = utcnow
-            if not url.eu:
-                url.eu = user
-            if not url.ct:
-                url.ct = utcnow
-            if not url.cu:
-                url.cu = user
+            url.uid = unicode(uuid.uuid4())
+            url.ct = utcnow
+            url.cu = user
+            url.et = utcnow
+            url.eu = user
         address.url_items = url_items
     if note_items is not None:
         for note in note_items:
             assert isinstance(note, Note)
-            if note.uid:
-                for old_note in address.note_items:
-                    if old_note.uid == note.uid:
-                        note.ct = old_note.ct
-                        note.cu = old_note.cu
-                        note.et = old_note.et
-                        note.eu = old_note.eu
-                        if old_note.text != note.text:
-                            note.et = utcnow
-                            note.eu = user
-            else:
-                note.uid = unicode(uuid.uuid4())
-            if not note.et:
-                note.et = utcnow
-            if not note.eu:
-                note.eu = user
-            if not note.ct:
-                note.ct = utcnow
-            if not note.cu:
-                note.cu = user
+            note.uid = unicode(uuid.uuid4())
+            note.ct = utcnow
+            note.cu = user
+            note.et = utcnow
+            note.eu = user
         address.note_items = note_items
     if journal_items is not None:
         for journal in journal_items:
             assert isinstance(journal, JournalItem)
-            if journal.uid:
-                for old_journal in address.journal_items:
-                    if old_journal.uid == journal.uid:
-                        journal.ct = old_journal.ct
-                        journal.cu = old_journal.cu
-                        journal.et = old_journal.et
-                        journal.eu = old_journal.eu
-                        if old_journal.text != journal.text:
-                            journal.et = utcnow
-                            journal.eu = user
-            else:
-                journal.uid = unicode(uuid.uuid4())
-            if not journal.et:
-                journal.et = utcnow
-            if not journal.eu:
-                journal.eu = user
-            if not journal.ct:
-                journal.ct = utcnow
-            if not journal.cu:
-                journal.cu = user
+            journal.uid = unicode(uuid.uuid4())
+            journal.ct = utcnow
+            journal.cu = user
+            journal.et = utcnow
+            journal.eu = user
         address.journal_items = journal_items
     if business_items is not None:
         if isinstance(business_items, basestring):
@@ -332,31 +248,11 @@ def create(
     if anniversary_items is not None:
         for anniversary in anniversary_items:
             assert isinstance(anniversary, Anniversary)
-            if anniversary.uid:
-                for old_anniversary in address.anniversary_items:
-                    if old_anniversary.uid == anniversary.uid:
-                        anniversary.ct = old_anniversary.ct
-                        anniversary.cu = old_anniversary.cu
-                        anniversary.et = old_anniversary.et
-                        anniversary.eu = old_anniversary.eu
-                        if (
-                            old_anniversary.label != anniversary.label or
-                            old_anniversary.year != anniversary.year or
-                            old_anniversary.month != anniversary.month or
-                            old_anniversary.day != anniversary.day
-                        ):
-                            anniversary.et = utcnow
-                            anniversary.eu = user
-            else:
-                anniversary.uid = unicode(uuid.uuid4())
-            if not anniversary.et:
-                anniversary.et = utcnow
-            if not anniversary.eu:
-                anniversary.eu = user
-            if not anniversary.ct:
-                anniversary.ct = utcnow
-            if not anniversary.cu:
-                anniversary.cu = user
+            anniversary.uid = unicode(uuid.uuid4())
+            anniversary.ct = utcnow
+            anniversary.cu = user
+            anniversary.et = utcnow
+            anniversary.eu = user
         address.anniversary_items = anniversary_items
     if gender is not None:
         gender = gender.lower()
@@ -821,6 +717,10 @@ def save_address(
                             tel.eu = user
             else:
                 tel.uid = unicode(uuid.uuid4())
+            if not tel.ct:
+                tel.ct = utcnow
+            if not tel.cu:
+                tel.cu = user
             if not tel.et:
                 tel.et = utcnow
             if not tel.eu:
@@ -844,6 +744,10 @@ def save_address(
                             email.eu = user
             else:
                 email.uid = unicode(uuid.uuid4())
+            if not email.ct:
+                email.ct = utcnow
+            if not email.cu:
+                email.cu = user
             if not email.et:
                 email.et = utcnow
             if not email.eu:
@@ -867,6 +771,10 @@ def save_address(
                             url.eu = user
             else:
                 url.uid = unicode(uuid.uuid4())
+            if not url.ct:
+                url.ct = utcnow
+            if not url.cu:
+                url.cu = user
             if not url.et:
                 url.et = utcnow
             if not url.eu:
@@ -887,6 +795,10 @@ def save_address(
                             note.eu = user
             else:
                 note.uid = unicode(uuid.uuid4())
+            if not note.ct:
+                note.ct = utcnow
+            if not note.cu:
+                note.cu = user
             if not note.et:
                 note.et = utcnow
             if not note.eu:
@@ -907,6 +819,10 @@ def save_address(
                             journal.eu = user
             else:
                 journal.uid = unicode(uuid.uuid4())
+            if not journal.ct:
+                journal.ct = utcnow
+            if not journal.cu:
+                journal.cu = user
             if not journal.et:
                 journal.et = utcnow
             if not journal.eu:
@@ -936,6 +852,10 @@ def save_address(
                             anniversary.eu = user
             else:
                 anniversary.uid = unicode(uuid.uuid4())
+            if not anniversary.ct:
+                anniversary.ct = utcnow
+            if not anniversary.cu:
+                anniversary.cu = user
             if not anniversary.et:
                 anniversary.et = utcnow
             if not anniversary.eu:

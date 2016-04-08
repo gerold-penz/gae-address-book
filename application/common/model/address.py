@@ -64,13 +64,9 @@ class Tel(ndb.Model):
     label = ndb.StringProperty()
     number = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -79,13 +75,9 @@ class Email(ndb.Model):
     label = ndb.StringProperty()
     email = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -94,13 +86,9 @@ class Url(ndb.Model):
     label = ndb.StringProperty()
     url = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -108,13 +96,9 @@ class Note(ndb.Model):
     uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -122,13 +106,9 @@ class Agreement(ndb.Model):
     uid = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -138,13 +118,9 @@ class JournalItem(ndb.Model):
     date_time = ndb.DateTimeProperty()
     text = ndb.TextProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -165,13 +141,9 @@ class Anniversary(ndb.Model):
     month = ndb.IntegerProperty(required = True, choices = range(1, 13))
     day = ndb.IntegerProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
@@ -236,13 +208,9 @@ class Address(ndb.Model):
     uid = ndb.StringProperty(required = True)
     owner = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(
-        auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
-    )
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(
-        auto_now = True, verbose_name = u"edit_timestamp"
-    )
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
     dt = ndb.DateTimeProperty(verbose_name = u"deletion_timestamp")
 
