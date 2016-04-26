@@ -186,6 +186,7 @@ class JsonRpc(CherryPyJsonRpc):
         note_items = None,
         journal_items = None,
         agreement_items = None,
+        free_defined_items = None,
         business_items = None,
         anniversary_items = None,
         gender = None
@@ -275,6 +276,18 @@ class JsonRpc(CherryPyJsonRpc):
 
                 [{"text": "This is a short agreement item"}]
 
+        :param free_defined_items: A list with dictionaries.
+            Syntax::
+
+                [{"<label>": "<text>"), ...]
+
+            Example::
+
+                [
+                    {"Shoe-Size": "45"},
+                    {"Body-Height": "180"}
+                ]
+
         :param business_items: A list with strings.
             Example::
 
@@ -341,6 +354,13 @@ class JsonRpc(CherryPyJsonRpc):
                 agreement_item in agreement_items
             ]
 
+        # Prepare FreeDefinedItems
+        if free_defined_items:
+            free_defined_items = [
+                common.addresses.FreeDefinedItem(**free_defined_item) for
+                free_defined_item in free_defined_items
+            ]
+
         # Prepare Anniversary-Items
         if anniversary_items:
             anniversary_items = [
@@ -372,6 +392,7 @@ class JsonRpc(CherryPyJsonRpc):
             note_items = note_items,
             journal_items = journal_items,
             agreement_items = agreement_items,
+            free_defined_items = free_defined_items,
             business_items = business_items,
             anniversary_items = anniversary_items,
             gender = gender
@@ -581,6 +602,7 @@ class JsonRpc(CherryPyJsonRpc):
         note_items = None,
         journal_items = None,
         agreement_items = None,
+        free_defined_items = None,
         business_items = None,
         anniversary_items = None,
         gender = None
@@ -674,6 +696,18 @@ class JsonRpc(CherryPyJsonRpc):
 
                 [{"text": "This is a short agreement item"}]
 
+        :param free_defined_items: A list with dictionaries.
+            Syntax::
+
+                [{"<label>": "<value>"), ...]
+
+            Example::
+
+                [
+                    {"Shoe-Size": "45"},
+                    {"Body-Height": "180"}
+                ]
+
         :param business_items: A list with strings.
             Example::
 
@@ -740,6 +774,13 @@ class JsonRpc(CherryPyJsonRpc):
                 agreement_item in agreement_items
             ]
 
+        # Prepare FreeDefined-Items
+        if free_defined_items:
+            free_defined_items = [
+                common.addresses.FreeDefinedItem(**free_defined_item) for
+                free_defined_item in free_defined_items
+            ]
+
         # Prepare Anniversary-Items
         if anniversary_items:
             anniversary_items = [
@@ -774,6 +815,7 @@ class JsonRpc(CherryPyJsonRpc):
             note_items = note_items,
             journal_items = journal_items,
             agreement_items = agreement_items,
+            free_defined_items = free_defined_items,
             business_items = business_items,
             anniversary_items = anniversary_items,
             gender = gender

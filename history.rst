@@ -16,6 +16,9 @@ Version 0.1.18
 
 - JournalItems are now without explicit date
 
+- The Address model has got the new field *free_defined_items*, which allows
+  to add several free defined values to the address.
+
 
 ==============
 Version 0.1.17

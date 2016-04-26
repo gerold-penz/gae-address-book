@@ -8,7 +8,9 @@ from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.ext import deferred
 from model.address import (
-    Address, Tel, Email, Url, NoteItem, JournalItem, AgreementItem, Anniversary
+    Address,
+    TelItem, EmailItem, UrlItem, NoteItem, JournalItem,
+    AgreementItem, FreeDefinedItem, AnniversaryItem
 )
 from model.address_history import AddressHistory
 
@@ -36,6 +38,7 @@ def create(
     note_items = None,
     journal_items = None,
     agreement_items = None,
+    free_defined_items = None,
     business_items = None,
     anniversary_items = None,
     gender = None
@@ -121,6 +124,18 @@ def create(
 
             [AgreementItem(text = "This is a short note")]
 
+    :param free_defined_items: A list with FreeDefinedItem-objects.
+        Syntax::
+
+            [FreeDefinedItem(label = "<label>", text = "<text>"), ...]
+
+        Example::
+
+            [
+                FreeDefinedItem(label = "Shoe-Size", text = "45"),
+                FreeDefinedItem(label = "Body-Height", text = "180")
+            ]
+
     :param business_items: A list with business items.
         Example::
 
@@ -202,7 +217,7 @@ def create(
     address.country = country
     if phone_items is not None:
         for tel in phone_items:
-            assert isinstance(tel, Tel)
+            assert isinstance(tel, TelItem)
             tel.uid = unicode(uuid.uuid4())
             tel.ct = utcnow
             tel.cu = user
@@ -211,7 +226,7 @@ def create(
         address.phone_items = phone_items
     if email_items is not None:
         for email in email_items:
-            assert isinstance(email, Email)
+            assert isinstance(email, EmailItem)
             email.uid = unicode(uuid.uuid4())
             email.ct = utcnow
             email.cu = user
@@ -220,7 +235,7 @@ def create(
         address.email_items = email_items
     if url_items is not None:
         for url in url_items:
-            assert isinstance(url, Url)
+            assert isinstance(url, UrlItem)
             url.uid = unicode(uuid.uuid4())
             url.ct = utcnow
             url.cu = user
@@ -254,13 +269,22 @@ def create(
             agreement.et = utcnow
             agreement.eu = user
         address.agreement_items = agreement_items
+    if free_defined_items is not None:
+        for free_defined_item in free_defined_items:
+            assert isinstance(free_defined_item, FreeDefinedItem)
+            free_defined_item.uid = unicode(uuid.uuid4())
+            free_defined_item.ct = utcnow
+            free_defined_item.cu = user
+            free_defined_item.et = utcnow
+            free_defined_item.eu = user
+        address.free_defined_items = free_defined_items
     if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
         address.business_items = sorted(list(set(business_items)))
     if anniversary_items is not None:
         for anniversary in anniversary_items:
-            assert isinstance(anniversary, Anniversary)
+            assert isinstance(anniversary, AnniversaryItem)
             anniversary.uid = unicode(uuid.uuid4())
             anniversary.ct = utcnow
             anniversary.cu = user
@@ -526,6 +550,7 @@ def save_address(
     note_items = None,
     journal_items = None,
     agreement_items = None,
+    free_defined_items = None,
     business_items = None,
     anniversary_items = None,
     gender = None
@@ -613,6 +638,18 @@ def save_address(
         Example::
 
             [AgreementItem(text = "This is a short note")]
+
+    :param free_defined_items: A list with FreeDefinedItem-objects.
+        Syntax::
+
+            [FreeDefinedItem(label = "<label>", text = "<text>"), ...]
+
+        Example::
+
+            [
+                FreeDefinedItem(label = "Shoe-Size", text = "45"),
+                FreeDefinedItem(label = "Body-Height", text = "180")
+            ]
 
     :param business_items: A list with strings.
         Example::
@@ -718,7 +755,7 @@ def save_address(
         address.country = country
     if phone_items is not None:
         for tel in phone_items:
-            assert isinstance(tel, Tel)
+            assert isinstance(tel, TelItem)
             if tel.uid:
                 for old_tel in address.phone_items:
                     if old_tel.uid == tel.uid:
@@ -747,7 +784,7 @@ def save_address(
         ]
     if email_items is not None:
         for email in email_items:
-            assert isinstance(email, Email)
+            assert isinstance(email, EmailItem)
             if email.uid:
                 for old_email in address.email_items:
                     if old_email.uid == email.uid:
@@ -776,7 +813,7 @@ def save_address(
         ]
     if url_items is not None:
         for url in url_items:
-            assert isinstance(url, Url)
+            assert isinstance(url, UrlItem)
             if url.uid:
                 for old_url in address.url_items:
                     if old_url.uid == url.uid:
@@ -881,13 +918,39 @@ def save_address(
         address.agreement_items = [
             agreement_item for agreement_item in agreement_items if agreement_item.text
         ]
+    if free_defined_items is not None:
+        for free_defined_item in free_defined_items:
+            assert isinstance(free_defined_item, FreeDefinedItem)
+            if free_defined_item.uid:
+                for old_free_defined in address.free_defined_items:
+                    if old_free_defined.uid == free_defined_item.uid:
+                        free_defined_item.ct = old_free_defined.ct
+                        free_defined_item.cu = old_free_defined.cu
+                        free_defined_item.et = old_free_defined.et
+                        free_defined_item.eu = old_free_defined.eu
+                        if old_free_defined.text != free_defined_item.text:
+                            free_defined_item.et = utcnow
+                            free_defined_item.eu = user
+            else:
+                free_defined_item.uid = unicode(uuid.uuid4())
+            if not free_defined_item.ct:
+                free_defined_item.ct = utcnow
+            if not free_defined_item.cu:
+                free_defined_item.cu = user
+            if not free_defined_item.et:
+                free_defined_item.et = utcnow
+            if not free_defined_item.eu:
+                free_defined_item.eu = user
+        address.free_defined_items = [
+            free_defined_item for free_defined_item in free_defined_items if free_defined_item.text
+        ]
     if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
         address.business_items = sorted(list(set(business_items)))
     if anniversary_items is not None:
         for anniversary in anniversary_items:
-            assert isinstance(anniversary, Anniversary)
+            assert isinstance(anniversary, AnniversaryItem)
             if anniversary.uid:
                 for old_anniversary in address.anniversary_items:
                     if old_anniversary.uid == anniversary.uid:

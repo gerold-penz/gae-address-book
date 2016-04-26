@@ -46,17 +46,17 @@ class ItemsBase(ndb.Model):
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
-class Tel(ItemsBase):
+class TelItem(ItemsBase):
     label = ndb.StringProperty()
     number = ndb.StringProperty(required = True)
 
 
-class Email(ItemsBase):
+class EmailItem(ItemsBase):
     label = ndb.StringProperty()
     email = ndb.StringProperty(required = True)
 
 
-class Url(ItemsBase):
+class UrlItem(ItemsBase):
     label = ndb.StringProperty()
     url = ndb.StringProperty(required = True)
 
@@ -73,11 +73,16 @@ class AgreementItem(NoteItem):
     pass
 
 
-class Anniversary(ItemsBase):
+class AnniversaryItem(ItemsBase):
     label = ndb.StringProperty(required = True)
     year = ndb.IntegerProperty()
     month = ndb.IntegerProperty(choices = range(1, 13))
     day = ndb.IntegerProperty(choices = range(1, 32))
+
+
+class FreeDefinedItem(ItemsBase):
+    label = ndb.StringProperty(required = True)
+    text = ndb.StringProperty(required = True)
 
 
 class Address(ndb.Model):
@@ -95,7 +100,7 @@ class Address(ndb.Model):
             return
 
         for anniversary_item in self.anniversary_items:
-            assert isinstance(anniversary_item, Anniversary)
+            assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.label and anniversary_item.label.lower() in [
                 u"geburtstag",
                 u"birthday"
@@ -123,7 +128,7 @@ class Address(ndb.Model):
             return
 
         for anniversary_item in self.anniversary_items:
-            assert isinstance(anniversary_item, Anniversary)
+            assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.label and anniversary_item.label.lower() in [
                 u"geburtstag",
                 u"birthday"
@@ -264,14 +269,17 @@ class Address(ndb.Model):
         lambda self: self.country[0].lower() if self.country else None
     )
 
-    phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern
-    email_items = ndb.StructuredProperty(Email, repeated = True)  # E-Mail-Adressen
-    url_items = ndb.StructuredProperty(Url, repeated = True)  # URLs
+    phone_items = ndb.StructuredProperty(TelItem, repeated = True)  # Telefonnummern
+    email_items = ndb.StructuredProperty(EmailItem, repeated = True)  # E-Mail-Adressen
+    url_items = ndb.StructuredProperty(UrlItem, repeated = True)  # URLs
+
     note_items = ndb.StructuredProperty(NoteItem, repeated = True)  # Notizen
     journal_items = ndb.StructuredProperty(JournalItem, repeated = True)  # Journaleinträge
     agreement_items = ndb.StructuredProperty(AgreementItem, repeated = True)  # Vereinbarungen
+    free_defined_items = ndb.StructuredProperty(FreeDefinedItem, repeated = True)  # Frei definierbare Felder
+
     business_items = ndb.StringProperty(repeated = True)  # Branchen
-    anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
+    anniversary_items = ndb.StructuredProperty(AnniversaryItem, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)
     age = property(fget = get_age)
@@ -313,6 +321,7 @@ class Address(ndb.Model):
             "note_items",
             "journal_items",
             "agreement_items",
+            "free_defined_items",
             "anniversary_items",
         ]:
             if fieldname not in address_dict:
@@ -465,13 +474,13 @@ class Address(ndb.Model):
                 ))
             fields.append(search.TextField(name = u"business", value = business_item))
         for phone_item in self.phone_items:
-            assert isinstance(phone_item, Tel)
+            assert isinstance(phone_item, TelItem)
             fields.append(search.TextField(name = u"phone", value = phone_item.number))
         for email_item in self.email_items:
-            assert isinstance(email_item, Email)
+            assert isinstance(email_item, EmailItem)
             fields.append(search.TextField(name = u"email", value = email_item.email))
         for url_item in self.url_items:
-            assert isinstance(url_item, Url)
+            assert isinstance(url_item, UrlItem)
             fields.append(search.TextField(name = u"url", value = url_item.url))
         for note_item in self.note_items:
             if common.format_.has_umlauts(note_item.text):
@@ -494,8 +503,19 @@ class Address(ndb.Model):
                 ))
             assert isinstance(agreement_item, AgreementItem)
             fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
+        for free_defined_item in self.free_defined_items:
+            if common.format_.has_umlauts(free_defined_item.text):
+                fields.append(search.TextField(
+                    name = free_defined_item.label,
+                    value = common.format_.replace_umlauts(free_defined_item.text)
+                ))
+            assert isinstance(free_defined_item, FreeDefinedItem)
+            fields.append(search.TextField(
+                name = free_defined_item.label,
+                value = free_defined_item.text
+            ))
         for anniversary_item in self.anniversary_items:
-            assert isinstance(anniversary_item, Anniversary)
+            assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.year and anniversary_item.month and anniversary_item.day:
                 fields.append(
                     search.DateField(
