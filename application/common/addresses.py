@@ -805,7 +805,7 @@ def save_address(
         ]
     if note_items is not None:
         for note in note_items:
-            assert isinstance(note, Note)
+            assert isinstance(note, NoteItem)
             if note.uid:
                 for old_note in address.note_items:
                     if old_note.uid == note.uid:
