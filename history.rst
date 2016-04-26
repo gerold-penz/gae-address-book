@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.18
+==============
+
+2016-04-26
+
+- AgreementItems
+
+
+==============
 Version 0.1.17
 ==============
 

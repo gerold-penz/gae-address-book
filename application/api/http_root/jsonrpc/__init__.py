@@ -185,6 +185,7 @@ class JsonRpc(CherryPyJsonRpc):
         url_items = None,
         note_items = None,
         journal_items = None,
+        agreement_items = None,
         business_items = None,
         anniversary_items = None,
         gender = None
@@ -249,7 +250,7 @@ class JsonRpc(CherryPyJsonRpc):
         :param note_items: A list with dictionaries.
             Syntax::
 
-                [{"text": "<note>"}, ...]
+                [{"text": "<text>"}, ...]
 
             Example::
 
@@ -259,16 +260,20 @@ class JsonRpc(CherryPyJsonRpc):
         :param journal_items: A list with dictionaries.
             Syntax::
 
-                [{"date_time": <DateTimeIso>, "text": "<note>"), ...]
+                [{"text": "<text>"), ...]
 
             Example::
 
-                [
-                    {
-                        "date_time": "2000-01-01T14:30:00",
-                        "text": "This is a short journal item."
-                    }, ...
-                ]
+                [{"text": "This is a short journal item"}]
+
+        :param agreement_items: A list with dictionaries.
+            Syntax::
+
+                [{"text": "<text>"), ...]
+
+            Example::
+
+                [{"text": "This is a short agreement item"}]
 
         :param business_items: A list with strings.
             Example::
@@ -319,7 +324,7 @@ class JsonRpc(CherryPyJsonRpc):
         # Prepare Note-Items
         if note_items:
             note_items = [
-                common.addresses.Note(**note_item) for note_item in note_items
+                common.addresses.NoteItem(**note_item) for note_item in note_items
             ]
 
         # Prepare Journal-Items
@@ -327,6 +332,13 @@ class JsonRpc(CherryPyJsonRpc):
             journal_items = [
                 common.addresses.JournalItem(**journal_item) for
                 journal_item in journal_items
+            ]
+
+        # Prepare Agreement-Items
+        if agreement_items:
+            agreement_items = [
+                common.addresses.AgreementItem(**agreement_item) for
+                agreement_item in agreement_items
             ]
 
         # Prepare Anniversary-Items
@@ -359,6 +371,7 @@ class JsonRpc(CherryPyJsonRpc):
             url_items = url_items,
             note_items = note_items,
             journal_items = journal_items,
+            agreement_items = agreement_items,
             business_items = business_items,
             anniversary_items = anniversary_items,
             gender = gender
@@ -567,6 +580,7 @@ class JsonRpc(CherryPyJsonRpc):
         url_items = None,
         note_items = None,
         journal_items = None,
+        agreement_items = None,
         business_items = None,
         anniversary_items = None,
         gender = None
@@ -635,7 +649,7 @@ class JsonRpc(CherryPyJsonRpc):
         :param note_items: A list with dictionaries.
             Syntax::
 
-                [{"text": "<note>"}, ...]
+                [{"text": "<text>"}, ...]
 
             Example::
 
@@ -645,16 +659,20 @@ class JsonRpc(CherryPyJsonRpc):
         :param journal_items: A list with dictionaries.
             Syntax::
 
-                [{"date_time": <DateTimeIso>, "text": "<note>"), ...]
+                [{"text": "<text>"), ...]
 
             Example::
 
-                [
-                    {
-                        "date_time": "2000-01-01T14:30:00",
-                        "text": "This is a short journal item."
-                    }, ...
-                ]
+                [{"text": "This is a short journal item"}]
+
+        :param agreement_items: A list with dictionaries.
+            Syntax::
+
+                [{"text": "<text>"), ...]
+
+            Example::
+
+                [{"text": "This is a short agreement item"}]
 
         :param business_items: A list with strings.
             Example::
@@ -715,6 +733,13 @@ class JsonRpc(CherryPyJsonRpc):
                 journal_item in journal_items
             ]
 
+        # Prepare Agreement-Items
+        if agreement_items:
+            agreement_items = [
+                common.addresses.AgreementItem(**agreement_item) for
+                agreement_item in agreement_items
+            ]
+
         # Prepare Anniversary-Items
         if anniversary_items:
             anniversary_items = [
@@ -748,6 +773,7 @@ class JsonRpc(CherryPyJsonRpc):
             url_items = url_items,
             note_items = note_items,
             journal_items = journal_items,
+            agreement_items = agreement_items,
             business_items = business_items,
             anniversary_items = anniversary_items,
             gender = gender
@@ -829,8 +855,8 @@ class JsonRpc(CherryPyJsonRpc):
             - phone
             - email
             - url
-            - journal
             - note
+            - journal
             - agreement
             - anniversary
 

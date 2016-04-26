@@ -36,115 +36,48 @@ def age_years(birthday, basedate = None):
     return years
 
 
-# class DateTimePropertySerializable(ndb.DateTimeProperty):
-#
-#     def _get_for_dict(self, entity):
-#
-#         value = self._get_value(entity)
-#
-#         if value:
-#             return value.isoformat()
-#         else:
-#             return value
-#
-#     def _validate(self, value):
-#         if isinstance(value, basestring):
-#             value = common.format_.string_to_datetime(value)
-#         ndb.DateTimeProperty._validate(self, value)
-#
-#
-#     def _db_set_value(self, v, p, value):
-#         if isinstance(value, basestring):
-#             value = common.format_.string_to_datetime(value)
-#         ndb.DateTimeProperty._db_set_value(self, v, p, value)
+class ItemsBase(ndb.Model):
 
-
-class Tel(ndb.Model):
     uid = ndb.StringProperty(required = True)
+
+    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
+    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
+    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
+    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+
+class Tel(ItemsBase):
     label = ndb.StringProperty()
     number = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
-
-class Email(ndb.Model):
-    uid = ndb.StringProperty(required = True)
+class Email(ItemsBase):
     label = ndb.StringProperty()
     email = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
-
-class Url(ndb.Model):
-    uid = ndb.StringProperty(required = True)
+class Url(ItemsBase):
     label = ndb.StringProperty()
     url = ndb.StringProperty(required = True)
 
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
-
-class Note(ndb.Model):
-    uid = ndb.StringProperty(required = True)
+class NoteItem(ItemsBase):
     text = ndb.TextProperty(required = True)
 
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+
+class JournalItem(NoteItem):
+    pass
 
 
-class Agreement(ndb.Model):
-    uid = ndb.StringProperty(required = True)
-    text = ndb.TextProperty(required = True)
-
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
+class AgreementItem(NoteItem):
+    pass
 
 
-class JournalItem(ndb.Model):
-
-    uid = ndb.StringProperty(required = True)
-    date_time = ndb.DateTimeProperty()
-    text = ndb.TextProperty(required = True)
-
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
-
-
-    def set_date_time_iso(self, value):
-        """
-        Übernimmt einen ISO-Datumsstring und konvertiert diesen nach DateTime
-        """
-
-        self.date_time = common.format_.string_to_datetime(value)
-
-    date_time_iso = property(fget = None, fset = set_date_time_iso)
-
-
-class Anniversary(ndb.Model):
-    uid = ndb.StringProperty(required = True)
+class Anniversary(ItemsBase):
     label = ndb.StringProperty(required = True)
     year = ndb.IntegerProperty()
     month = ndb.IntegerProperty(choices = range(1, 13))
     day = ndb.IntegerProperty(choices = range(1, 32))
-
-    ct = ndb.DateTimeProperty(required = True, verbose_name = u"creation_timestamp")
-    cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
-    et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
-    eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
 
 class Address(ndb.Model):
@@ -334,14 +267,14 @@ class Address(ndb.Model):
     phone_items = ndb.StructuredProperty(Tel, repeated = True)  # Telefonnummern
     email_items = ndb.StructuredProperty(Email, repeated = True)  # E-Mail-Adressen
     url_items = ndb.StructuredProperty(Url, repeated = True)  # URLs
+    note_items = ndb.StructuredProperty(NoteItem, repeated = True)  # Notizen
     journal_items = ndb.StructuredProperty(JournalItem, repeated = True)  # Journaleinträge
+    agreement_items = ndb.StructuredProperty(AgreementItem, repeated = True)  # Vereinbarungen
     business_items = ndb.StringProperty(repeated = True)  # Branchen
     anniversary_items = ndb.StructuredProperty(Anniversary, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)
     age = property(fget = get_age)
-    note_items = ndb.StructuredProperty(Note, repeated = True)  # Notizen
-    agreement_items = ndb.StructuredProperty(Agreement, repeated = True)  # Vereinbarungen
 
 
     def to_dict(
@@ -379,6 +312,7 @@ class Address(ndb.Model):
             "url_items",
             "note_items",
             "journal_items",
+            "agreement_items",
             "anniversary_items",
         ]:
             if fieldname not in address_dict:
@@ -539,6 +473,13 @@ class Address(ndb.Model):
         for url_item in self.url_items:
             assert isinstance(url_item, Url)
             fields.append(search.TextField(name = u"url", value = url_item.url))
+        for note_item in self.note_items:
+            if common.format_.has_umlauts(note_item.text):
+                fields.append(search.TextField(
+                    name = u"note", value = common.format_.replace_umlauts(note_item.text)
+                ))
+            assert isinstance(note_item, NoteItem)
+            fields.append(search.TextField(name = u"note", value = note_item.text))
         for journal_item in self.journal_items:
             if common.format_.has_umlauts(journal_item.text):
                 fields.append(search.TextField(
@@ -546,19 +487,12 @@ class Address(ndb.Model):
                 ))
             assert isinstance(journal_item, JournalItem)
             fields.append(search.TextField(name = u"journal", value = journal_item.text))
-        for note_item in self.note_items:
-            if common.format_.has_umlauts(note_item.text):
-                fields.append(search.TextField(
-                    name = u"note", value = common.format_.replace_umlauts(note_item.text)
-                ))
-            assert isinstance(note_item, Note)
-            fields.append(search.TextField(name = u"note", value = note_item.text))
         for agreement_item in self.agreement_items:
             if common.format_.has_umlauts(agreement_item.text):
                 fields.append(search.TextField(
                     name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
                 ))
-            assert isinstance(agreement_item, Agreement)
+            assert isinstance(agreement_item, AgreementItem)
             fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
         for anniversary_item in self.anniversary_items:
             assert isinstance(anniversary_item, Anniversary)
@@ -580,6 +514,7 @@ class Address(ndb.Model):
                     )
                 )
             fields.append(search.TextField(name = u"anniversary", value = anniversary_item.label))
+
         # Document
         document = search.Document(
             doc_id = key.urlsafe(),

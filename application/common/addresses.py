@@ -8,7 +8,7 @@ from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.ext import deferred
 from model.address import (
-    Address, Tel, Email, Url, Note, JournalItem, Anniversary
+    Address, Tel, Email, Url, NoteItem, JournalItem, AgreementItem, Anniversary
 )
 from model.address_history import AddressHistory
 
@@ -35,6 +35,7 @@ def create(
     url_items = None,
     note_items = None,
     journal_items = None,
+    agreement_items = None,
     business_items = None,
     anniversary_items = None,
     gender = None
@@ -96,26 +97,29 @@ def create(
     :param note_items: A list with Note-objects.
         Syntax::
 
-            [Note(text = "<note>", ...]
+            [NoteItem(text = "<text>", ...]
 
         Example::
 
-            [Note(text = "This is a short note")]
-
+            [NoteItem(text = "This is a short note")]
 
     :param journal_items: A list with JournalItem-objects.
         Syntax::
 
-            [JournalItem(date_time = <datetime.datetime>, text = "<note>"), ...]
+            [JournalItem(text = "<text>"), ...]
 
         Example::
 
-            [
-                JournalItem(
-                    date_time = datetime.datetime(2000, 1, 1, 14, 30),
-                    text = "This is a short journal item."
-                ), ...
-            ]
+            [JournalItem(text = "This is a short journal item."), ...]
+
+    :param agreement_items: A list with Agreement-objects.
+        Syntax::
+
+            [AgreementItem(text = "<text>", ...]
+
+        Example::
+
+            [AgreementItem(text = "This is a short note")]
 
     :param business_items: A list with business items.
         Example::
@@ -225,7 +229,7 @@ def create(
         address.url_items = url_items
     if note_items is not None:
         for note in note_items:
-            assert isinstance(note, Note)
+            assert isinstance(note, NoteItem)
             note.uid = unicode(uuid.uuid4())
             note.ct = utcnow
             note.cu = user
@@ -241,6 +245,15 @@ def create(
             journal.et = utcnow
             journal.eu = user
         address.journal_items = journal_items
+    if agreement_items is not None:
+        for agreement in agreement_items:
+            assert isinstance(agreement, AgreementItem)
+            agreement.uid = unicode(uuid.uuid4())
+            agreement.ct = utcnow
+            agreement.cu = user
+            agreement.et = utcnow
+            agreement.eu = user
+        address.agreement_items = agreement_items
     if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
@@ -512,6 +525,7 @@ def save_address(
     url_items = None,
     note_items = None,
     journal_items = None,
+    agreement_items = None,
     business_items = None,
     anniversary_items = None,
     gender = None
@@ -576,26 +590,29 @@ def save_address(
     :param note_items: A list with Note-objects.
         Syntax::
 
-            [Note(text = "<note>", ...]
+            [NoteItem(text = "<text>", ...]
 
         Example::
 
-            [Note(text = "This is a short note")]
-
+            [NoteItem(text = "This is a short note")]
 
     :param journal_items: A list with JournalItem-objects.
         Syntax::
 
-            [JournalItem(date_time = <datetime.datetime>, text = "<note>"), ...]
+            [JournalItem(text = "<text>"), ...]
 
         Example::
 
-            [
-                JournalItem(
-                    date_time = datetime.datetime(2000, 1, 1, 14, 30),
-                    text = "This is a short journal item."
-                ), ...
-            ]
+            [JournalItem(text = "This is a short journal item."), ...]
+
+    :param agreement_items: A list with Agreement-objects.
+        Syntax::
+
+            [AgreementItem(text = "<text>", ...]
+
+        Example::
+
+            [AgreementItem(text = "This is a short note")]
 
     :param business_items: A list with strings.
         Example::
@@ -838,6 +855,32 @@ def save_address(
         address.journal_items = [
             journal_item for journal_item in journal_items if journal_item.text
         ]
+    if agreement_items is not None:
+        for agreement in agreement_items:
+            assert isinstance(agreement, AgreementItem)
+            if agreement.uid:
+                for old_agreement in address.agreement_items:
+                    if old_agreement.uid == agreement.uid:
+                        agreement.ct = old_agreement.ct
+                        agreement.cu = old_agreement.cu
+                        agreement.et = old_agreement.et
+                        agreement.eu = old_agreement.eu
+                        if old_agreement.text != agreement.text:
+                            agreement.et = utcnow
+                            agreement.eu = user
+            else:
+                agreement.uid = unicode(uuid.uuid4())
+            if not agreement.ct:
+                agreement.ct = utcnow
+            if not agreement.cu:
+                agreement.cu = user
+            if not agreement.et:
+                agreement.et = utcnow
+            if not agreement.eu:
+                agreement.eu = user
+        address.agreement_items = [
+            agreement_item for agreement_item in agreement_items if agreement_item.text
+        ]
     if business_items is not None:
         if isinstance(business_items, basestring):
             business_items = [business_items]
@@ -1017,8 +1060,8 @@ def search_addresses(
         - phone
         - email
         - url
-        - journal
         - note
+        - journal
         - agreement
         - anniversary
     """
