@@ -723,7 +723,7 @@ class JsonRpc(CherryPyJsonRpc):
         # Prepare Note-Items
         if note_items:
             note_items = [
-                common.addresses.Note(**note_item) for note_item in note_items
+                common.addresses.NoteItem(**note_item) for note_item in note_items
             ]
 
         # Prepare Journal-Items
