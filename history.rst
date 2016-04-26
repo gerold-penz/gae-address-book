@@ -14,6 +14,8 @@ Version 0.1.18
 
 - AgreementItems
 
+- JournalItems are now without explicit date
+
 
 ==============
 Version 0.1.17
