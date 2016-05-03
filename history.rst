@@ -16,6 +16,10 @@ Version 0.1.19
 
 - Default authorizations added
 
+- JsonRpc-functions for free defined fields added
+
+- Documentation added
+
 
 ==============
 Version 0.1.18

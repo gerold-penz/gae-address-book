@@ -13,6 +13,7 @@ import common.constants
 import common.format_
 import common.addresses
 import common.authorization
+import common.free_defined_fields
 from mako.template import Template
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 
@@ -117,14 +118,23 @@ def jronsrpc_help(*args, **kwargs):
         function_help_strings = [
             # Help strings
             extract_documentation(JsonRpc.get_info, u"get_info"),
-            extract_documentation(JsonRpc.create_address, u"create_address"),
 
+            extract_documentation(JsonRpc.create_address, u"create_address"),
             extract_documentation(JsonRpc.get_address, u"get_address"),
+            extract_documentation(JsonRpc.save_address, u"save_address"),
+            extract_documentation(JsonRpc.delete_address, u"delete_address"),
             extract_documentation(JsonRpc.get_addresses, u"get_addresses"),
+            extract_documentation(JsonRpc.search_addresses, u"search_addresses"),
 
             extract_documentation(JsonRpc.get_category_items, u"get_category_items"),
             extract_documentation(JsonRpc.get_business_items, u"get_business_items"),
             extract_documentation(JsonRpc.get_tag_items, u"get_tag_items"),
+
+            extract_documentation(JsonRpc.create_free_defined_field, u"create_free_defined_field"),
+            extract_documentation(JsonRpc.get_free_defined_field, u"get_free_defined_field"),
+            extract_documentation(JsonRpc.save_free_defined_field, u"save_free_defined_field"),
+            extract_documentation(JsonRpc.delete_free_defined_field, u"delete_free_defined_field"),
+            extract_documentation(JsonRpc.get_free_defined_fields, u"get_free_defined_fields"),
 
             extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
         ]
@@ -977,6 +987,140 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return True
+
+
+    @rpcmethod
+    def create_free_defined_field(
+        self,
+        label,
+        position = None,
+    ):
+        """
+        Creates a new free defined field
+
+        ==========
+        Parameters
+        ==========
+
+        :param label: Label of the field
+        :param position: sort key
+
+        :return: New free defined field (dictionary)
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Create new free defined field
+        new_free_defined_field = common.free_defined_fields.create(
+            user = user,
+            label = label,
+            position = position,
+        )
+
+        # Finished
+        return new_free_defined_field.to_dict()
+
+
+    @rpcmethod
+    def delete_free_defined_field(self, key_urlsafe = None):
+        """
+        Deletes one free defined field
+        """
+
+        common.free_defined_fields.delete_free_defined_field(
+            key_urlsafe = key_urlsafe
+        )
+
+        # Finished
+        return True
+
+
+    @rpcmethod
+    def get_free_defined_field(self, key_urlsafe = None):
+        """
+        Returns all data for the requested free defined field
+        """
+
+        free_defined_field = common.free_defined_fields.get_free_defined_field(
+            key_urlsafe = key_urlsafe
+        )
+        if not free_defined_field:
+            return None
+
+        free_defined_field_dict = free_defined_field.to_dict()
+
+        # Finished
+        return free_defined_field_dict
+
+
+    @rpcmethod
+    def get_free_defined_fields(
+        self,
+        exclude_creation_metadata = None
+    ):
+        """
+        Returns a list with free defined fields
+
+        :param exclude_creation_metadata: If `True`, the fields "ct" (creation timestamp)
+            and "cu" (creation user) will excluded
+
+        :return: List with free defined fields
+        """
+
+        free_defined_fields = []
+
+        for free_defined_field in common.free_defined_fields.get_free_defined_fields():
+            free_defined_field_dict = free_defined_field.to_dict()
+            if exclude_creation_metadata:
+                del free_defined_field_dict["ct"]
+                del free_defined_field_dict["cu"]
+
+            free_defined_fields.append(free_defined_field_dict)
+
+        # Finished
+        return free_defined_fields
+
+
+    @rpcmethod
+    def save_free_defined_field(
+        self,
+        key_urlsafe = None,
+        label = None,
+        position = None
+    ):
+        """
+        Saves one free_defined_field
+
+        The original free defined field will saved before into the *free_defined_field_history*-table.
+
+        ==========
+        Parameters
+        ==========
+
+        :param label: Label
+        :param position: Sort key
+
+        :return: Saved free defined field (dictionary)
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Saving
+        free_defined_field = common.free_defined_fields.save_free_defined_field(
+            user = user,
+            key_urlsafe = key_urlsafe,
+            label = label,
+            position = position
+        )
+
+        free_defined_field_dict = free_defined_field.to_dict()
+
+        # Finished
+        return free_defined_field_dict
+
+
 
 
 
