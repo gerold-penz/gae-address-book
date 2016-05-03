@@ -7,12 +7,12 @@ from google.appengine.ext import ndb
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
 
 
-class FreeDefinedField(ndb.Model):
+class FreeDefinedFieldHistory(ndb.Model):
 
     ct = ndb.DateTimeProperty(
         auto_now_add = True, required = True, verbose_name = u"creation_timestamp"
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
 
-    address_key = ndb.KeyProperty()
-    address_dict = ndb.PickleProperty()
+    free_defined_field_key = ndb.KeyProperty()
+    free_defined_field_dict = ndb.PickleProperty()

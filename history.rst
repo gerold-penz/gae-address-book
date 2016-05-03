@@ -12,7 +12,7 @@ Version 0.1.19
 
 2016-05-03
 
-
+- New: FreeDefinedField-Model
 
 
 ==============

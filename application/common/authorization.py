@@ -19,6 +19,9 @@ PRIVATE_ADDRESS_READ = "private_address.read"
 PRIVATE_ADDRESS_EDIT = "private_address.edit"
 PRIVATE_ADDRESS_DELETE = "private_address.delete"
 
+FREE_DEFINED_FIELD_CREATE = "free_defined_field.create"
+FREE_DEFINED_FIELD_EDIT = "free_defined_field.edit"
+
 # All authorizations
 ALL_AUTHORIZATIONS = {
     ADDRESS_CREATE,
@@ -33,7 +36,10 @@ ALL_AUTHORIZATIONS = {
 
     PRIVATE_ADDRESS_READ,
     PRIVATE_ADDRESS_EDIT,
-    PRIVATE_ADDRESS_DELETE
+    PRIVATE_ADDRESS_DELETE,
+
+    FREE_DEFINED_FIELD_CREATE,
+    FREE_DEFINED_FIELD_EDIT
 }
 
 
