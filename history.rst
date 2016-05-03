@@ -10,9 +10,9 @@ ToDo: Security: Authorization: *common.authorization*
 Version 0.1.19
 ==============
 
-2016-05-02
+2016-05-03
 
-- Neues Adressbuch für Immoads-Alt erstellt
+
 
 
 ==============
