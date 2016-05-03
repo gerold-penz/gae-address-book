@@ -42,6 +42,47 @@ ALL_AUTHORIZATIONS = {
     FREE_DEFINED_FIELD_EDIT
 }
 
+# Default authorizations for roles
+DEFAULT_AUTHORIZATIONS = {
+    "address.create": ["user", "main_user", "admin"],
+
+    "own_address.read": ["viewer", "user", "main_user", "admin"],
+    "own_address.edit": ["user", "main_user", "admin"],
+    "own_address.delete": ["user", "main_user", "admin"],
+
+    "public_address.read": ["viewer", "user", "main_user", "admin"],
+    "public_address.edit": ["user", "main_user", "admin"],
+    "public_address.delete": ["main_user", "admin"],
+
+    "private_address.read": ["main_user", "admin"],
+    "private_address.edit": ["admin"],
+    "private_address.delete": ["admin"],
+
+    "free_defined_field.create": ["admin"],
+    "free_defined_field.edit": ["admin"],
+}
+
+
+# Global authorizations
+_authorizations = None
+
+
+def get_authorizations():
+    """
+    Returns a combination between default authorizations and INI-settings
+    """
+
+    global _authorizations
+
+    if _authorizations:
+        return _authorizations
+
+    _authorizations = DEFAULT_AUTHORIZATIONS.copy()
+    _authorizations.update(cherrypy.config["authorizations"])
+
+    # Finished
+    return _authorizations
+
 
 def check_authorization(user, authorization):
     """
@@ -56,8 +97,11 @@ def check_authorization(user, authorization):
     if user not in cherrypy.config["users"]:
         raise errors.UserNotExistsError(user = user)
 
+    # Get authorizations
+    authorizations = get_authorizations()
+
     # Get roles for authorization
-    role_names = cherrypy.config["authorizations"].get(authorization)
+    role_names = authorizations.get(authorization)
     if not role_names:
         raise errors.NotAuthorizedError(user = user, authorization = authorization)
 
@@ -67,27 +111,5 @@ def check_authorization(user, authorization):
             break
     else:
         raise errors.NotAuthorizedError(user = user, authorization = authorization)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

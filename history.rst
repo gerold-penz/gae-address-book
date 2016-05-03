@@ -14,6 +14,8 @@ Version 0.1.19
 
 - New: FreeDefinedField-Model
 
+- Default authorizations added
+
 
 ==============
 Version 0.1.18
