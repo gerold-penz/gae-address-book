@@ -20,6 +20,8 @@ Version 0.1.19
 
 - Documentation added
 
+- *index.yaml* added
+
 
 ==============
 Version 0.1.18

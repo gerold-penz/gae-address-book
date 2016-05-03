@@ -29,7 +29,7 @@ def create(
 
     # Create field
     free_defined_field = FreeDefinedField(
-        user = user,
+        cu = user,
         label = label,
         position = position
     )
@@ -50,7 +50,7 @@ def get_free_defined_fields():
     query = FreeDefinedField.query()
 
     # Sorting
-    query.order("position")
+    query = query.order(FreeDefinedField.position, FreeDefinedField.label)
 
     # Fetch adresses
     free_defined_fields = []

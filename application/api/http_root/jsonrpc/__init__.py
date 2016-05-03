@@ -1071,12 +1071,9 @@ class JsonRpc(CherryPyJsonRpc):
         free_defined_fields = []
 
         for free_defined_field in common.free_defined_fields.get_free_defined_fields():
-            free_defined_field_dict = free_defined_field.to_dict()
-            if exclude_creation_metadata:
-                del free_defined_field_dict["ct"]
-                del free_defined_field_dict["cu"]
-
-            free_defined_fields.append(free_defined_field_dict)
+            free_defined_fields.append(free_defined_field.to_dict(
+                exclude_creation_metadata = exclude_creation_metadata
+            ))
 
         # Finished
         return free_defined_fields
