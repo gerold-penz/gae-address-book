@@ -991,6 +991,7 @@ class JsonRpc(CherryPyJsonRpc):
     @rpcmethod
     def create_free_defined_field(
         self,
+        group,
         label,
         position = None,
     ):
@@ -1002,6 +1003,7 @@ class JsonRpc(CherryPyJsonRpc):
         ==========
 
         :param label: Label of the field
+        :param group: Group name
         :param position: sort key
 
         :return: New free defined field (dictionary)
@@ -1013,6 +1015,7 @@ class JsonRpc(CherryPyJsonRpc):
         # Create new free defined field
         new_free_defined_field = common.free_defined_fields.create(
             user = user,
+            group = group,
             label = label,
             position = position,
         )
@@ -1082,6 +1085,7 @@ class JsonRpc(CherryPyJsonRpc):
     def save_free_defined_field(
         self,
         key_urlsafe = None,
+        group = None,
         label = None,
         position = None
     ):
@@ -1094,6 +1098,7 @@ class JsonRpc(CherryPyJsonRpc):
         Parameters
         ==========
 
+        :param group: Group name
         :param label: Label
         :param position: Sort key
 
@@ -1107,6 +1112,7 @@ class JsonRpc(CherryPyJsonRpc):
         free_defined_field = common.free_defined_fields.save_free_defined_field(
             user = user,
             key_urlsafe = key_urlsafe,
+            group = group,
             label = label,
             position = position
         )

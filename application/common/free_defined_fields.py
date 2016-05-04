@@ -9,12 +9,14 @@ from model.free_defined_field_history import FreeDefinedFieldHistory
 
 def create(
     user,
+    group,
     label,
     position = None,
 ):
     """
     Creates a new free defined field
 
+    :param group: Group name
     :param user: Username
     :param label: Label of the field
     :param position: sort key
@@ -30,6 +32,7 @@ def create(
     # Create field
     free_defined_field = FreeDefinedField(
         cu = user,
+        group = group,
         label = label,
         position = position
     )
@@ -73,6 +76,7 @@ def get_free_defined_field(key_urlsafe):
 def save_free_defined_field(
     user,
     key_urlsafe = None,
+    group = None,
     label = None,
     position = None
 ):
@@ -81,6 +85,7 @@ def save_free_defined_field(
 
     :param user: Username
     :param key_urlsafe: Key
+    :param group: Group name
     :param label: Label
     :param position: Sort key
 
@@ -104,6 +109,8 @@ def save_free_defined_field(
     free_defined_field_history.put()
 
     # Check arguments and set values
+    if group is not None:
+        free_defined_field.group = group
     if label is not None:
         free_defined_field.label = label
     if position is not None:

@@ -15,8 +15,8 @@ class FreeDefinedField(ndb.Model):
     )
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
 
+    group = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
-    group = ndb.StringProperty()
     position = ndb.IntegerProperty()
 
 
