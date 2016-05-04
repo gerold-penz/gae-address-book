@@ -14,6 +14,8 @@ Version 0.1.20
 
 - Get and set free defined fields works, now.
 
+- New: *FreeDefinedField.group*
+
 
 ==============
 Version 0.1.19
