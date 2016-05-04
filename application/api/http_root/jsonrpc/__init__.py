@@ -617,7 +617,6 @@ class JsonRpc(CherryPyJsonRpc):
         anniversary_items = None,
         gender = None
     ):
-
         """
         Saves one address
 
@@ -709,13 +708,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"<label>": "<value>"), ...]
+                [{"label": "<label>", "text": "<text>"}, ...]
 
             Example::
 
                 [
-                    {"Shoe-Size": "45"},
-                    {"Body-Height": "180"}
+                    {"label": "Shoe-Size", "text": "45"},
+                    {"label": "Body-Height", "text": "180"}
                 ]
 
         :param business_items: A list with strings.

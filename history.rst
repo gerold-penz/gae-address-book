@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.20
+==============
+
+2016-05-04
+
+- Get and set free defined fields works, now.
+
+
+==============
 Version 0.1.19
 ==============
 

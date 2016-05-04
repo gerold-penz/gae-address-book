@@ -506,12 +506,12 @@ class Address(ndb.Model):
         for free_defined_item in self.free_defined_items:
             if common.format_.has_umlauts(free_defined_item.text):
                 fields.append(search.TextField(
-                    name = free_defined_item.label,
+                    name = u"free_defined",
                     value = common.format_.replace_umlauts(free_defined_item.text)
                 ))
             assert isinstance(free_defined_item, FreeDefinedItem)
             fields.append(search.TextField(
-                name = free_defined_item.label,
+                name = u"free_defined",
                 value = free_defined_item.text
             ))
         for anniversary_item in self.anniversary_items:
