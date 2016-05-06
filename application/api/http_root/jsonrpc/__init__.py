@@ -329,19 +329,19 @@ class JsonRpc(CherryPyJsonRpc):
         # Prepare Phone-Items
         if phone_items:
             phone_items = [
-                common.addresses.Tel(**phone_item) for phone_item in phone_items
+                common.addresses.TelItem(**phone_item) for phone_item in phone_items
             ]
 
         # Prepare Email-Items
         if email_items:
             email_items = [
-                common.addresses.Email(**email_item) for email_item in email_items
+                common.addresses.EmailItem(**email_item) for email_item in email_items
             ]
 
         # Prepare Url-Items
         if url_items:
             url_items = [
-                common.addresses.Url(**url_item) for url_item in url_items
+                common.addresses.UrlItem(**url_item) for url_item in url_items
             ]
 
         # Prepare Note-Items
@@ -374,7 +374,7 @@ class JsonRpc(CherryPyJsonRpc):
         # Prepare Anniversary-Items
         if anniversary_items:
             anniversary_items = [
-                common.addresses.Anniversary(**anniversary_item) for
+                common.addresses.AnniversaryItem(**anniversary_item) for
                 anniversary_item in anniversary_items
             ]
 
