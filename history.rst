@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.22
+==============
+
+2016-05-09
+
+- URL: "http" concatenated
+
+
+==============
 Version 0.1.21
 ==============
 

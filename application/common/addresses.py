@@ -837,9 +837,17 @@ def save_address(
                 url.et = utcnow
             if not url.eu:
                 url.eu = user
+
+            # Mit "http" ergänzen
+            if url.url:
+                url.url = url.url.strip()
+                if not url.url.startswith("http"):
+                    url.url = u"http://" + url.url
+
         address.url_items = [
             url_item for url_item in url_items if url_item.url
         ]
+
     if note_items is not None:
         for note in note_items:
             assert isinstance(note, NoteItem)
