@@ -519,12 +519,12 @@ class Address(ndb.Model):
             assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.year and anniversary_item.month and anniversary_item.day:
                 fields.append(
-                    search.DateField(
-                        name = u"anniversary", value = datetime.date(
+                    search.TextField(
+                        name = u"anniversary", value = common.format_.date_to_iso(datetime.date(
                             anniversary_item.year,
                             anniversary_item.month,
                             anniversary_item.day
-                        )
+                        ))
                     )
                 )
             elif anniversary_item.month and anniversary_item.day:

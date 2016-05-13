@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.1.23
+==============
+
+2016-05-13
+
+- Search-Index: Anniversary-Date --> ISO-String
+
+
+==============
 Version 0.1.22
 ==============
 
