@@ -6,6 +6,15 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
+=============
+Version 0.2.0
+=============
+
+2016-05-17
+
+- Webapp2 added (ZIP file).
+
+
 ==============
 Version 0.1.23
 ==============
