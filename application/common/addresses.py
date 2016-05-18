@@ -315,7 +315,7 @@ def get_addresses(
     page,
     page_size,
     order_by = None,
-    deleted = False,
+    also_deleted = False,
     filter_by_organization = None,
     filter_by_organization_char1 = None,
     filter_by_first_name = None,
@@ -365,7 +365,7 @@ def get_addresses(
         - "birthday"
         - "age"
 
-    :param deleted: If `True`: returns only deleted addresses.
+    :param also_deleted: If `True`: returns undeleted and deleted addresses.
         If `False`: returns only undeleted addresses.
 
     :param filter_by_xxx: Case insensitive filter strings
@@ -391,9 +391,9 @@ def get_addresses(
     query = Address.query()
 
     # Prepare filter
-    filter_items = [
-        Address.deleted == deleted
-    ]
+    filter_items = []
+    if not also_deleted:
+        filter_items.append(Address.deleted == False)
 
     # Append filter items (strings)
     if filter_by_organization:
