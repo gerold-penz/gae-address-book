@@ -5,6 +5,8 @@ Google App Engine - Address Book - Data Backend
 
 ToDo: Security: Authorization: *common.authorization*
 
+ToDo: Development-Directory
+
 
 =============
 Version 0.2.0

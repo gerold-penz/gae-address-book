@@ -8,7 +8,7 @@ import os
 import subprocess
 
 THISDIR = os.path.dirname(os.path.abspath(__file__))
-STORAGEDIR = os.path.join(THISDIR, "_local_datastore")
+STORAGEDIR = os.path.abspath(os.path.join(THISDIR, "..", "_local_datastore"))
 
 os.chdir(THISDIR)
 
