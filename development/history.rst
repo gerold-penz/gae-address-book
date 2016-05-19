@@ -8,6 +8,16 @@ ToDo: Security: Authorization: *common.authorization*
 ToDo: Development-Directory
 
 
+
+=============
+Version 0.2.1
+=============
+
+2016-05-19
+
+- Huge changes in the program-structure
+
+
 =============
 Version 0.2.0
 =============
