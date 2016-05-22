@@ -1,0 +1,10 @@
+cron:
+
+#- description: Taegliches Datenbank-Backup
+#  url: /_ah/datastore_admin/backup.create?name=DatabaseBackup&kind=Address&kind=AddressHistory&kind=FreeDefinedField&kind=FreeDefinedFieldHistory&filesystem=gs&gs_bucket_name=immoads-adr-clients.appspot.com/backups
+#  schedule: every day 04:10
+#  target: ah-builtin-python-bundle
+
+- description: Update cached tag items
+  url: /api/cronjobs/update_tag_items_cache
+  schedule: every day 05:10

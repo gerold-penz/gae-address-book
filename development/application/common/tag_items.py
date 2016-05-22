@@ -14,7 +14,6 @@ def get_tag_items_direct():
     Returns all uses tag items as set. Directly from the Address model.
     """
 
-
     tag_items = set()
 
     query = Address.query(projection = [Address.tag_items], distinct = True)

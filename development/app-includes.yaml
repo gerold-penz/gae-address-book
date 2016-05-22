@@ -43,6 +43,12 @@ handlers:
   http_headers:
     X-Static: static
 
+# Zugriff für CronJobs nur für Admins/System
+- url: /api/cronjobs/.*
+  login: admin
+  secure: always
+  script: api.app
+
 # API
 - url: /api/.*
   secure: always

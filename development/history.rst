@@ -18,6 +18,8 @@ Version 0.2.2
 
 - Cached tag items
 
+- *common.named_values.get_value()* now uses the key to fetch values from database.
+
 
 =============
 Version 0.2.1

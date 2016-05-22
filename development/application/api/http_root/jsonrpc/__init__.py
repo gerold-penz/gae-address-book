@@ -13,6 +13,7 @@ import common.constants
 import common.format_
 import common.addresses
 import common.authorization
+import common.tag_items
 import common.free_defined_fields
 from mako.template import Template
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
@@ -863,11 +864,11 @@ class JsonRpc(CherryPyJsonRpc):
     @rpcmethod
     def get_tag_items(self):
         """
-        Returns all used tag items as unordered list.
+        Returns cached tag items as unordered list.
         """
 
         # Finished
-        return list(common.addresses.get_tag_items())
+        return list(common.tag_items.get_tag_items_cached())
 
 
     @rpcmethod
