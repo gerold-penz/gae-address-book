@@ -156,11 +156,14 @@ class Address(ndb.Model):
     # Kind
     kind = ndb.StringProperty(required = True)
 
-    # Category Items
+    # Category items
     category_items = ndb.StringProperty(repeated = True)
 
-    # Tag Items
+    # Tag items
     tag_items = ndb.StringProperty(repeated = True)
+
+    # Business items
+    business_items = ndb.StringProperty(repeated = True)  # Branchen
 
     # Organization
     organization = ndb.StringProperty(indexed = False)
@@ -279,7 +282,6 @@ class Address(ndb.Model):
     agreement_items = ndb.StructuredProperty(AgreementItem, repeated = True)  # Vereinbarungen
     free_defined_items = ndb.StructuredProperty(FreeDefinedItem, repeated = True)  # Frei definierbare Felder
 
-    business_items = ndb.StringProperty(repeated = True)  # Branchen
     anniversary_items = ndb.StructuredProperty(AnniversaryItem, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)

@@ -14,6 +14,10 @@ Version 0.2.2
 
 - New model: NamedValue contains a simple key-value-store.
 
+- Tag items, now have an own module.
+
+- Cached tag items
+
 
 =============
 Version 0.2.1
