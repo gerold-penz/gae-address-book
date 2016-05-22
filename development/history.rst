@@ -5,8 +5,14 @@ Google App Engine - Address Book - Data Backend
 
 ToDo: Security: Authorization: *common.authorization*
 
-ToDo: Development-Directory
 
+=============
+Version 0.2.2
+=============
+
+2016-05-22
+
+- New model: NamedValue contains a simple key-value-store.
 
 
 =============
