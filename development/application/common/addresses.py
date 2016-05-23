@@ -1183,13 +1183,22 @@ def delete_all_addresses(yes_do_it = False):
         return
 
     logging.info(u"delete_all_addresses: BEGIN")
-
+    
+    # Delete addresses
     address_keys = []
-    for index, address in enumerate(Address.query().iter(keys_only = True)):
-        address_keys.append(address.key)
+    for index, key in enumerate(Address.query().iter(keys_only = True)):
+        address_keys.append(key)
         ndb.delete_multi(address_keys)
         if index % 100:
             address_keys = []
+
+    # Delete address histories
+    address_history_keys = []
+    for index, key in enumerate(AddressHistory.query().iter(keys_only = True)):
+        address_history_keys.append(key)
+        ndb.delete_multi(address_history_keys)
+        if index % 100:
+            address_history_keys = []
 
     logging.info(u"delete_all_addresses: END")
 
