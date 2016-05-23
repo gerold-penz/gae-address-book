@@ -14,6 +14,8 @@ import common.format_
 import common.addresses
 import common.authorization
 import common.tag_items
+import common.category_items
+import common.business_items
 import common.free_defined_fields
 from mako.template import Template
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
@@ -169,7 +171,7 @@ class JsonRpc(CherryPyJsonRpc):
         return dict(
             appname = cherrypy.config["APPNAME"],
             label = cherrypy.config["LABEL"],
-            addresses_count = common.addresses.get_addresses_count()
+            addresses_count = common.addresses.get_address_quantity_cached()
         )
 
 
@@ -848,7 +850,7 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         # Finished
-        return list(common.addresses.get_category_items())
+        return list(common.category_items.get_category_items_cached())
 
 
     @rpcmethod
@@ -858,7 +860,7 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         # Finished
-        return list(common.addresses.get_business_items())
+        return list(common.business_items.get_business_items_cached())
 
 
     @rpcmethod

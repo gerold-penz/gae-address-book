@@ -27,13 +27,61 @@ def set_value(name, value):
     # Get existing named value
     named_value = get_value(name)
 
-    if not named_value:
+    if named_value is None:
         # Create new named value
         named_value = NamedValue()
         named_value.name = name
 
     # Edit value
     named_value.value = value
+
+    # Save
+    named_value.put()
+
+    # Finished
+    return named_value
+
+
+def increment(name):
+    """
+    Increments the value with the given name, if it is an integer.
+    """
+
+    # Get existing named value
+    named_value = get_value(name)
+
+    if named_value is None:
+        # Create new named value
+        named_value = NamedValue()
+        named_value.name = name
+        named_value.value = 0
+
+    # Edit value
+    named_value.value += 1
+
+    # Save
+    named_value.put()
+
+    # Finished
+    return named_value
+
+
+def decrement(name):
+    """
+    Decrements the value with the given name, if it is an integer.
+    """
+
+    # Get existing named value
+    named_value = get_value(name)
+
+    if named_value is None:
+        # Create new named value
+        named_value = NamedValue()
+        named_value.name = name
+        named_value.value = 1
+
+    # Edit value
+    named_value.value -= 1
 
     # Save
     named_value.put()

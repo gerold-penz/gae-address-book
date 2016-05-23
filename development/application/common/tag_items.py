@@ -10,7 +10,7 @@ TAG_ITEMS = "tag_items"
 
 def get_tag_items_direct():
     """
-    Returns all uses tag items as set. Directly from the Address model.
+    Returns all used tag items as set. Directly from the Address model.
     """
 
     tag_items = set()

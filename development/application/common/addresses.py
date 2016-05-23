@@ -4,6 +4,7 @@
 import uuid
 import datetime
 import authorization
+import named_values
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.ext import deferred
@@ -13,6 +14,12 @@ from model.address import (
     AgreementItem, FreeDefinedItem, AnniversaryItem
 )
 from model.address_history import AddressHistory
+from business_items import add_business_items_to_cache
+from category_items import add_category_items_to_cache
+from tag_items import add_tag_items_to_cache
+
+
+ADDRESS_QUANTITY = "address_quantity"
 
 
 def create(
@@ -299,23 +306,29 @@ def create(
     # Save
     address.put()
 
+    # Increment Quantity
+    increment_address_quantity_in_cache()
+
+    # Update cached Business-Items
+    if address.business_items:
+        add_business_items_to_cache(address.business_items)
+
+    # Update cached Category-Items
+    if address.category_items:
+        add_category_items_to_cache(address.category_items)
+
+    # Update cached Tag-Items
+    if address.tag_items:
+        add_tag_items_to_cache(address.tag_items)
+
     # Finished
     return address
-
-
-def get_addresses_count():
-    """
-    Returns the quantity of addresses in the database
-    """
-
-    return Address.query().count()
 
 
 def get_addresses(
     page,
     page_size,
     order_by = None,
-    also_deleted = False,
     filter_by_organization = None,
     filter_by_organization_char1 = None,
     filter_by_first_name = None,
@@ -365,9 +378,6 @@ def get_addresses(
         - "birthday"
         - "age"
 
-    :param also_deleted: If `True`: returns undeleted and deleted addresses.
-        If `False`: returns only undeleted addresses.
-
     :param filter_by_xxx: Case insensitive filter strings
 
     :param filter_by_category_items: List with *case sensitive* items.
@@ -390,12 +400,8 @@ def get_addresses(
     # Query
     query = Address.query()
 
-    # Prepare filter
+    # Prepare filter and append filter items (strings)
     filter_items = []
-    if not also_deleted:
-        filter_items.append(Address.deleted == False)
-
-    # Append filter items (strings)
     if filter_by_organization:
         filter_items.append(
             Address.organization_lower == filter_by_organization.strip().lower())
@@ -488,9 +494,6 @@ def get_addresses(
     # Start with
     offset = (page - 1) * page_size
 
-    # Quantity
-    quantity = query.count()
-
     # Fetch adresses
     addresses = query.fetch(
         offset = offset,
@@ -498,6 +501,12 @@ def get_addresses(
         batch_size = page_size,
         deadline = 30  # seconds
     )
+
+    # Quantity
+    if not filter_items:
+        quantity = get_address_quantity_cached()
+    else:
+        quantity = query.count()
 
     # Finished
     return dict(
@@ -1035,46 +1044,8 @@ def _refresh_index():
 
     # Resave all addresses
     query = Address().query()
-    for address in query.iter(batch_size = 1000):
+    for address in query.iter(batch_size = 200):
         address.put()
-
-
-def get_category_items():
-    """
-    Returns all used categorie-names as set.
-    """
-
-    category_items = set()
-
-    query = Address.query(
-        projection = [Address.category_items],
-        distinct = True
-    )
-    for address in query.iter(batch_size = 1000):
-        for category_item in address.category_items:
-            category_items.add(category_item)
-
-    # Finished
-    return category_items
-
-
-def get_business_items():
-    """
-    Returns all used business items as set.
-    """
-
-    business_items = set()
-
-    query = Address.query(
-        projection = [Address.business_items],
-        distinct = True
-    )
-    for address in query.iter(batch_size = 1000):
-        for business_item in address.business_items:
-            business_items.add(business_item)
-
-    # Finished
-    return business_items
 
 
 def search_addresses(
@@ -1150,7 +1121,7 @@ def delete_address(key_urlsafe = None, address_uid = None, force = False):
     Deletes one address
 
     :param force: If `True`, address will deleted full.
-        Else, only the "deletion_timestamp" will set.
+        Else, the address will moved into the DeleteAddress model.
     """
 
     assert key_urlsafe or address_uid
@@ -1171,5 +1142,66 @@ def delete_address(key_urlsafe = None, address_uid = None, force = False):
             address.key.delete()
         else:
             # Safe delete
+
+
+
             address.dt = datetime.datetime.utcnow()
             address.put()
+
+    # Decrement Quantity
+    decrement_address_quantity_in_cache()
+
+
+def get_address_quantity_direct():
+    """
+    Returns the quantity of undeleted addresses in the database.
+    Directly from the Address model.
+    """
+
+    return Address.query(Address.deleted == False).count()
+
+
+def get_address_quantity_cached():
+    """
+    Returns all used category items as set.
+    """
+
+    # Cache get
+    address_quantity = named_values.get_value(name = ADDRESS_QUANTITY)
+    if address_quantity is not None:
+        return address_quantity
+
+    # Fetch quantity direct from the Address model
+    address_quantity = get_address_quantity_direct()
+
+    # Cache set
+    named_values.set_value(name = ADDRESS_QUANTITY, value = address_quantity)
+
+    # Finished
+    return address_quantity
+
+
+def update_address_quantity_cache():
+    """
+    Updates the "address_quantity" NamedValue entity
+    """
+
+    # Cache set
+    named_values.set_value(name = ADDRESS_QUANTITY, value = get_address_quantity_direct())
+
+
+def increment_address_quantity_in_cache():
+    """
+    Increments address quantity in the cache
+    """
+
+    named_values.increment(name = ADDRESS_QUANTITY)
+
+
+def decrement_address_quantity_in_cache():
+    """
+    Decrements address quantity in the cache
+    """
+
+    named_values.decrement(name = ADDRESS_QUANTITY)
+

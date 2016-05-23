@@ -151,7 +151,6 @@ class Address(ndb.Model):
     cu = ndb.StringProperty(required = True, verbose_name = u"creation_user")
     et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
-    dt = ndb.DateTimeProperty(verbose_name = u"deletion_timestamp")
 
     # Kind
     kind = ndb.StringProperty(required = True)
@@ -362,15 +361,6 @@ class Address(ndb.Model):
 
         # Finished
         return address_dict
-
-
-    @ndb.ComputedProperty
-    def deleted(self):
-        """
-        Returns `True` if *DeletionTimestamp* is set.
-        """
-
-        return bool(self.dt)
 
 
     def put(self, **ctx_options):

@@ -4,7 +4,6 @@
 import authorization
 from google.appengine.ext import ndb
 from model.free_defined_field import FreeDefinedField
-from model.free_defined_field_history import FreeDefinedFieldHistory
 
 
 def create(
@@ -99,14 +98,6 @@ def save_free_defined_field(
 
     # Check authorization
     authorization.check_authorization(user, authorization.FREE_DEFINED_FIELD_EDIT)
-
-    # Save original field to *free_defined_field_history*.
-    free_defined_field_history = FreeDefinedFieldHistory(
-        cu = user,
-        free_defined_field_key = free_defined_field.key,
-        free_defined_field_dict = free_defined_field.to_dict()
-    )
-    free_defined_field_history.put()
 
     # Check arguments and set values
     if group is not None:

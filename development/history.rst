@@ -12,8 +12,15 @@ Version 0.2.3
 
 2016-05-23
 
+- FreeDefinedFieldHistory-model deleted
 
+- AddressHistory-model deleted
 
+- Tag-Items, Business-Items and Category-Items are now cached
+
+- Deletion of addresses now work with a new model
+
+- Cron-Jobs added
 
 
 =============
