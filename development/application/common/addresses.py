@@ -14,6 +14,7 @@ from model.address import (
     AgreementItem, FreeDefinedItem, AnniversaryItem
 )
 from model.address_history import AddressHistory
+from model.deleted_address import DeletedAddress
 from business_items import add_business_items_to_cache
 from category_items import add_category_items_to_cache
 from tag_items import add_tag_items_to_cache
@@ -707,8 +708,8 @@ def save_address(
 
     # Save original address to *address_history*.
     address_history = AddressHistory(
+        parent = address.key,
         cu = user,
-        address_key = address.key,
         address_dict = address.to_dict()
     )
     address_history.put()
@@ -1116,9 +1117,11 @@ def search_addresses(
     return result
 
 
-def delete_address(key_urlsafe = None, address_uid = None, force = False):
+def delete_address(user, key_urlsafe = None, address_uid = None, force = False):
     """
     Deletes one address
+
+    :param user: Username
 
     :param force: If `True`, address will deleted full.
         Else, the address will moved into the DeleteAddress model.
@@ -1127,26 +1130,32 @@ def delete_address(key_urlsafe = None, address_uid = None, force = False):
     assert key_urlsafe or address_uid
 
     if force and key_urlsafe:
-        # Delete address unsafe (only with key)
+        address = None
         key = ndb.Key(urlsafe = key_urlsafe)
-        key.delete()
     else:
         # Load address
         address = get_address(
             key_urlsafe = key_urlsafe,
             address_uid = address_uid
         )
+        key = address.key
 
-        if force:
-            # Delete address unsafe
-            address.key.delete()
-        else:
-            # Safe delete
+    if force:
+        # Delete address-history items
+        history_keys = []
+        for history_key in AddressHistory.query(ancestor = key).iter(keys_only = True):
+            history_keys.append(history_key)
+        ndb.delete_multi(history_keys)
+    else:
+        # Copy address to *DeletedAddress-Model*.
+        deleted_address = DeletedAddress(
+            du = user,
+            address_dict = address.to_dict()
+        )
+        deleted_address.put()
 
-
-
-            address.dt = datetime.datetime.utcnow()
-            address.put()
+    # Delete address
+    key.delete()
 
     # Decrement Quantity
     decrement_address_quantity_in_cache()
@@ -1158,7 +1167,7 @@ def get_address_quantity_direct():
     Directly from the Address model.
     """
 
-    return Address.query(Address.deleted == False).count()
+    return Address.query().count()
 
 
 def get_address_quantity_cached():

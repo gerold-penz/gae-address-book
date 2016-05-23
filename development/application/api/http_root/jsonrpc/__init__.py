@@ -426,7 +426,6 @@ class JsonRpc(CherryPyJsonRpc):
         exclude_edit_metadata = None,
         exclude_empty_fields = None,
         order_by = None,
-        also_deleted = None,
         filter_by_organization = None,
         filter_by_organization_char1 = None,
         filter_by_first_name = None,
@@ -469,9 +468,6 @@ class JsonRpc(CherryPyJsonRpc):
         :param order_by: Order result, String or list with fieldnames. A "-"
             sets descending order.
 
-        :param also_deleted: If `True`: returns undeleted and deleted addresses.
-            If `False`: returns only undeleted addresses.
-
         :param filter_by_name: Case insensitive filter string which filters the
             fields "organization", "first_name", "last_name".
 
@@ -498,7 +494,6 @@ class JsonRpc(CherryPyJsonRpc):
             page = page,
             page_size = page_size,
             order_by = order_by,
-            also_deleted = also_deleted,
             filter_by_organization = filter_by_organization,
             filter_by_organization_char1 = filter_by_organization_char1,
             filter_by_first_name = filter_by_first_name,
@@ -983,9 +978,18 @@ class JsonRpc(CherryPyJsonRpc):
     ):
         """
         Deletes one address
+
+        ==========
+        Parameters
+        ==========
+
+        :param force: If `True`, the address will completely removed from the
+            database, the address-history too.
+            If `False`, the address will moved to the DeletedAddress-Model.
         """
 
         common.addresses.delete_address(
+            user = cherrypy.request.login,
             key_urlsafe = key_urlsafe,
             address_uid = address_uid,
             force = force
