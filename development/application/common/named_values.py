@@ -6,17 +6,28 @@ from model.named_value import NamedValue
 _global_keys = {}
 
 
-def get_value(name):
+def get_named_value_raw(name):
     """
-    Returns the value with the given name.
+    Returns the NamedValue-Object with the given name.
     """
 
     try:
         return _global_keys[name].get()
     except KeyError:
         named_value = NamedValue.query(NamedValue.name == name).get()
-        _global_keys[name] = named_value.key
-        return named_value
+        if named_value is not None:
+            _global_keys[name] = named_value.key
+            return named_value
+
+
+def get_value(name):
+    """
+    Returns the value with the given name.
+    """
+
+    named_value = get_named_value_raw(name)
+    if named_value is not None:
+        return named_value.value
 
 
 def set_value(name, value):
@@ -25,7 +36,7 @@ def set_value(name, value):
     """
 
     # Get existing named value
-    named_value = get_value(name)
+    named_value = get_named_value_raw(name)
 
     if named_value is None:
         # Create new named value
@@ -48,7 +59,7 @@ def increment(name):
     """
 
     # Get existing named value
-    named_value = get_value(name)
+    named_value = get_named_value_raw(name)
 
     if named_value is None:
         # Create new named value
@@ -72,7 +83,7 @@ def decrement(name):
     """
 
     # Get existing named value
-    named_value = get_value(name)
+    named_value = get_named_value_raw(name)
 
     if named_value is None:
         # Create new named value

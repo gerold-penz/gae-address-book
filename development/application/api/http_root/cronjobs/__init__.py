@@ -52,3 +52,15 @@ def update_address_quantity_cache():
     # Finished
     common.http.set_content_type_text()
     return u"OK"
+
+
+@cherrypy.expose
+def update_address_search_index():
+
+    # Run job
+    common.addresses.update_address_search_index()
+
+    # Finished
+    common.http.set_content_type_text()
+    return u"OK"
+

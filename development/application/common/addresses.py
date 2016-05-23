@@ -1010,7 +1010,7 @@ def save_address(
     return address
 
 
-def delete_address_search_index():
+def delete_all_search_indexes():
     """
     Deletes all documents in the "Address" search index
     """
@@ -1024,6 +1024,14 @@ def delete_address_search_index():
         if not document_ids:
             break
         index.delete(document_ids)
+
+
+def start_delete_all_search_indexes():
+    """
+    Starts the deletion of all search indexes deferred
+    """
+
+    deferred.defer(delete_all_search_indexes)
 
 
 def start_refresh_index():
@@ -1041,7 +1049,7 @@ def _refresh_index():
     """
 
     # Delete full search index
-    delete_address_search_index()
+    delete_all_search_indexes()
 
     # Resave all addresses
     query = Address().query()
@@ -1161,6 +1169,30 @@ def delete_address(user, key_urlsafe = None, address_uid = None, force = False):
     decrement_address_quantity_in_cache()
 
 
+def delete_all_addresses(yes_do_it = False):
+    """
+    Deletes really ALL addresses and search_indexes
+    """
+
+    if not yes_do_it:
+        return
+
+    address_keys = []
+    for index, address in enumerate(Address.query().iter(keys_only = True)):
+        address_keys.append(address.key)
+        ndb.delete_multi(address_keys)
+        if index % 100:
+            address_keys = []
+
+
+def start_delete_all_addresses(yes_do_it = False):
+    """
+    Starts the deletion of all addresses deferred
+    """
+
+    deferred.defer(delete_all_addresses, yes_do_it = yes_do_it)
+
+
 def get_address_quantity_direct():
     """
     Returns the quantity of undeleted addresses in the database.
@@ -1214,3 +1246,44 @@ def decrement_address_quantity_in_cache():
 
     named_values.decrement(name = ADDRESS_QUANTITY)
 
+
+def update_address_search_index():
+    """
+    Updates all documents in the "Address" search index
+    """
+
+    index = search.Index("Address")
+    address_keys = set()
+
+    # Iterate over all addresses
+    for address in Address.query().iter(batch_size = 200):
+
+        # Append key
+        address_keys.add(address.key.urlsafe())
+
+        # Update search index for the address
+        address.update_search_index()
+
+    # Fetch all document ids
+    document_ids = set()
+    start_id = None
+    while True:
+
+        fetched_document_ids = index.get_range(
+            start_id = start_id,
+            include_start_object = False,
+            limit = 200,
+            ids_only = True
+        )
+        if not fetched_document_ids:
+            break
+
+        for document in fetched_document_ids:
+            document_ids.add(document.doc_id)
+
+        start_id = fetched_document_ids[-1].doc_id
+
+    # Delete search indexes for not existing addresses
+    for document_id in document_ids:
+        if document_id not in address_keys:
+            index.delete(document_id)

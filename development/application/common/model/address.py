@@ -272,16 +272,16 @@ class Address(ndb.Model):
         lambda self: self.country[0].lower() if self.country else None
     )
 
-    phone_items = ndb.StructuredProperty(TelItem, repeated = True)  # Telefonnummern
-    email_items = ndb.StructuredProperty(EmailItem, repeated = True)  # E-Mail-Adressen
-    url_items = ndb.StructuredProperty(UrlItem, repeated = True)  # URLs
+    phone_items = ndb.LocalStructuredProperty(TelItem, repeated = True)  # Telefonnummern
+    email_items = ndb.LocalStructuredProperty(EmailItem, repeated = True)  # E-Mail-Adressen
+    url_items = ndb.LocalStructuredProperty(UrlItem, repeated = True)  # URLs
 
-    note_items = ndb.StructuredProperty(NoteItem, repeated = True)  # Notizen
-    journal_items = ndb.StructuredProperty(JournalItem, repeated = True)  # Journaleinträge
-    agreement_items = ndb.StructuredProperty(AgreementItem, repeated = True)  # Vereinbarungen
-    free_defined_items = ndb.StructuredProperty(FreeDefinedItem, repeated = True)  # Frei definierbare Felder
+    note_items = ndb.LocalStructuredProperty(NoteItem, repeated = True, compressed = True)  # Notizen
+    journal_items = ndb.LocalStructuredProperty(JournalItem, repeated = True, compressed = True)  # Journaleinträge
+    agreement_items = ndb.LocalStructuredProperty(AgreementItem, repeated = True, compressed = True)  # Vereinbarungen
+    free_defined_items = ndb.LocalStructuredProperty(FreeDefinedItem, repeated = True, compressed = True)  # Frei definierbare Felder
+    anniversary_items = ndb.LocalStructuredProperty(AnniversaryItem, repeated = True, compressed = True)  # Jahrestage, Geburtstag
 
-    anniversary_items = ndb.StructuredProperty(AnniversaryItem, repeated = True)  # Jahrestage, Geburtstag
     gender = ndb.StringProperty()
     birthday = ndb.ComputedProperty(get_birthday_iso)
     age = property(fget = get_age)
@@ -372,6 +372,18 @@ class Address(ndb.Model):
 
         # Save address
         key = ndb.Model.put(self, **ctx_options)
+
+        # Update search index
+        self.update_search_index()
+
+        # Finished
+        return key
+
+
+    def update_search_index(self):
+        """
+        Updates the address search index with the values of this address.
+        """
 
         # Gather information for the index
         fields = []
@@ -466,6 +478,7 @@ class Address(ndb.Model):
                     name = u"business", value = common.format_.replace_umlauts(business_item)
                 ))
             fields.append(search.TextField(name = u"business", value = business_item))
+
         for phone_item in self.phone_items:
             assert isinstance(phone_item, TelItem)
             fields.append(search.TextField(name = u"phone", value = phone_item.number))
@@ -475,38 +488,40 @@ class Address(ndb.Model):
         for url_item in self.url_items:
             assert isinstance(url_item, UrlItem)
             fields.append(search.TextField(name = u"url", value = url_item.url))
-        for note_item in self.note_items:
-            if common.format_.has_umlauts(note_item.text):
-                fields.append(search.TextField(
-                    name = u"note", value = common.format_.replace_umlauts(note_item.text)
-                ))
-            assert isinstance(note_item, NoteItem)
-            fields.append(search.TextField(name = u"note", value = note_item.text))
-        for journal_item in self.journal_items:
-            if common.format_.has_umlauts(journal_item.text):
-                fields.append(search.TextField(
-                    name = u"journal", value = common.format_.replace_umlauts(journal_item.text)
-                ))
-            assert isinstance(journal_item, JournalItem)
-            fields.append(search.TextField(name = u"journal", value = journal_item.text))
-        for agreement_item in self.agreement_items:
-            if common.format_.has_umlauts(agreement_item.text):
-                fields.append(search.TextField(
-                    name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
-                ))
-            assert isinstance(agreement_item, AgreementItem)
-            fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
-        for free_defined_item in self.free_defined_items:
-            if common.format_.has_umlauts(free_defined_item.text):
-                fields.append(search.TextField(
-                    name = u"free_defined",
-                    value = common.format_.replace_umlauts(free_defined_item.text)
-                ))
-            assert isinstance(free_defined_item, FreeDefinedItem)
-            fields.append(search.TextField(
-                name = u"free_defined",
-                value = free_defined_item.text
-            ))
+
+        # for note_item in self.note_items:
+        #     if common.format_.has_umlauts(note_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"note", value = common.format_.replace_umlauts(note_item.text)
+        #         ))
+        #     assert isinstance(note_item, NoteItem)
+        #     fields.append(search.TextField(name = u"note", value = note_item.text))
+        # for journal_item in self.journal_items:
+        #     if common.format_.has_umlauts(journal_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"journal", value = common.format_.replace_umlauts(journal_item.text)
+        #         ))
+        #     assert isinstance(journal_item, JournalItem)
+        #     fields.append(search.TextField(name = u"journal", value = journal_item.text))
+        # for agreement_item in self.agreement_items:
+        #     if common.format_.has_umlauts(agreement_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
+        #         ))
+        #     assert isinstance(agreement_item, AgreementItem)
+        #     fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
+        # for free_defined_item in self.free_defined_items:
+        #     if common.format_.has_umlauts(free_defined_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"free_defined",
+        #             value = common.format_.replace_umlauts(free_defined_item.text)
+        #         ))
+        #     assert isinstance(free_defined_item, FreeDefinedItem)
+        #     fields.append(search.TextField(
+        #         name = u"free_defined",
+        #         value = free_defined_item.text
+        #     ))
+
         for anniversary_item in self.anniversary_items:
             assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.year and anniversary_item.month and anniversary_item.day:
@@ -530,24 +545,27 @@ class Address(ndb.Model):
 
         # Document
         document = search.Document(
-            doc_id = key.urlsafe(),
+            doc_id = self.key.urlsafe(),
             fields = fields
         )
 
-        # Index (deferred)
-        deferred.defer(
-            _put_address_to_index,
-            document = document
-        )
+        # Add/update index
+        index = search.Index(name = "Address")
+        index.put(document)
 
-        # Finished
-        return key
+        # # Index (deferred)
+        # deferred.defer(
+        #     _put_address_to_index,
+        #     document = document
+        # )
 
 
-def _put_address_to_index(document):
-    """
-    Adds the address to the search_index
-    """
+# def _put_address_to_index(document):
+#     """
+#     Adds the address to the search_index
+#     """
+#
+#     index = search.Index(name = "Address")
+#     index.put(document)
 
-    index = search.Index(name = "Address")
-    index.put(document)
+

@@ -16,9 +16,16 @@ Version 0.2.3
 
 - Tag-Items, Business-Items and Category-Items are now cached
 
-- Deletion of addresses now work with a new model
+- Deletion of addresses now works with a new model
 
 - Cron-Jobs added
+
+- New functions added:
+
+    - delete_all_addresses
+    - start_delete_all_addresses
+    - delete_all_search_indexes
+    - start_delete_all_search_indexes
 
 
 =============

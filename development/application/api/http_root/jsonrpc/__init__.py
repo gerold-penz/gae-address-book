@@ -140,6 +140,9 @@ def jronsrpc_help(*args, **kwargs):
             extract_documentation(JsonRpc.get_free_defined_fields, u"get_free_defined_fields"),
 
             extract_documentation(JsonRpc.start_refresh_index, u"start_refresh_index"),
+            extract_documentation(JsonRpc.start_delete_all_addresses, u"start_delete_all_addresses"),
+            extract_documentation(JsonRpc.start_delete_all_search_indexes, u"start_delete_all_search_indexes"),
+
         ]
     )
 
@@ -1132,6 +1135,41 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return free_defined_field_dict
+
+
+    @rpcmethod
+    def start_delete_all_addresses(self, yes_do_it = False):
+        """
+        Deletes ALL addresses. Really ALL!!!
+        """
+
+        if not yes_do_it:
+            # Canceled
+            return False
+
+        # Delete all Addresses
+        common.addresses.start_delete_all_addresses(yes_do_it = yes_do_it)
+
+        # Finished
+        return True
+
+
+    @rpcmethod
+    def start_delete_all_search_indexes(self, yes_do_it = False):
+        """
+        Deletes ALL search indexes. Really ALL!!!
+        """
+
+        if not yes_do_it:
+            # Canceled
+            return False
+
+        # Delete all search indexes
+        common.addresses.start_delete_all_search_indexes()
+
+        # Finished
+        return True
+
 
 
 
