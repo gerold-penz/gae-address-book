@@ -3,6 +3,7 @@
 
 import uuid
 import datetime
+import logging
 import authorization
 import named_values
 from google.appengine.ext import ndb
@@ -1015,6 +1016,8 @@ def delete_all_search_indexes():
     Deletes all documents in the "Address" search index
     """
 
+    logging.info(u"delete_all_search_indexes: BEGIN")
+
     index = search.Index("Address")
     while True:
         document_ids = [
@@ -1024,6 +1027,8 @@ def delete_all_search_indexes():
         if not document_ids:
             break
         index.delete(document_ids)
+
+    logging.info(u"delete_all_search_indexes: END")
 
 
 def start_delete_all_search_indexes():
@@ -1177,12 +1182,16 @@ def delete_all_addresses(yes_do_it = False):
     if not yes_do_it:
         return
 
+    logging.info(u"delete_all_addresses: BEGIN")
+
     address_keys = []
     for index, address in enumerate(Address.query().iter(keys_only = True)):
         address_keys.append(address.key)
         ndb.delete_multi(address_keys)
         if index % 100:
             address_keys = []
+
+    logging.info(u"delete_all_addresses: END")
 
 
 def start_delete_all_addresses(yes_do_it = False):
