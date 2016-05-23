@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from google.appengine.ext import ndb
 from model.address import Address
 import named_values
 
