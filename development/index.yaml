@@ -10,11 +10,6 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: Address
-  properties:
-  - name: deleted
-  - name: organization_lower
-
 - kind: FreeDefinedField
   properties:
   - name: position
