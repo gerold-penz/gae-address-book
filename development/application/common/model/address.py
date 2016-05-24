@@ -388,7 +388,7 @@ class Address(ndb.Model):
         # Gather information for the index
         fields = []
         if self.kind is not None:
-            fields.append(search.TextField(name = u"kind", value = self.kind))
+            fields.append(search.AtomField(name = u"kind", value = self.kind))
         if self.organization is not None:
             if common.format_.has_umlauts(self.organization):
                 fields.append(search.TextField(
@@ -462,22 +462,22 @@ class Address(ndb.Model):
 
         for category_item in self.category_items:
             if common.format_.has_umlauts(category_item):
-                fields.append(search.TextField(
+                fields.append(search.AtomField(
                     name = u"category", value = common.format_.replace_umlauts(category_item)
                 ))
-            fields.append(search.TextField(name = u"category", value = category_item))
+            fields.append(search.AtomField(name = u"category", value = category_item))
         for tag_item in self.tag_items:
             if common.format_.has_umlauts(tag_item):
-                fields.append(search.TextField(
+                fields.append(search.AtomField(
                     name = u"tag", value = common.format_.replace_umlauts(tag_item)
                 ))
-            fields.append(search.TextField(name = u"tag", value = tag_item))
+            fields.append(search.AtomField(name = u"tag", value = tag_item))
         for business_item in self.business_items:
             if common.format_.has_umlauts(business_item):
-                fields.append(search.TextField(
+                fields.append(search.AtomField(
                     name = u"business", value = common.format_.replace_umlauts(business_item)
                 ))
-            fields.append(search.TextField(name = u"business", value = business_item))
+            fields.append(search.AtomField(name = u"business", value = business_item))
 
         for phone_item in self.phone_items:
             assert isinstance(phone_item, TelItem)
@@ -526,7 +526,7 @@ class Address(ndb.Model):
             assert isinstance(anniversary_item, AnniversaryItem)
             if anniversary_item.year and anniversary_item.month and anniversary_item.day:
                 fields.append(
-                    search.TextField(
+                    search.AtomField(
                         name = u"anniversary", value = common.format_.date_to_iso(datetime.date(
                             anniversary_item.year,
                             anniversary_item.month,
@@ -536,7 +536,7 @@ class Address(ndb.Model):
                 )
             elif anniversary_item.month and anniversary_item.day:
                 fields.append(
-                    search.TextField(
+                    search.AtomField(
                         name = u"anniversary",
                         value = unicode(anniversary_item.month) + u"-" + unicode(anniversary_item.day)
                     )
