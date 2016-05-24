@@ -63,6 +63,8 @@ def add_tag_items_to_cache(tag_items):
 
     # Cache get
     cached_tag_items = named_values.get_value(name = TAG_ITEMS)
+    if cached_tag_items is None:
+        cached_tag_items = set()
 
     # Add new tag items
     for tag_item in tag_items:

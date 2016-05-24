@@ -1057,9 +1057,13 @@ def _refresh_index():
     delete_all_search_indexes()
 
     # Resave all addresses
+    logging.info(u"refresh_indexes: BEGIN")
+
     query = Address().query()
     for address in query.iter(batch_size = 200):
         address.put()
+
+    logging.info(u"refresh_indexes: END")
 
 
 def search_addresses(
@@ -1305,3 +1309,52 @@ def update_address_search_index():
     for document_id in document_ids:
         if document_id not in address_keys:
             index.delete(document_id)
+
+
+def get_addresses_by_search(
+    page,
+    page_size
+):
+    """
+    :return: Dictionary with total quantity and one page with addresses::
+
+        {
+            "total_quantity": <Quantity>,
+            "addresses": [<Address>, ...]
+        }
+    """
+
+    index = search.Index("Address")
+    offset = (page - 1) * page_size
+
+    query_options = search.QueryOptions(
+        limit = page_size,
+        offset = offset,
+        # ids_only = True
+    )
+
+    query_string = u"Gerold"
+
+    # Search
+    query = search.Query(query_string = query_string, options = query_options)
+    search_result = index.search(query)
+
+
+    logging.info(search_result)
+
+
+    # TEST
+    return {
+        "total_quantity": 0,
+        "addresses": []
+    }
+
+
+
+
+
+
+
+
+
+

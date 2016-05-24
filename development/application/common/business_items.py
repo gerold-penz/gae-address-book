@@ -63,6 +63,8 @@ def add_business_items_to_cache(business_items):
 
     # Cache get
     cached_business_items = named_values.get_value(name = BUSINESS_ITEMS)
+    if cached_business_items is None:
+        cached_business_items = set()
 
     # Add new business items
     for business_item in business_items:

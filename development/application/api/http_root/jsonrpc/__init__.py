@@ -493,28 +493,35 @@ class JsonRpc(CherryPyJsonRpc):
 
         addresses = []
 
-        fetched_result = common.addresses.get_addresses(
+        # fetched_result = common.addresses.get_addresses(
+        #     page = page,
+        #     page_size = page_size,
+        #     order_by = order_by,
+        #     filter_by_organization = filter_by_organization,
+        #     filter_by_organization_char1 = filter_by_organization_char1,
+        #     filter_by_first_name = filter_by_first_name,
+        #     filter_by_first_name_char1 = filter_by_first_name_char1,
+        #     filter_by_last_name = filter_by_last_name,
+        #     filter_by_last_name_char1 = filter_by_last_name_char1,
+        #     filter_by_nickname = filter_by_nickname,
+        #     filter_by_nickname_char1 = filter_by_nickname_char1,
+        #     filter_by_street = filter_by_street,
+        #     filter_by_street_char1 = filter_by_street_char1,
+        #     filter_by_postcode = filter_by_postcode,
+        #     filter_by_postcode_char1 = filter_by_postcode_char1,
+        #     filter_by_city = filter_by_city,
+        #     filter_by_city_char1 = filter_by_city_char1,
+        #     filter_by_business_items = filter_by_business_items,
+        #     filter_by_category_items = filter_by_category_items,
+        #     filter_by_tag_items = filter_by_tag_items
+        # )
+
+
+        fetched_result = common.addresses.get_addresses_by_search(
             page = page,
-            page_size = page_size,
-            order_by = order_by,
-            filter_by_organization = filter_by_organization,
-            filter_by_organization_char1 = filter_by_organization_char1,
-            filter_by_first_name = filter_by_first_name,
-            filter_by_first_name_char1 = filter_by_first_name_char1,
-            filter_by_last_name = filter_by_last_name,
-            filter_by_last_name_char1 = filter_by_last_name_char1,
-            filter_by_nickname = filter_by_nickname,
-            filter_by_nickname_char1 = filter_by_nickname_char1,
-            filter_by_street = filter_by_street,
-            filter_by_street_char1 = filter_by_street_char1,
-            filter_by_postcode = filter_by_postcode,
-            filter_by_postcode_char1 = filter_by_postcode_char1,
-            filter_by_city = filter_by_city,
-            filter_by_city_char1 = filter_by_city_char1,
-            filter_by_business_items = filter_by_business_items,
-            filter_by_category_items = filter_by_category_items,
-            filter_by_tag_items = filter_by_tag_items
+            page_size = page_size
         )
+
 
         for address in fetched_result["addresses"]:
             addresses.append(address.to_dict(

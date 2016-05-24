@@ -64,6 +64,8 @@ def add_category_items_to_cache(category_items):
 
     # Cache get
     cached_category_items = named_values.get_value(name = CATEGORY_ITEMS)
+    if cached_category_items is None:
+        cached_category_items = set()
 
     # Add new category items
     for category_item in category_items:
