@@ -1330,14 +1330,23 @@ def get_addresses_by_search(
         - key_urlsafe
         - kind
         - organization
+        - organization_char1
         - position
+        - position_char1
         - salutation
+        - salutation_char1
         - first_name
+        - first_name_char1
         - last_name
+        - last_name_char1
         - nickname
+        - nickname_char1
         - street
+        - street_char1
         - postcode
+        - postcode_char1
         - city
+        - city_char1
         - district
         - land
         - country
@@ -1370,7 +1379,13 @@ def get_addresses_by_search(
         address = Bunch(key_urlsafe = document.doc_id)
         for field in document.fields:
             if field.name in ["tag", "category", "business"]:
+
+                # ToDo: hier gehts weiter
+
                 continue
+
+
+
             if field.name not in address:
                 address[field.name] = field.value
         addresses.append(address)
