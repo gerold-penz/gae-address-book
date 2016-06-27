@@ -15,6 +15,8 @@ Version 0.2.4
 
 - Search index: "_char1"-Fields added
 
+- JsonRPC-getAddresses() --> common.addresses.get_addresses_by_search()
+
 
 =============
 Version 0.2.3

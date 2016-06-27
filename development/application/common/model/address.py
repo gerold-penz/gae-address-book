@@ -3,6 +3,7 @@
 
 import copy
 import datetime
+import cherrypy
 import common.format_
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -152,125 +153,26 @@ class Address(ndb.Model):
     et = ndb.DateTimeProperty(required = True, verbose_name = u"edit_timestamp")
     eu = ndb.StringProperty(required = True, verbose_name = u"edit_user")
 
-    # Kind
     kind = ndb.StringProperty(required = True)
-
-    # Category items
     category_items = ndb.StringProperty(repeated = True)
-
-    # Tag items
-    tag_items = ndb.StringProperty(repeated = True)
-
-    # Business items
-    business_items = ndb.StringProperty(repeated = True)  # Branchen
-
-    # Organization
     organization = ndb.StringProperty(indexed = False)
-    organization_lower = ndb.ComputedProperty(
-        lambda self: self.organization.lower() if self.organization else None
-    )
-    organization_char1 = ndb.ComputedProperty(
-        lambda self: self.organization[0].lower() if self.organization else None
-    )
-
-    # Position
     position = ndb.StringProperty(indexed = False)
-    position_lower = ndb.ComputedProperty(
-        lambda self: self.position.lower() if self.position else None
-    )
-    position_char1 = ndb.ComputedProperty(
-        lambda self: self.position[0].lower() if self.position else None
-    )
-
-    # Salutation
     salutation = ndb.StringProperty(indexed = False)
-    salutation_lower = ndb.ComputedProperty(
-        lambda self: self.salutation.lower() if self.salutation else None
-    )
-    salutation_char1 = ndb.ComputedProperty(
-        lambda self: self.salutation[0].lower() if self.salutation else None
-    )
-
-    # First name
     first_name = ndb.StringProperty(indexed = False)
-    first_name_lower = ndb.ComputedProperty(
-        lambda self: self.first_name.lower() if self.first_name else None
-    )
-    first_name_char1 = ndb.ComputedProperty(
-        lambda self: self.first_name[0].lower() if self.first_name else None
-    )
-
-    # Last name
     last_name = ndb.StringProperty(indexed = False)
-    last_name_lower = ndb.ComputedProperty(
-        lambda self: self.last_name.lower() if self.last_name else None
-    )
-    last_name_char1 = ndb.ComputedProperty(
-        lambda self: self.last_name[0].lower() if self.last_name else None
-    )
-
-    # Nickname
     nickname = ndb.StringProperty(indexed = False)
-    nickname_lower = ndb.ComputedProperty(
-        lambda self: self.nickname.lower() if self.nickname else None
-    )
-    nickname_char1 = ndb.ComputedProperty(
-        lambda self: self.nickname[0].lower() if self.nickname else None
-    )
-
-    # Street
     street = ndb.StringProperty(indexed = False)
-    street_lower = ndb.ComputedProperty(
-        lambda self: self.street.lower() if self.street else None
-    )
-    street_char1 = ndb.ComputedProperty(
-        lambda self: self.street[0].lower() if self.street else None
-    )
-
-    # Postcode
     postcode = ndb.StringProperty(indexed = False)
-    postcode_lower = ndb.ComputedProperty(
-        lambda self: self.postcode.lower() if self.postcode else None
-    )
-    postcode_char1 = ndb.ComputedProperty(
-        lambda self: self.postcode[0].lower() if self.postcode else None
-    )
-
-    # City
     city = ndb.StringProperty(indexed = False)
-    city_lower = ndb.ComputedProperty(
-        lambda self: self.city.lower() if self.city else None
-    )
-    city_char1 = ndb.ComputedProperty(
-        lambda self: self.city[0].lower() if self.city else None
-    )
-
-    # District
     district = ndb.StringProperty(indexed = False)
-    district_lower = ndb.ComputedProperty(
-        lambda self: self.district.lower() if self.district else None
-    )
-    district_char1 = ndb.ComputedProperty(
-        lambda self: self.district[0].lower() if self.district else None
-    )
-
-    # Land (Bundesland)
     land = ndb.StringProperty(indexed = False)
-    land_lower = ndb.ComputedProperty(
-        lambda self: self.land.lower() if self.land else None
-    )
-    land_char1 = ndb.ComputedProperty(
-        lambda self: self.land[0].lower() if self.land else None
-    )
-
-    # Country
     country = ndb.StringProperty(indexed = False)  # Land
-    country_lower = ndb.ComputedProperty(
-        lambda self: self.country.lower() if self.country else None
-    )
-    country_char1 = ndb.ComputedProperty(
-        lambda self: self.country[0].lower() if self.country else None
-    )
+    gender = ndb.StringProperty()
+    birthday = ndb.ComputedProperty(get_birthday_iso)
+    age = property(fget = get_age)
+
+    tag_items = ndb.StringProperty(repeated = True)
+    business_items = ndb.StringProperty(repeated = True)  # Branchen
 
     phone_items = ndb.LocalStructuredProperty(TelItem, repeated = True)  # Telefonnummern
     email_items = ndb.LocalStructuredProperty(EmailItem, repeated = True)  # E-Mail-Adressen
@@ -281,10 +183,6 @@ class Address(ndb.Model):
     agreement_items = ndb.LocalStructuredProperty(AgreementItem, repeated = True, compressed = True)  # Vereinbarungen
     free_defined_items = ndb.LocalStructuredProperty(FreeDefinedItem, repeated = True, compressed = True)  # Frei definierbare Felder
     anniversary_items = ndb.LocalStructuredProperty(AnniversaryItem, repeated = True, compressed = True)  # Jahrestage, Geburtstag
-
-    gender = ndb.StringProperty()
-    birthday = ndb.ComputedProperty(get_birthday_iso)
-    age = property(fget = get_age)
 
 
     def to_dict(
@@ -546,30 +444,6 @@ class Address(ndb.Model):
         for url_item in self.url_items:
             fields.append(search.TextField(name = u"url", value = url_item.url))
 
-        # for note_item in self.note_items:
-        #     if common.format_.has_umlauts(note_item.text):
-        #         fields.append(search.TextField(
-        #             name = u"note", value = common.format_.replace_umlauts(note_item.text)
-        #         ))
-        #     assert isinstance(note_item, NoteItem)
-        #     fields.append(search.TextField(name = u"note", value = note_item.text))
-
-        # for journal_item in self.journal_items:
-        #     if common.format_.has_umlauts(journal_item.text):
-        #         fields.append(search.TextField(
-        #             name = u"journal", value = common.format_.replace_umlauts(journal_item.text)
-        #         ))
-        #     assert isinstance(journal_item, JournalItem)
-        #     fields.append(search.TextField(name = u"journal", value = journal_item.text))
-
-        # for agreement_item in self.agreement_items:
-        #     if common.format_.has_umlauts(agreement_item.text):
-        #         fields.append(search.TextField(
-        #             name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
-        #         ))
-        #     assert isinstance(agreement_item, AgreementItem)
-        #     fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
-
         for free_defined_item in self.free_defined_items:
             assert isinstance(free_defined_item, FreeDefinedItem)
 
@@ -606,11 +480,35 @@ class Address(ndb.Model):
 
             fields.append(search.TextField(name = name, value = value))
 
+        # for note_item in self.note_items:
+        #     if common.format_.has_umlauts(note_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"note", value = common.format_.replace_umlauts(note_item.text)
+        #         ))
+        #     assert isinstance(note_item, NoteItem)
+        #     fields.append(search.TextField(name = u"note", value = note_item.text))
+
+        # for journal_item in self.journal_items:
+        #     if common.format_.has_umlauts(journal_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"journal", value = common.format_.replace_umlauts(journal_item.text)
+        #         ))
+        #     assert isinstance(journal_item, JournalItem)
+        #     fields.append(search.TextField(name = u"journal", value = journal_item.text))
+
+        # for agreement_item in self.agreement_items:
+        #     if common.format_.has_umlauts(agreement_item.text):
+        #         fields.append(search.TextField(
+        #             name = u"agreement", value = common.format_.replace_umlauts(agreement_item.text)
+        #         ))
+        #     assert isinstance(agreement_item, AgreementItem)
+        #     fields.append(search.TextField(name = u"agreement", value = agreement_item.text))
+
         # Document
         document = search.Document(
             doc_id = self.key.urlsafe(),
             fields = fields,
-            language = "de"
+            language = cherrypy.config["LANGUAGE"]
         )
 
         # Add/update index

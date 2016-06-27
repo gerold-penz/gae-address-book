@@ -328,194 +328,194 @@ def create(
     return address
 
 
-def get_addresses(
-    page,
-    page_size,
-    order_by = None,
-    filter_by_organization = None,
-    filter_by_organization_char1 = None,
-    filter_by_first_name = None,
-    filter_by_first_name_char1 = None,
-    filter_by_last_name = None,
-    filter_by_last_name_char1 = None,
-    filter_by_nickname = None,
-    filter_by_nickname_char1 = None,
-    filter_by_street = None,
-    filter_by_street_char1 = None,
-    filter_by_postcode = None,
-    filter_by_postcode_char1 = None,
-    filter_by_city = None,
-    filter_by_city_char1 = None,
-    filter_by_business_items = None,
-    filter_by_category_items = None,
-    filter_by_tag_items = None
-):
-    """
-    Returns a dictionary with the count of addresses and one page of addresses
-    
-    :param order_by: List with field names. A minus (-) directly before the
-        field name reverts the sort order.
-
-        Possible field names are:
-     
-        - "uid"
-        - "owner"
-        - "ct"
-        - "cu"
-        - "et"
-        - "eu"
-        - "kind"
-        - "organization"
-        - "position"
-        - "salutation"
-        - "first_name"
-        - "last_name"
-        - "nickname"
-        - "street"
-        - "postcode"
-        - "city"
-        - "district"
-        - "land"
-        - "country"
-        - "gender"
-        - "birthday"
-        - "age"
-
-    :param filter_by_xxx: Case insensitive filter strings
-
-    :param filter_by_category_items: List with *case sensitive* items.
-
-    :param filter_by_tag_items: List with *case sensitive* items.
-
-    :param filter_by_business_items: List with *case sensitive* items.
-
-    :return: Dictionary with total quantity and one page with addresses::
-
-        {
-            "total_quantity": <Quantity>,
-            "addresses": [<Address>, ...]
-        }
-    """
-
-    if order_by and isinstance(order_by, basestring):
-        order_by = [order_by]
-
-    # Query
-    query = Address.query()
-
-    # Prepare filter and append filter items (strings)
-    filter_items = []
-    if filter_by_organization:
-        filter_items.append(
-            Address.organization_lower == filter_by_organization.strip().lower())
-    if filter_by_organization_char1:
-        filter_items.append(
-            Address.organization_char1 == filter_by_organization_char1[0].lower())
-    if filter_by_first_name:
-        filter_items.append(
-            Address.first_name_lower == filter_by_first_name.strip().lower())
-    if filter_by_first_name_char1:
-        filter_items.append(
-            Address.first_name_char1 == filter_by_first_name_char1[0].lower())
-    if filter_by_last_name:
-        filter_items.append(
-            Address.last_name_lower == filter_by_last_name.strip().lower())
-    if filter_by_last_name_char1:
-        filter_items.append(
-            Address.last_name_char1 == filter_by_last_name_char1[0].lower())
-    if filter_by_nickname:
-        filter_items.append(
-            Address.nickname_lower == filter_by_nickname.strip().lower())
-    if filter_by_nickname_char1:
-        filter_items.append(
-            Address.nickname_char1 == filter_by_nickname_char1[0].lower())
-    if filter_by_street:
-        filter_items.append(
-            Address.street_lower == filter_by_street.strip().lower())
-    if filter_by_street_char1:
-        filter_items.append(
-            Address.street_char1 == filter_by_street_char1[0].lower())
-    if filter_by_postcode:
-        filter_items.append(
-            Address.postcode_lower == filter_by_postcode.strip().lower())
-    if filter_by_postcode_char1:
-        filter_items.append(
-            Address.postcode_char1 == filter_by_postcode_char1[0].lower())
-    if filter_by_city:
-        filter_items.append(
-            Address.city_lower == filter_by_city.strip().lower())
-    if filter_by_city_char1:
-        filter_items.append(
-            Address.city_char1 == filter_by_city_char1[0].lower())
-
-    # Append filter items (lists) --> IN
-    if filter_by_business_items:
-        if isinstance(filter_by_business_items, basestring):
-            filter_by_business_items = [filter_by_business_items]
-        for business_item in filter_by_business_items:
-            filter_items.append(Address.business_items == business_item)
-    if filter_by_category_items:
-        if isinstance(filter_by_category_items, basestring):
-            filter_by_category_items = [filter_by_category_items]
-        for category_item in filter_by_category_items:
-            filter_items.append(Address.category_items == category_item)
-    if filter_by_tag_items:
-        if isinstance(filter_by_tag_items, basestring):
-            filter_by_tag_items = [filter_by_tag_items]
-        for tag_item in filter_by_tag_items:
-            filter_items.append(Address.tag_items == tag_item)
-
-    # Filter query
-    query = query.filter(*filter_items)
-
-    # Sorting
-    if order_by:
-        order_fields = []
-        for order_item in order_by:
-            # Parse
-            reverse = order_item.startswith("-")
-            field_name = order_item.lstrip("-")
-
-            # Check field name
-            if "%s_lower" % field_name in Address._properties:
-                order_field = Address._properties["%s_lower" % field_name]
-            elif field_name in Address._properties:
-                order_field = Address._properties[field_name]
-            else:
-                continue
-
-            # Add sort order
-            if reverse:
-                order_fields.append(-order_field)
-            else:
-                order_fields.append(order_field)
-
-        # Sort query
-        if order_fields:
-            query = query.order(*order_fields)
-
-    # Start with
-    offset = (page - 1) * page_size
-
-    # Fetch adresses
-    addresses = query.fetch(
-        offset = offset,
-        limit = page_size,
-        batch_size = page_size,
-        deadline = 30  # seconds
-    )
-
-    # Quantity
-    if not filter_items:
-        quantity = get_address_quantity_cached()
-    else:
-        quantity = query.count()
-
-    # Finished
-    return dict(
-        total_quantity = quantity,
-        addresses = addresses
-    )
+# def get_addresses(
+#     page,
+#     page_size,
+#     order_by = None,
+#     filter_by_organization = None,
+#     filter_by_organization_char1 = None,
+#     filter_by_first_name = None,
+#     filter_by_first_name_char1 = None,
+#     filter_by_last_name = None,
+#     filter_by_last_name_char1 = None,
+#     filter_by_nickname = None,
+#     filter_by_nickname_char1 = None,
+#     filter_by_street = None,
+#     filter_by_street_char1 = None,
+#     filter_by_postcode = None,
+#     filter_by_postcode_char1 = None,
+#     filter_by_city = None,
+#     filter_by_city_char1 = None,
+#     filter_by_business_items = None,
+#     filter_by_category_items = None,
+#     filter_by_tag_items = None
+# ):
+#     """
+#     Returns a dictionary with the count of addresses and one page of addresses
+#
+#     :param order_by: List with field names. A minus (-) directly before the
+#         field name reverts the sort order.
+#
+#         Possible field names are:
+#
+#         - "uid"
+#         - "owner"
+#         - "ct"
+#         - "cu"
+#         - "et"
+#         - "eu"
+#         - "kind"
+#         - "organization"
+#         - "position"
+#         - "salutation"
+#         - "first_name"
+#         - "last_name"
+#         - "nickname"
+#         - "street"
+#         - "postcode"
+#         - "city"
+#         - "district"
+#         - "land"
+#         - "country"
+#         - "gender"
+#         - "birthday"
+#         - "age"
+#
+#     :param filter_by_xxx: Case insensitive filter strings
+#
+#     :param filter_by_category_items: List with *case sensitive* items.
+#
+#     :param filter_by_tag_items: List with *case sensitive* items.
+#
+#     :param filter_by_business_items: List with *case sensitive* items.
+#
+#     :return: Dictionary with total quantity and one page with addresses::
+#
+#         {
+#             "total_quantity": <Quantity>,
+#             "addresses": [<Address>, ...]
+#         }
+#     """
+#
+#     if order_by and isinstance(order_by, basestring):
+#         order_by = [order_by]
+#
+#     # Query
+#     query = Address.query()
+#
+#     # Prepare filter and append filter items (strings)
+#     filter_items = []
+#     if filter_by_organization:
+#         filter_items.append(
+#             Address.organization_lower == filter_by_organization.strip().lower())
+#     if filter_by_organization_char1:
+#         filter_items.append(
+#             Address.organization_char1 == filter_by_organization_char1[0].lower())
+#     if filter_by_first_name:
+#         filter_items.append(
+#             Address.first_name_lower == filter_by_first_name.strip().lower())
+#     if filter_by_first_name_char1:
+#         filter_items.append(
+#             Address.first_name_char1 == filter_by_first_name_char1[0].lower())
+#     if filter_by_last_name:
+#         filter_items.append(
+#             Address.last_name_lower == filter_by_last_name.strip().lower())
+#     if filter_by_last_name_char1:
+#         filter_items.append(
+#             Address.last_name_char1 == filter_by_last_name_char1[0].lower())
+#     if filter_by_nickname:
+#         filter_items.append(
+#             Address.nickname_lower == filter_by_nickname.strip().lower())
+#     if filter_by_nickname_char1:
+#         filter_items.append(
+#             Address.nickname_char1 == filter_by_nickname_char1[0].lower())
+#     if filter_by_street:
+#         filter_items.append(
+#             Address.street_lower == filter_by_street.strip().lower())
+#     if filter_by_street_char1:
+#         filter_items.append(
+#             Address.street_char1 == filter_by_street_char1[0].lower())
+#     if filter_by_postcode:
+#         filter_items.append(
+#             Address.postcode_lower == filter_by_postcode.strip().lower())
+#     if filter_by_postcode_char1:
+#         filter_items.append(
+#             Address.postcode_char1 == filter_by_postcode_char1[0].lower())
+#     if filter_by_city:
+#         filter_items.append(
+#             Address.city_lower == filter_by_city.strip().lower())
+#     if filter_by_city_char1:
+#         filter_items.append(
+#             Address.city_char1 == filter_by_city_char1[0].lower())
+#
+#     # Append filter items (lists) --> IN
+#     if filter_by_business_items:
+#         if isinstance(filter_by_business_items, basestring):
+#             filter_by_business_items = [filter_by_business_items]
+#         for business_item in filter_by_business_items:
+#             filter_items.append(Address.business_items == business_item)
+#     if filter_by_category_items:
+#         if isinstance(filter_by_category_items, basestring):
+#             filter_by_category_items = [filter_by_category_items]
+#         for category_item in filter_by_category_items:
+#             filter_items.append(Address.category_items == category_item)
+#     if filter_by_tag_items:
+#         if isinstance(filter_by_tag_items, basestring):
+#             filter_by_tag_items = [filter_by_tag_items]
+#         for tag_item in filter_by_tag_items:
+#             filter_items.append(Address.tag_items == tag_item)
+#
+#     # Filter query
+#     query = query.filter(*filter_items)
+#
+#     # Sorting
+#     if order_by:
+#         order_fields = []
+#         for order_item in order_by:
+#             # Parse
+#             reverse = order_item.startswith("-")
+#             field_name = order_item.lstrip("-")
+#
+#             # Check field name
+#             if "%s_lower" % field_name in Address._properties:
+#                 order_field = Address._properties["%s_lower" % field_name]
+#             elif field_name in Address._properties:
+#                 order_field = Address._properties[field_name]
+#             else:
+#                 continue
+#
+#             # Add sort order
+#             if reverse:
+#                 order_fields.append(-order_field)
+#             else:
+#                 order_fields.append(order_field)
+#
+#         # Sort query
+#         if order_fields:
+#             query = query.order(*order_fields)
+#
+#     # Start with
+#     offset = (page - 1) * page_size
+#
+#     # Fetch adresses
+#     addresses = query.fetch(
+#         offset = offset,
+#         limit = page_size,
+#         batch_size = page_size,
+#         deadline = 30  # seconds
+#     )
+#
+#     # Quantity
+#     if not filter_items:
+#         quantity = get_address_quantity_cached()
+#     else:
+#         quantity = query.count()
+#
+#     # Finished
+#     return dict(
+#         total_quantity = quantity,
+#         addresses = addresses
+#     )
 
 
 def get_address(key_urlsafe = None, address_uid = None):
@@ -1314,11 +1314,30 @@ def update_address_search_index():
 
 def get_addresses_by_search(
     page,
-    page_size
+    page_size,
+    order_by = None,
+    query_string = None,
+    filter_by_organization = None,
+    filter_by_organization_char1 = None,
+    filter_by_first_name = None,
+    filter_by_first_name_char1 = None,
+    filter_by_last_name = None,
+    filter_by_last_name_char1 = None,
+    filter_by_nickname = None,
+    filter_by_nickname_char1 = None,
+    filter_by_street = None,
+    filter_by_street_char1 = None,
+    filter_by_postcode = None,
+    filter_by_postcode_char1 = None,
+    filter_by_city = None,
+    filter_by_city_char1 = None,
+    filter_by_business_items = None,
+    filter_by_category_items = None,
+    filter_by_tag_items = None
 ):
     """
     :return: Dictionary with total quantity and one page with 
-        addresses::
+        real addresses::
 
             {
                 "total_quantity": <Quantity>,
@@ -1330,23 +1349,14 @@ def get_addresses_by_search(
         - key_urlsafe
         - kind
         - organization
-        - organization_char1
         - position
-        - position_char1
         - salutation
-        - salutation_char1
         - first_name
-        - first_name_char1
         - last_name
-        - last_name_char1
         - nickname
-        - nickname_char1
         - street
-        - street_char1
         - postcode
-        - postcode_char1
         - city
-        - city_char1
         - district
         - land
         - country
@@ -1361,13 +1371,89 @@ def get_addresses_by_search(
     index = search.Index("Address")
     offset = (page - 1) * page_size
 
-    query_options = search.QueryOptions(
+    # Sorting
+    if order_by and isinstance(order_by, basestring):
+        order_by = [order_by]
+    if order_by:
+        sort_expressions = []
+        for order_item in order_by:
+            # Parse
+            field_name = order_item.lstrip("-").lower()
+            if order_item.startswith("-"):
+                direction = search.SortExpression.DESCENDING
+            else:
+                direction = search.SortExpression.ASCENDING
 
+            sort_expressions.append(
+                search.SortExpression(
+                    expression = field_name,
+                    direction = direction
+                )
+            )
+        sort_options = search.SortOptions(
+            expressions = sort_expressions,
+            limit = search.MAXIMUM_SORTED_DOCUMENTS
+        )
+    else:
+        sort_options = None
+
+    # Query Options
+    query_options = search.QueryOptions(
         limit = page_size,
-        offset = offset
+        offset = offset,
+        sort_options = sort_options,
+        ids_only = True
     )
 
-    query_string = u""
+    # Query String
+    if not query_string:
+        query_string = u""
+
+    if filter_by_organization:
+        query_string += u' organization:%s' % filter_by_organization
+    if filter_by_organization_char1:
+        query_string += u' organization_char1:%s' % filter_by_organization_char1[0]
+    if filter_by_first_name:
+        query_string += u' first_name:%s' % filter_by_first_name
+    if filter_by_first_name_char1:
+        query_string += u' first_name_char1:%s' % filter_by_first_name_char1[0]
+    if filter_by_last_name:
+        query_string += u' last_name:%s' % filter_by_last_name
+    if filter_by_last_name_char1:
+        query_string += u' last_name_char1:%s' % filter_by_last_name_char1[0]
+    if filter_by_nickname:
+        query_string += u' nickname:%s' % filter_by_nickname
+    if filter_by_nickname_char1:
+        query_string += u' nickname_char1:%s' % filter_by_nickname_char1[0]
+    if filter_by_street:
+        query_string += u' street:%s' % filter_by_street
+    if filter_by_street_char1:
+        query_string += u' street_char1:%s' % filter_by_street_char1[0]
+    if filter_by_postcode:
+        query_string += u' postcode:%s' % filter_by_postcode
+    if filter_by_postcode_char1:
+        query_string += u' postcode_char1:%s' % filter_by_postcode_char1[0]
+    if filter_by_city:
+        query_string += u' city:%s' % filter_by_city
+    if filter_by_city_char1:
+        query_string += u' city_char1:%s' % filter_by_city_char1[0]
+    if filter_by_business_items:
+        if isinstance(filter_by_business_items, basestring):
+            filter_by_business_items = [filter_by_business_items]
+        for business_item in filter_by_business_items:
+            query_string += u' business:"%s"' % business_item
+    if filter_by_category_items:
+        if isinstance(filter_by_category_items, basestring):
+            filter_by_category_items = [filter_by_category_items]
+        for category_item in filter_by_category_items:
+            query_string += u' category:"%s"' % category_item
+    if filter_by_tag_items:
+        if isinstance(filter_by_tag_items, basestring):
+            filter_by_tag_items = [filter_by_tag_items]
+        for tag_item in filter_by_tag_items:
+            query_string += u' tag:"%s"' % tag_item
+
+    query_string = query_string.lstrip()
 
     # Search
     query = search.Query(query_string = query_string, options = query_options)
@@ -1376,19 +1462,11 @@ def get_addresses_by_search(
     # Fetch addresses
     addresses = []
     for document in search_result.results:
-        address = Bunch(key_urlsafe = document.doc_id)
-        for field in document.fields:
-            if field.name in ["tag", "category", "business"]:
-
-                # ToDo: hier gehts weiter
-
-                continue
-
-
-
-            if field.name not in address:
-                address[field.name] = field.value
-        addresses.append(address)
+        key_urlsafe = document.doc_id
+        key = ndb.Key(urlsafe = key_urlsafe)
+        address = key.get()
+        if address:
+            addresses.append(address)
 
     # Finished
     return {

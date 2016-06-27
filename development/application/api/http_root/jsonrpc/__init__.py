@@ -429,6 +429,7 @@ class JsonRpc(CherryPyJsonRpc):
         exclude_edit_metadata = None,
         exclude_empty_fields = None,
         order_by = None,
+        query_string = None,
         filter_by_organization = None,
         filter_by_organization_char1 = None,
         filter_by_first_name = None,
@@ -519,15 +520,27 @@ class JsonRpc(CherryPyJsonRpc):
 
         fetched_result = common.addresses.get_addresses_by_search(
             page = page,
-            page_size = page_size
+            page_size = page_size,
+            order_by = order_by,
+            query_string = query_string,
+            filter_by_organization = filter_by_organization,
+            filter_by_organization_char1 = filter_by_organization_char1,
+            filter_by_first_name = filter_by_first_name,
+            filter_by_first_name_char1 = filter_by_first_name_char1,
+            filter_by_last_name = filter_by_last_name,
+            filter_by_last_name_char1 = filter_by_last_name_char1,
+            filter_by_nickname = filter_by_nickname,
+            filter_by_nickname_char1 = filter_by_nickname_char1,
+            filter_by_street = filter_by_street,
+            filter_by_street_char1 = filter_by_street_char1,
+            filter_by_postcode = filter_by_postcode,
+            filter_by_postcode_char1 = filter_by_postcode_char1,
+            filter_by_city = filter_by_city,
+            filter_by_city_char1 = filter_by_city_char1,
+            filter_by_business_items = filter_by_business_items,
+            filter_by_category_items = filter_by_category_items,
+            filter_by_tag_items = filter_by_tag_items
         )
-
-        print
-        print fetched_result
-        print
-
-
-
 
         for address in fetched_result["addresses"]:
             addresses.append(address.to_dict(
