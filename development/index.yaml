@@ -10,48 +10,6 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: Address
-  properties:
-  - name: business_items
-  - name: postcode_lower
-  - name: kind
-    direction: desc
-
-- kind: Address
-  properties:
-  - name: business_items
-  - name: postcode_lower
-  - name: organization_lower
-
-- kind: Address
-  properties:
-  - name: business_items
-  - name: postcode_lower
-  - name: organization_lower
-    direction: desc
-
-- kind: Address
-  properties:
-  - name: postcode_lower
-  - name: kind
-
-- kind: Address
-  properties:
-  - name: postcode_lower
-  - name: kind
-    direction: desc
-
-- kind: Address
-  properties:
-  - name: postcode_lower
-  - name: organization_lower
-
-- kind: Address
-  properties:
-  - name: postcode_lower
-  - name: organization_lower
-    direction: desc
-
 - kind: FreeDefinedField
   properties:
   - name: position
