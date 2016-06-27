@@ -388,6 +388,8 @@ class Address(ndb.Model):
         # Gather information for the index
         fields = []
 
+        # fields.append(search.AtomField(name = u"all", value = "1"))
+
         if self.kind is not None:
             fields.append(search.AtomField(name = u"kind", value = self.kind))
 
@@ -398,6 +400,9 @@ class Address(ndb.Model):
                     name = u"organization",
                     value = common.format_.replace_umlauts(self.organization)
                 ))
+            fields.append(
+                search.AtomField(name = u"organization_char1", value = self.organization[0].lower())
+            )
 
         if self.position is not None:
             fields.append(search.TextField(name = u"position", value = self.position))
@@ -406,6 +411,9 @@ class Address(ndb.Model):
                     name = u"position",
                     value = common.format_.replace_umlauts(self.position)
                 ))
+            fields.append(
+                search.AtomField(name = u"position_char1", value = self.position[0].lower())
+            )
 
         if self.salutation is not None:
             fields.append(search.TextField(name = u"salutation", value = self.salutation))
@@ -414,6 +422,9 @@ class Address(ndb.Model):
                     name = u"salutation",
                     value = common.format_.replace_umlauts(self.salutation)
                 ))
+            fields.append(
+                search.AtomField(name = u"salutation_char1", value = self.salutation[0].lower())
+            )
 
         if self.first_name is not None:
             fields.append(search.TextField(name = u"first_name", value = self.first_name))
@@ -422,6 +433,9 @@ class Address(ndb.Model):
                     name = u"first_name",
                     value = common.format_.replace_umlauts(self.first_name)
                 ))
+            fields.append(
+                search.AtomField(name = u"first_name_char1", value = self.first_name[0].lower())
+            )
 
         if self.last_name is not None:
             fields.append(search.TextField(name = u"last_name", value = self.last_name))
@@ -430,6 +444,9 @@ class Address(ndb.Model):
                     name = u"last_name",
                     value = common.format_.replace_umlauts(self.last_name)
                 ))
+            fields.append(
+                search.AtomField(name = u"last_name_char1", value = self.last_name[0].lower())
+            )
 
         if self.nickname is not None:
             fields.append(search.TextField(name = u"nickname", value = self.nickname))
@@ -438,6 +455,9 @@ class Address(ndb.Model):
                     name = u"nickname",
                     value = common.format_.replace_umlauts(self.nickname)
                 ))
+            fields.append(
+                search.AtomField(name = u"nickname_char1", value = self.nickname[0].lower())
+            )
 
         if self.street is not None:
             fields.append(search.TextField(name = u"street", value = self.street))
@@ -445,9 +465,15 @@ class Address(ndb.Model):
                 fields.append(search.TextField(
                     name = u"street", value = common.format_.replace_umlauts(self.street)
                 ))
+            fields.append(
+                search.AtomField(name = u"street_char1", value = self.street[0].lower())
+            )
 
         if self.postcode is not None:
             fields.append(search.TextField(name = u"postcode", value = self.postcode))
+            fields.append(
+                search.AtomField(name = u"postcode_char1", value = self.postcode[0].lower())
+            )
 
         if self.city is not None:
             fields.append(search.TextField(name = u"city", value = self.city))
@@ -456,6 +482,9 @@ class Address(ndb.Model):
                     name = u"city",
                     value = common.format_.replace_umlauts(self.city)
                 ))
+            fields.append(
+                search.AtomField(name = u"city_char1", value = self.city[0].lower())
+            )
 
         if self.district is not None:
             fields.append(search.TextField(name = u"district", value = self.district))
@@ -580,7 +609,8 @@ class Address(ndb.Model):
         # Document
         document = search.Document(
             doc_id = self.key.urlsafe(),
-            fields = fields
+            fields = fields,
+            language = "de"
         )
 
         # Add/update index

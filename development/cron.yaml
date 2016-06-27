@@ -25,6 +25,7 @@ cron:
   url: /api/cronjobs/update_address_quantity_cache
   schedule: every day 05:42
 
+
 - description: Update search index for addresses
   url: /api/cronjobs/update_address_search_index
   schedule: every sunday 05:52

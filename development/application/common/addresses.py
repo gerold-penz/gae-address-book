@@ -9,6 +9,7 @@ import named_values
 from google.appengine.ext import ndb
 from google.appengine.api import search
 from google.appengine.ext import deferred
+from bunch import Bunch
 from model.address import (
     Address,
     TelItem, EmailItem, UrlItem, NoteItem, JournalItem,
@@ -1316,45 +1317,67 @@ def get_addresses_by_search(
     page_size
 ):
     """
-    :return: Dictionary with total quantity and one page with addresses::
+    :return: Dictionary with total quantity and one page with 
+        addresses::
 
-        {
-            "total_quantity": <Quantity>,
-            "addresses": [<Address>, ...]
-        }
+            {
+                "total_quantity": <Quantity>,
+                "addresses": [<Address>, ...]
+            }
+            
+        Address-Fields:
+
+        - key_urlsafe
+        - kind
+        - organization
+        - position
+        - salutation
+        - first_name
+        - last_name
+        - nickname
+        - street
+        - postcode
+        - city
+        - district
+        - land
+        - country
+        - gender
+        - phone
+        - email
+        - url
+        - immoads_makler_id
+        
     """
 
     index = search.Index("Address")
     offset = (page - 1) * page_size
 
     query_options = search.QueryOptions(
+
         limit = page_size,
-        offset = offset,
-        # ids_only = True
+        offset = offset
     )
 
-    query_string = u"Gerold"
+    query_string = u""
 
     # Search
     query = search.Query(query_string = query_string, options = query_options)
     search_result = index.search(query)
 
+    # Fetch addresses
+    addresses = []
+    for document in search_result.results:
+        address = Bunch(key_urlsafe = document.doc_id)
+        for field in document.fields:
+            if field.name in ["tag", "category", "business"]:
+                continue
+            if field.name not in address:
+                address[field.name] = field.value
+        addresses.append(address)
 
-    logging.info(search_result)
-
-
-    # TEST
+    # Finished
     return {
-        "total_quantity": 0,
-        "addresses": []
+        "total_quantity": search_result.number_found,
+        "addresses": addresses
     }
-
-
-
-
-
-
-
-
-
 

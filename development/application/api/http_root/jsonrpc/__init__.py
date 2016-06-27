@@ -522,6 +522,12 @@ class JsonRpc(CherryPyJsonRpc):
             page_size = page_size
         )
 
+        print
+        print fetched_result
+        print
+
+
+
 
         for address in fetched_result["addresses"]:
             addresses.append(address.to_dict(
@@ -912,16 +918,9 @@ class JsonRpc(CherryPyJsonRpc):
             - land
             - country
             - gender
-            - category
-            - tag
-            - business
             - phone
             - email
             - url
-            - note
-            - journal
-            - agreement
-            - anniversary
 
         :return: Dictionary
             ::

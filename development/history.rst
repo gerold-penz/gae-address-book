@@ -6,6 +6,16 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
+
+=============
+Version 0.2.4
+=============
+
+2016-06-27
+
+- Search index: "_char1"-Fields added
+
+
 =============
 Version 0.2.3
 =============
