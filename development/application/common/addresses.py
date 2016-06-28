@@ -1158,6 +1158,8 @@ def delete_address(user, key_urlsafe = None, address_uid = None, force = False):
         )
         key = address.key
 
+    key_urlsafe = key_urlsafe or key.urlsafe()
+
     if force:
         # Delete address-history items
         history_keys = []
@@ -1174,6 +1176,10 @@ def delete_address(user, key_urlsafe = None, address_uid = None, force = False):
 
     # Delete address
     key.delete()
+
+    # Remove address from search index
+    index = search.Index(name = "Address")
+    index.delete([key_urlsafe])
 
     # Decrement Quantity
     decrement_address_quantity_in_cache()

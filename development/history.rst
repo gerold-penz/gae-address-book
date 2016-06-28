@@ -6,6 +6,14 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
+=============
+Version 0.2.5
+=============
+
+2016-06-28
+
+- After deleting an address: address will removed from search index, too
+
 
 =============
 Version 0.2.4
