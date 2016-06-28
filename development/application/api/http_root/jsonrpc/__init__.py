@@ -1199,6 +1199,24 @@ class JsonRpc(CherryPyJsonRpc):
         Returns the fieldnames of the "Address" search index
         """
 
+        return common.addresses.get_search_index_fieldnames()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
