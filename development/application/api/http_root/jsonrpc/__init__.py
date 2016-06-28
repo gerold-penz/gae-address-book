@@ -143,6 +143,9 @@ def jronsrpc_help(*args, **kwargs):
             extract_documentation(JsonRpc.start_delete_all_addresses, u"start_delete_all_addresses"),
             extract_documentation(JsonRpc.start_delete_all_search_indexes, u"start_delete_all_search_indexes"),
 
+            extract_documentation(JsonRpc.get_search_index_fieldnames, u"get_search_index_fieldnames"),
+
+
         ]
     )
 
@@ -1188,6 +1191,13 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Finished
         return True
+
+
+    @rpcmethod
+    def get_search_index_fieldnames(self):
+        """
+        Returns the fieldnames of the "Address" search index
+        """
 
 
 

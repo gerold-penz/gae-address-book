@@ -1459,7 +1459,7 @@ def get_addresses_by_search(
         for tag_item in filter_by_tag_items:
             query_string += u' tag:"%s"' % tag_item
 
-    query_string = query_string.lstrip()
+    query_string = query_string.lstrip().lower()
 
     # Search
     query = search.Query(query_string = query_string, options = query_options)
@@ -1480,3 +1480,24 @@ def get_addresses_by_search(
         "addresses": addresses
     }
 
+
+def get_search_index_fieldnames():
+    """
+    Returns the schema of the "Address" search index.
+
+    :rtype: dict
+
+    :return: List with fieldnames as keys and Type
+    """
+
+    response = search.get_indexes(
+        limit = 1,
+        start_index_name = "Address",
+        include_start_index = True,
+        fetch_schema = True
+    )
+
+    schema = response.results[0].schema
+
+    # Finished
+    return schema.keys()

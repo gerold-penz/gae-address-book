@@ -14,6 +14,8 @@ Version 0.2.5
 
 - After deleting an address: address will removed from search index, too
 
+- New Api-function: *get_search_index_fieldnames()*
+
 
 =============
 Version 0.2.4
