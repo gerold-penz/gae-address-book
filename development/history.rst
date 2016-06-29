@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.2.6
+=============
+
+2016-06-29
+
+- Bug fixed: Error if no search index
+
+
+=============
 Version 0.2.5
 =============
 

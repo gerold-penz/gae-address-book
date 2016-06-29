@@ -1496,8 +1496,10 @@ def get_search_index_fieldnames():
         include_start_index = True,
         fetch_schema = True
     )
-
-    schema = response.results[0].schema
+    if response and response.results:
+        schema = response.results[0].schema
+    else:
+        schema = {}
 
     # Finished
     return schema.keys()
