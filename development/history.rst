@@ -14,6 +14,8 @@ Version 0.2.6
 
 - Bug fixed: Error if no search index
 
+- New Error QUERY_ERROR defined
+
 
 =============
 Version 0.2.5

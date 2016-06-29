@@ -18,10 +18,14 @@ import common.category_items
 import common.business_items
 import common.free_defined_fields
 from mako.template import Template
+from google.appengine.api import search
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
+from pyjsonrpc.rpcerror import JsonRpcError
 
 
 THISDIR = os.path.dirname(os.path.abspath(__file__))
+QUERY_ERROR = 1001
+
 
 
 # Globale Variable um die Benutzer (threadübergreifend) zwischenzuspeichern
@@ -520,30 +524,35 @@ class JsonRpc(CherryPyJsonRpc):
         #     filter_by_tag_items = filter_by_tag_items
         # )
 
-
-        fetched_result = common.addresses.get_addresses_by_search(
-            page = page,
-            page_size = page_size,
-            order_by = order_by,
-            query_string = query_string,
-            filter_by_organization = filter_by_organization,
-            filter_by_organization_char1 = filter_by_organization_char1,
-            filter_by_first_name = filter_by_first_name,
-            filter_by_first_name_char1 = filter_by_first_name_char1,
-            filter_by_last_name = filter_by_last_name,
-            filter_by_last_name_char1 = filter_by_last_name_char1,
-            filter_by_nickname = filter_by_nickname,
-            filter_by_nickname_char1 = filter_by_nickname_char1,
-            filter_by_street = filter_by_street,
-            filter_by_street_char1 = filter_by_street_char1,
-            filter_by_postcode = filter_by_postcode,
-            filter_by_postcode_char1 = filter_by_postcode_char1,
-            filter_by_city = filter_by_city,
-            filter_by_city_char1 = filter_by_city_char1,
-            filter_by_business_items = filter_by_business_items,
-            filter_by_category_items = filter_by_category_items,
-            filter_by_tag_items = filter_by_tag_items
-        )
+        try:
+            fetched_result = common.addresses.get_addresses_by_search(
+                page = page,
+                page_size = page_size,
+                order_by = order_by,
+                query_string = query_string,
+                filter_by_organization = filter_by_organization,
+                filter_by_organization_char1 = filter_by_organization_char1,
+                filter_by_first_name = filter_by_first_name,
+                filter_by_first_name_char1 = filter_by_first_name_char1,
+                filter_by_last_name = filter_by_last_name,
+                filter_by_last_name_char1 = filter_by_last_name_char1,
+                filter_by_nickname = filter_by_nickname,
+                filter_by_nickname_char1 = filter_by_nickname_char1,
+                filter_by_street = filter_by_street,
+                filter_by_street_char1 = filter_by_street_char1,
+                filter_by_postcode = filter_by_postcode,
+                filter_by_postcode_char1 = filter_by_postcode_char1,
+                filter_by_city = filter_by_city,
+                filter_by_city_char1 = filter_by_city_char1,
+                filter_by_business_items = filter_by_business_items,
+                filter_by_category_items = filter_by_category_items,
+                filter_by_tag_items = filter_by_tag_items
+            )
+        except search.QueryError as err:
+            raise JsonRpcError(
+                message = common.format_.safe_errormessage(err),
+                code = QUERY_ERROR
+            )
 
         for address in fetched_result["addresses"]:
             addresses.append(address.to_dict(
