@@ -18,9 +18,9 @@ import common.category_items
 import common.business_items
 import common.free_defined_fields
 from mako.template import Template
+from pyjsonrpc import JsonRpcError
 from google.appengine.api import search
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
-from pyjsonrpc.rpcerror import JsonRpcError
 
 
 THISDIR = os.path.dirname(os.path.abspath(__file__))
