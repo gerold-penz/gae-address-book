@@ -522,6 +522,15 @@ class Address(ndb.Model):
         # )
 
 
+
+
+
+        # ToDo: Notizen, Journal und Vereinbarungen in einen eigenen Index ablegen
+
+
+
+
+
 # def _put_address_to_index(document):
 #     """
 #     Adds the address to the search_index
