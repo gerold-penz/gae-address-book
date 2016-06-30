@@ -1284,14 +1284,39 @@ def update_address_search_index():
     index = search.Index("Address")
     address_keys = set()
 
-    # Iterate over all addresses
-    for address in Address.query().iter(batch_size = 200):
+    # # Iterate over all addresses
+    # #for address in Address.query().iter(batch_size = 50):
+    # for address in Address.query():
+    #
+    #     # Append key
+    #     address_keys.add(address.key.urlsafe())
+    #
+    #     # Update search index for the address
+    #     address.update_search_index()
 
-        # Append key
-        address_keys.add(address.key.urlsafe())
 
-        # Update search index for the address
-        address.update_search_index()
+    def _update_index(cursor = None):
+
+        if not cursor:
+            cursor = ndb.Cursor()
+        addresses, next_cursor, more = Address.query().fetch_page(
+            page_size = 100, start_cursor = cursor
+        )
+        if not addresses:
+            return
+
+        for address in addresses:
+            # Append key
+            address_keys.add(address.key.urlsafe())
+
+            # Update search index for the address
+            address.update_search_index()
+
+        return _update_index(next_cursor)
+
+
+    _update_index()
+
 
     # Fetch all document ids
     document_ids = set()
