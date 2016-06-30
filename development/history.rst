@@ -18,6 +18,8 @@ Version 0.2.7
 
 - Free-Defined-Items are now *ndb.TextProperty*-Fields
 
+- New field: *FreeDefinedField.visible*
+
 
 =============
 Version 0.2.6

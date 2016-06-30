@@ -18,6 +18,7 @@ class FreeDefinedField(ndb.Model):
     group = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
     position = ndb.IntegerProperty()
+    visible = ndb.BooleanProperty(default = True)
 
 
     def to_dict(
@@ -41,3 +42,4 @@ class FreeDefinedField(ndb.Model):
 
         # Finished
         return free_defined_field_dict
+
