@@ -1431,6 +1431,8 @@ def get_addresses_by_search(
     # Query Options
     query_options = search.QueryOptions(
         limit = page_size,
+        number_found_accuracy = search.MAXIMUM_NUMBER_FOUND_ACCURACY,
+        # number_found_accuracy = 10,
         offset = offset,
         sort_options = sort_options,
         ids_only = True
