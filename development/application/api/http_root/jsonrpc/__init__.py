@@ -1132,7 +1132,8 @@ class JsonRpc(CherryPyJsonRpc):
         key_urlsafe = None,
         group = None,
         label = None,
-        position = None
+        position = None,
+        visible = None
     ):
         """
         Saves one free_defined_field
@@ -1146,6 +1147,7 @@ class JsonRpc(CherryPyJsonRpc):
         :param group: Group name
         :param label: Label
         :param position: Sort key
+        :param visible: Visibility of the field
 
         :return: Saved free defined field (dictionary)
         """
@@ -1159,7 +1161,8 @@ class JsonRpc(CherryPyJsonRpc):
             key_urlsafe = key_urlsafe,
             group = group,
             label = label,
-            position = position
+            position = position,
+            visible = visible
         )
 
         free_defined_field_dict = free_defined_field.to_dict()

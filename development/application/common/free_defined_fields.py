@@ -11,6 +11,7 @@ def create(
     group,
     label,
     position = None,
+    visible = None
 ):
     """
     Creates a new free defined field
@@ -18,7 +19,8 @@ def create(
     :param group: Group name
     :param user: Username
     :param label: Label of the field
-    :param position: sort key
+    :param position: Sort key
+    :param visible: Visibility of the field
 
     :return: New created and saved FreeDefinedField-Object
 
@@ -33,7 +35,8 @@ def create(
         cu = user,
         group = group,
         label = label,
-        position = position
+        position = position,
+        visible = visible
     )
 
     # Save
@@ -77,7 +80,8 @@ def save_free_defined_field(
     key_urlsafe = None,
     group = None,
     label = None,
-    position = None
+    position = None,
+    visible = None
 ):
     """
     Saves one free_defined_field
@@ -87,6 +91,7 @@ def save_free_defined_field(
     :param group: Group name
     :param label: Label
     :param position: Sort key
+    :param visible: Visibility of the field
 
     :return: Edited FreeDefinedField-Object
 
@@ -106,6 +111,8 @@ def save_free_defined_field(
         free_defined_field.label = label
     if position is not None:
         free_defined_field.position = position
+    if visible is not None:
+        free_defined_field.visible = visible
 
     # save changes
     free_defined_field.put()
