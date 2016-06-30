@@ -16,6 +16,8 @@ Version 0.2.7
 
 - Address-model: "indexed = false" removed
 
+- Free-Defined-Items are now *ndb.TextProperty*-Fields
+
 
 =============
 Version 0.2.6

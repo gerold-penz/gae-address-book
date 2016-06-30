@@ -84,7 +84,7 @@ class AnniversaryItem(ItemsBase):
 class FreeDefinedItem(ItemsBase):
     group = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
-    text = ndb.StringProperty(required = True)
+    text = ndb.TextProperty(required = True)
 
 
 class Address(ndb.Model):
