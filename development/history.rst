@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.2.7
+=============
+
+2016-06-30
+
+- Bug fixed: IndexError: string index out of range
+
+
+=============
 Version 0.2.6
 =============
 

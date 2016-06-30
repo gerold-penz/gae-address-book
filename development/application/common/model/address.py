@@ -293,177 +293,193 @@ class Address(ndb.Model):
 
         if self.organization is not None:
             fields.append(search.TextField(name = u"organization", value = self.organization))
-            if common.format_.has_umlauts(self.organization):
-                fields.append(search.TextField(
-                    name = u"organization",
-                    value = common.format_.replace_umlauts(self.organization)
-                ))
-            fields.append(
-                search.AtomField(name = u"organization_char1", value = self.organization[0].lower())
-            )
+            if self.organization:
+                if common.format_.has_umlauts(self.organization):
+                    fields.append(search.TextField(
+                        name = u"organization",
+                        value = common.format_.replace_umlauts(self.organization)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"organization_char1", value = self.organization[0].lower())
+                )
 
         if self.position is not None:
             fields.append(search.TextField(name = u"position", value = self.position))
-            if common.format_.has_umlauts(self.position):
-                fields.append(search.TextField(
-                    name = u"position",
-                    value = common.format_.replace_umlauts(self.position)
-                ))
-            fields.append(
-                search.AtomField(name = u"position_char1", value = self.position[0].lower())
-            )
+            if self.position:
+                if common.format_.has_umlauts(self.position):
+                    fields.append(search.TextField(
+                        name = u"position",
+                        value = common.format_.replace_umlauts(self.position)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"position_char1", value = self.position[0].lower())
+                )
 
         if self.salutation is not None:
             fields.append(search.TextField(name = u"salutation", value = self.salutation))
-            if common.format_.has_umlauts(self.salutation):
-                fields.append(search.TextField(
-                    name = u"salutation",
-                    value = common.format_.replace_umlauts(self.salutation)
-                ))
-            fields.append(
-                search.AtomField(name = u"salutation_char1", value = self.salutation[0].lower())
-            )
+            if self.salutation:
+                if common.format_.has_umlauts(self.salutation):
+                    fields.append(search.TextField(
+                        name = u"salutation",
+                        value = common.format_.replace_umlauts(self.salutation)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"salutation_char1", value = self.salutation[0].lower())
+                )
 
         if self.first_name is not None:
             fields.append(search.TextField(name = u"first_name", value = self.first_name))
-            if common.format_.has_umlauts(self.first_name):
-                fields.append(search.TextField(
-                    name = u"first_name",
-                    value = common.format_.replace_umlauts(self.first_name)
-                ))
-            fields.append(
-                search.AtomField(name = u"first_name_char1", value = self.first_name[0].lower())
-            )
+            if self.first_name:
+                if common.format_.has_umlauts(self.first_name):
+                    fields.append(search.TextField(
+                        name = u"first_name",
+                        value = common.format_.replace_umlauts(self.first_name)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"first_name_char1", value = self.first_name[0].lower())
+                )
 
         if self.last_name is not None:
             fields.append(search.TextField(name = u"last_name", value = self.last_name))
-            if common.format_.has_umlauts(self.last_name):
-                fields.append(search.TextField(
-                    name = u"last_name",
-                    value = common.format_.replace_umlauts(self.last_name)
-                ))
-            fields.append(
-                search.AtomField(name = u"last_name_char1", value = self.last_name[0].lower())
-            )
+            if self.last_name:
+                if common.format_.has_umlauts(self.last_name):
+                    fields.append(search.TextField(
+                        name = u"last_name",
+                        value = common.format_.replace_umlauts(self.last_name)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"last_name_char1", value = self.last_name[0].lower())
+                )
 
         if self.nickname is not None:
             fields.append(search.TextField(name = u"nickname", value = self.nickname))
-            if common.format_.has_umlauts(self.nickname):
-                fields.append(search.TextField(
-                    name = u"nickname",
-                    value = common.format_.replace_umlauts(self.nickname)
-                ))
-            fields.append(
-                search.AtomField(name = u"nickname_char1", value = self.nickname[0].lower())
-            )
+            if self.nickname:
+                if common.format_.has_umlauts(self.nickname):
+                    fields.append(search.TextField(
+                        name = u"nickname",
+                        value = common.format_.replace_umlauts(self.nickname)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"nickname_char1", value = self.nickname[0].lower())
+                )
 
         if self.street is not None:
             fields.append(search.TextField(name = u"street", value = self.street))
-            if common.format_.has_umlauts(self.street):
-                fields.append(search.TextField(
-                    name = u"street", value = common.format_.replace_umlauts(self.street)
-                ))
-            fields.append(
-                search.AtomField(name = u"street_char1", value = self.street[0].lower())
-            )
+            if self.street:
+                if common.format_.has_umlauts(self.street):
+                    fields.append(search.TextField(
+                        name = u"street", value = common.format_.replace_umlauts(self.street)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"street_char1", value = self.street[0].lower())
+                )
 
         if self.postcode is not None:
             fields.append(search.TextField(name = u"postcode", value = self.postcode))
-            fields.append(
-                search.AtomField(name = u"postcode_char1", value = self.postcode[0].lower())
-            )
+            if self.postcode:
+                fields.append(
+                    search.AtomField(name = u"postcode_char1", value = self.postcode[0].lower())
+                )
 
         if self.city is not None:
             fields.append(search.TextField(name = u"city", value = self.city))
-            if common.format_.has_umlauts(self.city):
-                fields.append(search.TextField(
-                    name = u"city",
-                    value = common.format_.replace_umlauts(self.city)
-                ))
-            fields.append(
-                search.AtomField(name = u"city_char1", value = self.city[0].lower())
-            )
+            if self.city:
+                if common.format_.has_umlauts(self.city):
+                    fields.append(search.TextField(
+                        name = u"city",
+                        value = common.format_.replace_umlauts(self.city)
+                    ))
+                fields.append(
+                    search.AtomField(name = u"city_char1", value = self.city[0].lower())
+                )
 
         if self.district is not None:
             fields.append(search.TextField(name = u"district", value = self.district))
-            if common.format_.has_umlauts(self.district):
-                fields.append(search.TextField(
-                    name = u"district",
-                    value = common.format_.replace_umlauts(self.district)
-                ))
+            if self.district:
+                if common.format_.has_umlauts(self.district):
+                    fields.append(search.TextField(
+                        name = u"district",
+                        value = common.format_.replace_umlauts(self.district)
+                    ))
 
         if self.land is not None:
             fields.append(search.TextField(name = u"land", value = self.land))
-            if common.format_.has_umlauts(self.land):
-                fields.append(search.TextField(
-                    name = u"land",
-                    value = common.format_.replace_umlauts(self.land)
-                ))
+            if self.land:
+                if common.format_.has_umlauts(self.land):
+                    fields.append(search.TextField(
+                        name = u"land",
+                        value = common.format_.replace_umlauts(self.land)
+                    ))
 
         if self.country is not None:
             fields.append(search.TextField(name = u"country", value = self.country))
-            if common.format_.has_umlauts(self.country):
-                fields.append(search.TextField(
-                    name = u"country",
-                    value = common.format_.replace_umlauts(self.country)
-                ))
+            if self.country:
+                if common.format_.has_umlauts(self.country):
+                    fields.append(search.TextField(
+                        name = u"country",
+                        value = common.format_.replace_umlauts(self.country)
+                    ))
 
         if self.gender is not None:
             fields.append(search.TextField(name = u"gender", value = self.gender))
 
         for category_item in self.category_items:
             fields.append(search.AtomField(name = u"category", value = category_item))
-            if common.format_.has_umlauts(category_item):
-                fields.append(search.AtomField(
-                    name = u"category",
-                    value = common.format_.replace_umlauts(category_item)
-                ))
+            if category_item:
+                if common.format_.has_umlauts(category_item):
+                    fields.append(search.AtomField(
+                        name = u"category",
+                        value = common.format_.replace_umlauts(category_item)
+                    ))
 
         for tag_item in self.tag_items:
             fields.append(search.AtomField(name = u"tag", value = tag_item))
-            if common.format_.has_umlauts(tag_item):
-                fields.append(search.AtomField(
-                    name = u"tag",
-                    value = common.format_.replace_umlauts(tag_item)
-                ))
+            if tag_item:
+                if common.format_.has_umlauts(tag_item):
+                    fields.append(search.AtomField(
+                        name = u"tag",
+                        value = common.format_.replace_umlauts(tag_item)
+                    ))
 
         for business_item in self.business_items:
             fields.append(search.AtomField(name = u"business", value = business_item))
-            if common.format_.has_umlauts(business_item):
-                fields.append(search.AtomField(
-                    name = u"business",
-                    value = common.format_.replace_umlauts(business_item)
-                ))
+            if business_item:
+                if common.format_.has_umlauts(business_item):
+                    fields.append(search.AtomField(
+                        name = u"business",
+                        value = common.format_.replace_umlauts(business_item)
+                    ))
 
         for phone_item in self.phone_items:
-            fields.append(search.TextField(name = u"phone", value = phone_item.number))
+            if phone_item.number is not None:
+                fields.append(search.TextField(name = u"phone", value = phone_item.number))
 
         for email_item in self.email_items:
-            fields.append(search.TextField(name = u"email", value = email_item.email))
+            if email_item.email is not None:
+                fields.append(search.TextField(name = u"email", value = email_item.email))
 
         for url_item in self.url_items:
-            fields.append(search.TextField(name = u"url", value = url_item.url))
+            if url_item.url is not None:
+                fields.append(search.TextField(name = u"url", value = url_item.url))
 
         for free_defined_item in self.free_defined_items:
-            assert isinstance(free_defined_item, FreeDefinedItem)
 
             name = common.format_.safe_ascii(
                 free_defined_item.label.lower().replace(" ", "_").replace("-", "_")
             )
             value = free_defined_item.text
 
-            fields.append(search.TextField(
-                name = name, value = value
-            ))
+            if value is not None:
+                fields.append(search.TextField(name = name, value = value))
 
-            if common.format_.has_umlauts(free_defined_item.text):
-                fields.append(search.TextField(
-                    name = name,
-                    value = common.format_.replace_umlauts(value)
-                ))
+                if value:
+                    if common.format_.has_umlauts(free_defined_item.text):
+                        fields.append(search.TextField(
+                            name = name,
+                            value = common.format_.replace_umlauts(value)
+                        ))
 
         for anniversary_item in self.anniversary_items:
-            assert isinstance(anniversary_item, AnniversaryItem)
 
             name = common.format_.safe_ascii(
                 anniversary_item.label.lower().replace(" ", "_").replace("-", "_")
