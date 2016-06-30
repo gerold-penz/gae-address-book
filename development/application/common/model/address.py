@@ -467,6 +467,10 @@ class Address(ndb.Model):
             name = common.format_.safe_ascii(
                 free_defined_item.label.lower().replace(" ", "_").replace("-", "_")
             )
+            # This fields will not indexed
+            if name in cherrypy.config["search_index.address.free_defined_fields.exceptions"]:
+                continue
+
             value = free_defined_item.text
 
             if value is not None:
