@@ -14,6 +14,8 @@ Version 0.2.7
 
 - Bug fixed: IndexError: string index out of range
 
+- Address-model: "indexed = false" removed
+
 
 =============
 Version 0.2.6
