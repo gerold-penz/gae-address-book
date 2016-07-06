@@ -828,6 +828,12 @@ class JsonRpc(CherryPyJsonRpc):
 
         # Prepare FreeDefined-Items
         if free_defined_items:
+
+            for free_defined_item in free_defined_items:
+                text = free_defined_item.get("text")
+                if text is not None:
+                    free_defined_item["text"] = unicode(text)
+
             free_defined_items = [
                 common.addresses.FreeDefinedItem(**free_defined_item) for
                 free_defined_item in free_defined_items
