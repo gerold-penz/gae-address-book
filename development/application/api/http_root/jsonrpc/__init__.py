@@ -548,7 +548,7 @@ class JsonRpc(CherryPyJsonRpc):
                 filter_by_category_items = filter_by_category_items,
                 filter_by_tag_items = filter_by_tag_items
             )
-        except search.QueryError as err:
+        except search.Error as err:
             raise JsonRpcError(
                 message = common.format_.safe_errormessage(err),
                 code = QUERY_ERROR
