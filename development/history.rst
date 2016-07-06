@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.2.8
+=============
+
+2016-07-06
+
+- Index for tag_items changed
+
+
+=============
 Version 0.2.7
 =============
 

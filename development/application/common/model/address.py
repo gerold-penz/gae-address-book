@@ -7,7 +7,7 @@ import cherrypy
 import common.format_
 from google.appengine.ext import ndb
 from google.appengine.api import search
-from google.appengine.ext import deferred
+# from google.appengine.ext import deferred
 
 
 # ACHTUNG! Neue Models müssen auch in den Backup-Cron-Job eingetragen werden!
@@ -424,28 +424,28 @@ class Address(ndb.Model):
             fields.append(search.TextField(name = u"gender", value = self.gender))
 
         for category_item in self.category_items:
-            fields.append(search.AtomField(name = u"category", value = category_item))
+            fields.append(search.TextField(name = u"category", value = category_item))
             if category_item:
                 if common.format_.has_umlauts(category_item):
-                    fields.append(search.AtomField(
+                    fields.append(search.TextField(
                         name = u"category",
                         value = common.format_.replace_umlauts(category_item)
                     ))
 
         for tag_item in self.tag_items:
-            fields.append(search.AtomField(name = u"tag", value = tag_item))
+            fields.append(search.TextField(name = u"tag", value = tag_item))
             if tag_item:
                 if common.format_.has_umlauts(tag_item):
-                    fields.append(search.AtomField(
+                    fields.append(search.TextField(
                         name = u"tag",
                         value = common.format_.replace_umlauts(tag_item)
                     ))
 
         for business_item in self.business_items:
-            fields.append(search.AtomField(name = u"business", value = business_item))
+            fields.append(search.TextField(name = u"business", value = business_item))
             if business_item:
                 if common.format_.has_umlauts(business_item):
-                    fields.append(search.AtomField(
+                    fields.append(search.TextField(
                         name = u"business",
                         value = common.format_.replace_umlauts(business_item)
                     ))
