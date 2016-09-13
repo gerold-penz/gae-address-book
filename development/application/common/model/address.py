@@ -490,15 +490,23 @@ class Address(ndb.Model):
             )
             value = u""
 
-            if anniversary_item.year:
-                value += unicode(anniversary_item.year) + "-"
-            if anniversary_item.month:
-                value += unicode(anniversary_item.month).rjust(2, "0") + "-"
-            if anniversary_item.day:
-                value += unicode(anniversary_item.day).rjust(2, "0")
-            value = value.rstrip("-")
+            if anniversary_item.year and anniversary_item.month and anniversary_item.day:
+                value = datetime.date(
+                    int(anniversary_item.year),
+                    int(anniversary_item.month),
+                    int(anniversary_item.day)
+                )
+                fields.append(search.DateField(name = name, value = value))
+            else:
+                if anniversary_item.year:
+                    value += unicode(anniversary_item.year) + "-"
+                if anniversary_item.month:
+                    value += unicode(anniversary_item.month).rjust(2, "0") + "-"
+                if anniversary_item.day:
+                    value += unicode(anniversary_item.day).rjust(2, "0")
+                value = value.rstrip("-")
 
-            fields.append(search.TextField(name = name, value = value))
+                fields.append(search.TextField(name = name, value = value))
 
         # for note_item in self.note_items:
         #     if common.format_.has_umlauts(note_item.text):
