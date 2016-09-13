@@ -9,7 +9,7 @@ import threading
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 from google.appengine.ext import deferred
 from common.model.address import (
-    Address, AnniversaryItem
+    Address
 )
 
 
@@ -55,10 +55,10 @@ class JsonRpc(CherryPyJsonRpc):
 
 
     @rpcmethod
-    def replace_anmeldung_kunde_seit(self):
+    def start_add_immoads_tag(self):
 
         # Hilfsfunktion per Deferred aufrufen
-        deferred.defer(_replace_anmeldung_kunde_seit)
+        deferred.defer(_add_immoads_tag)
 
         return True
 
@@ -68,21 +68,17 @@ jsonrpc = JsonRpc()
 jsonrpc.exposed = True
 
 
-def _replace_anmeldung_kunde_seit():
+def _add_immoads_tag():
 
     for address in Address.query():
         assert isinstance(address, Address)
         # logging.info(repr(address.organization))
 
-        saved = True
-        for anniversary_item in address.anniversary_items:
-            assert isinstance(anniversary_item, AnniversaryItem)
-            if anniversary_item.label == u"Anmeldung":
-                anniversary_item.label = u"Kunde seit"
-                saved = False
-
-        if not saved:
-            address.put()
+        if address.category_items:
+            address.category_items.append(u"Immoads")
+        else:
+            address.category_items = [u"Immoads"]
+        address.put()
 
     logging.info("Fertig")
 
