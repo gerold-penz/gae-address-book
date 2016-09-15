@@ -286,7 +286,12 @@ class Address(ndb.Model):
         # Gather information for the index
         fields = []
 
-        # fields.append(search.AtomField(name = u"all", value = "1"))
+        fields.append(search.DateField(name = u"creation_timestamp", value = self.ct))
+        fields.append(search.TextField(name = u"creation_user", value = self.cu))
+        if self.et is not None:
+            fields.append(search.DateField(name = u"edit_timestamp", value = self.et))
+        if self.eu is not None:
+            fields.append(search.TextField(name = u"edit_user", value = self.eu))
 
         if self.kind is not None:
             fields.append(search.AtomField(name = u"kind", value = self.kind))
