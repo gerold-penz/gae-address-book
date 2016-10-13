@@ -6,7 +6,7 @@ import pyjsonrpc
 
 # TEST ENVIRONMENT
 address_book = pyjsonrpc.HttpClient(
-    url = "http://localhost:8080/api/jsonrpc",
+    url = "http://localhost:8081/api/jsonrpc",
     username = "test",
     password = "test"
 )
