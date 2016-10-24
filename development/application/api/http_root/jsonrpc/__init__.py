@@ -663,7 +663,7 @@ class JsonRpc(CherryPyJsonRpc):
         """
         Saves one address
 
-        The original address will saved before into the *address_history*-table.
+        The original address will saved into the *address_history*-table before.
 
         ==========
         Parameters
