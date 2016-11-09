@@ -302,13 +302,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"<label>": "<text>"), ...]
+                [{"group": "<group name>", "label": "<label>", "text": "<text>"), ...]
 
             Example::
 
                 [
-                    {"Shoe-Size": "45"},
-                    {"Body-Height": "180"}
+                    {"group": "Body Data", "label": "Shoe-Size", "text": "45"},
+                    {"group": "Body Data", "label": "Body-Height", "text": "180"}
                 ]
 
         :param business_items: A list with strings.
