@@ -1486,7 +1486,7 @@ def get_addresses_by_search(
         for tag_item in filter_by_tag_items:
             query_string += u' tag:"%s"' % tag_item
 
-    query_string = query_string.lstrip().lower()
+    query_string = query_string.lstrip()
 
     # Search
     query = search.Query(query_string = query_string, options = query_options)
