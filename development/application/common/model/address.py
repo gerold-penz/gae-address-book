@@ -488,8 +488,10 @@ class Address(ndb.Model):
                             name = name,
                             value = common.format_.replace_umlauts(value),
                         ))
-                elif free_defined_item.value_type in [u"int", u"float"]:
-                    fields.append(search.NumberField(name = name, value = value))
+                elif free_defined_item.value_type == u"int":
+                    fields.append(search.NumberField(name = name, value = int(value)))
+                elif free_defined_item.value_type == u"float":
+                    fields.append(search.NumberField(name = name, value = float(value)))
                 elif free_defined_item.value_type == u"date":
                     fields.append(search.DateField(name = name, value = common.format_.string_to_date(value)))
 
