@@ -302,13 +302,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"group": "<group name>", "label": "<label>", "text": "<text>"), ...]
+                [{"group": "<group name>", "label": "<label>", "text": "<text>", value_type = "unicode"|"int"|"float"|"date"), ...]
 
             Example::
 
                 [
-                    {"group": "Body Data", "label": "Shoe-Size", "text": "45"},
-                    {"group": "Body Data", "label": "Body-Height", "text": "180"}
+                    {"group": "Body Data", "label": "Shoe-Size", "text": "45", value_type = "unicode"},
+                    {"group": "Body Data", "label": "Body-Height", "text": "180", value_type = "unicode"}
                 ]
 
         :param business_items: A list with strings.
@@ -751,13 +751,13 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"label": "<label>", "text": "<text>"}, ...]
+                [{"label": "<label>", "text": "<text>", value_type = "unicode"|"int"|"float"|"date"}, ...]
 
             Example::
 
                 [
-                    {"label": "Shoe-Size", "text": "45"},
-                    {"label": "Body-Height", "text": "180"}
+                    {"label": "Shoe-Size", "text": "45", value_type = "unicode"},
+                    {"label": "Body-Height", "text": "180", value_type = "unicode"}
                 ]
 
         :param business_items: A list with strings.
@@ -1045,6 +1045,7 @@ class JsonRpc(CherryPyJsonRpc):
         group,
         label,
         position = None,
+        value_type = u"unicode",
     ):
         """
         Creates a new free defined field
@@ -1056,6 +1057,7 @@ class JsonRpc(CherryPyJsonRpc):
         :param label: Label of the field
         :param group: Group name
         :param position: sort key
+        :param value_type: "unicode"|"int"|"float"|"date"
 
         :return: New free defined field (dictionary)
         """
@@ -1069,6 +1071,7 @@ class JsonRpc(CherryPyJsonRpc):
             group = group,
             label = label,
             position = position,
+            value_type = value_type
         )
 
         # Finished
@@ -1139,7 +1142,8 @@ class JsonRpc(CherryPyJsonRpc):
         group = None,
         label = None,
         position = None,
-        visible = None
+        visible = None,
+        value_type = u"unicode"
     ):
         """
         Saves one free_defined_field
@@ -1154,6 +1158,7 @@ class JsonRpc(CherryPyJsonRpc):
         :param label: Label
         :param position: Sort key
         :param visible: Visibility of the field
+        :param value_type: "unicode"|"int"|"float"|"date"
 
         :return: Saved free defined field (dictionary)
         """
@@ -1168,7 +1173,8 @@ class JsonRpc(CherryPyJsonRpc):
             group = group,
             label = label,
             position = position,
-            visible = visible
+            visible = visible,
+            value_type = value_type
         )
 
         free_defined_field_dict = free_defined_field.to_dict()

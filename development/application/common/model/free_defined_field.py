@@ -19,6 +19,7 @@ class FreeDefinedField(ndb.Model):
     label = ndb.StringProperty(required = True)
     position = ndb.IntegerProperty()
     visible = ndb.BooleanProperty(default = True)
+    value_type = ndb.StringProperty(default = u"unicode")  # u"unicode", u"int", u"float", u"date"
 
 
     def to_dict(

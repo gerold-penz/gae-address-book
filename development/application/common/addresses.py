@@ -137,13 +137,13 @@ def create(
     :param free_defined_items: A list with FreeDefinedItem-objects.
         Syntax::
 
-            [FreeDefinedItem(group = "<group name>", label = "<label>", text = "<text>"), ...]
+            [FreeDefinedItem(group = "<group name>", label = "<label>", text = "<text>", value_type = "unicode"|"int"|"float"|"date"), ...]
 
         Example::
 
             [
-                FreeDefinedItem(group = "Body Data", label = "Shoe-Size", text = "45"),
-                FreeDefinedItem(group = "Body Data", label = "Body-Height", text = "180")
+                FreeDefinedItem(group = "Body Data", label = "Shoe-Size", text = "45", value_type = "unicode"),
+                FreeDefinedItem(group = "Body Data", label = "Body-Height", text = "180", value_type = "unicode")
             ]
 
     :param business_items: A list with business items.

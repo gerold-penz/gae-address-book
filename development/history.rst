@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.2.11
+==============
+
+2016-11-10
+
+- Free defined fields: *value_type* added
+
+
+==============
 Version 0.2.10
 ==============
 

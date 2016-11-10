@@ -11,7 +11,8 @@ def create(
     group,
     label,
     position = None,
-    visible = None
+    visible = None,
+    value_type = u"unicode"
 ):
     """
     Creates a new free defined field
@@ -21,6 +22,7 @@ def create(
     :param label: Label of the field
     :param position: Sort key
     :param visible: Visibility of the field
+    :param value_type: "unicode"|"int"|"float"|"date"
 
     :return: New created and saved FreeDefinedField-Object
 
@@ -36,7 +38,8 @@ def create(
         group = group,
         label = label,
         position = position,
-        visible = visible
+        visible = visible,
+        value_type = value_type
     )
 
     # Save
@@ -81,7 +84,8 @@ def save_free_defined_field(
     group = None,
     label = None,
     position = None,
-    visible = None
+    visible = None,
+    value_type = None
 ):
     """
     Saves one free_defined_field
@@ -92,6 +96,7 @@ def save_free_defined_field(
     :param label: Label
     :param position: Sort key
     :param visible: Visibility of the field
+    :param value_type: "unicode"|"int"|"float"|"date"
 
     :return: Edited FreeDefinedField-Object
 
@@ -113,6 +118,8 @@ def save_free_defined_field(
         free_defined_field.position = position
     if visible is not None:
         free_defined_field.visible = visible
+    if value_type is not None:
+        free_defined_field.value_type = value_type
 
     # save changes
     free_defined_field.put()

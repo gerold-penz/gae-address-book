@@ -85,6 +85,7 @@ class FreeDefinedItem(ItemsBase):
     group = ndb.StringProperty(required = True)
     label = ndb.StringProperty(required = True)
     text = ndb.TextProperty(required = True)
+    value_type = ndb.StringProperty(default = u"unicode")  # u"unicode", u"int", u"float", u"date"
 
 
 class Address(ndb.Model):
@@ -478,15 +479,19 @@ class Address(ndb.Model):
 
             value = free_defined_item.text
 
-            if value is not None:
-                fields.append(search.TextField(name = name, value = value))
+            if value is not None and value:
 
-                if value:
+                if free_defined_item.value_type == u"unicode":
+                    fields.append(search.TextField(name = name, value = value))
                     if common.format_.has_umlauts(free_defined_item.text):
                         fields.append(search.TextField(
                             name = name,
-                            value = common.format_.replace_umlauts(value)
+                            value = common.format_.replace_umlauts(value),
                         ))
+                elif free_defined_item.value_type in [u"int", u"float"]:
+                    fields.append(search.NumberField(name = name, value = value))
+                elif free_defined_item.value_type == u"date":
+                    fields.append(search.DateField(name = name, value = common.format_.string_to_date(value)))
 
         for anniversary_item in self.anniversary_items:
 
