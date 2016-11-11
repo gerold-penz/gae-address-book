@@ -9,6 +9,7 @@ import threading
 import common.addresses
 from pyjsonrpc.cp import CherryPyJsonRpc, rpcmethod
 from google.appengine.ext import deferred
+from google.appengine.api import search
 from common.model.address import (
     Address
 )
@@ -73,26 +74,31 @@ jsonrpc.exposed = True
 
 def _do_iteration():
 
-    index = 0
+    index = search.Index("Address")
+    cursor = search.Cursor()
+    iternumber = 0
 
-    for address in Address.query(Address.tag_items == u"Imabis-Import"):
-        assert isinstance(address, Address)
+    while cursor:
+        iternumber += 1
+        logging.info("Iteration: {iternumber}".format(iternumber = iternumber))
 
-        # Log
-        index += 1
-        if index % 100 == 0:
-            logging.info("do_iteration: {index}".format(index = index))
+        options = search.QueryOptions(limit = 100, cursor = cursor, returned_fields = ["email"])
+        query = search.Query(
+            query_string = 'NOT (tag = "Imabis-Import" OR tag = "Excel-Import")',
+            options = options
+        )
 
-        # Erste E-Mail-Adresse ermitteln
-        if address.email_items:
-            email = address.email_items[0].email
+        results = index.search(query)
+        cursor = results.cursor
+
+        for document in results:
+            email = document.fields[0].value
 
             deferred.defer(
                 _do_iteration_part2,
                 email = email,
-                _queue = "onebyone"
+                _queue = "noretry"
             )
-
 
     logging.info("Do-Iteration fertig")
 
@@ -101,18 +107,18 @@ def _do_iteration():
 
 def _do_iteration_part2(email):
 
-    # E-Mail in Excel-Import suchen
+    # E-Mail in (Imabix/Excel)-Import suchen
     result = common.addresses.get_addresses_by_search(
         page = 1,
         page_size = 100,
-        query_string = u'tag = "Excel-Import" AND email = "{email}"'.format(email = email),
+        query_string = u'email = "{email}" AND (tag = "Imabis-Import" OR tag = "Excel-Import")'.format(email = email),
     )
-    for excel_address in result["addresses"]:
-        # Excel-Adresse löschen
+    for address in result["addresses"]:
+        # Imabis/Excel-Adresse löschen
         logging.info("Adresse wird geloescht PROD")
         common.addresses.delete_address(
             user = "gerold",
-            key_urlsafe = excel_address.key.urlsafe(),
+            key_urlsafe = address.key.urlsafe(),
             force = True
         )
 
