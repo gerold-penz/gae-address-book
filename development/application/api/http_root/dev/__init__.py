@@ -84,107 +84,50 @@ def _do_iteration():
     index = search.Index("Address")
     cursor = search.Cursor()
     iternumber = 0
-    addresses = {}
-    
+
     
     # Domains und doc_ids sammeln
     while cursor:
+
         iternumber += 1
         logging.info("Iteration: {iternumber}".format(iternumber = iternumber))
 
-        options = search.QueryOptions(limit = 100, cursor = cursor, returned_fields = ["email"])
+        options = search.QueryOptions(limit = 100, cursor = cursor, ids_only = True)
         query = search.Query(
-            query_string = 'NOT (tag = "Imabis-Import" OR tag = "Excel-Import")',
+            query_string = 'NOT postcode = "0000"',
             options = options
         )
 
         results = index.search(query)
         cursor = results.cursor
 
-        for document in results:
-            doc_id = document.doc_id
-            email = document.fields[0].value
-            domain = email.split("@", 1)[1]
-            
-            if domain in [
-                u'aon.at',
-                u'gmx.at',
-                u'hotmail.com',
-                u'chello.at',
-                u'gmail.com',
-                u'yahoo.de',
-                u'immoads.at',
-                u'a1.net',
-                u'gmx.net',
-                u'utanet.at',
-                u'liwest.at',
-                u'inode.at',
-                u'web.de',
-                u'tele2.at',
-                u't-online.de',
-                u'oe24.at',
-                u'gmx.com',
-                u'yahoo.com',
-                u'drei.at',
-                u'yahoo.it',
-                u'tirol.com',
-                u'test.at',
-                u'sms.at',
-                u'rimml.com',
-                u'outlook.com',
-                u'justimmo.at',
-            ]:
+        for i, document in enumerate(results):
+            if i % 2 == 0:
                 continue
-            
-            domains = addresses.setdefault(doc_id, set())
-            domains.add(domain)
-            
 
-            # deferred.defer(
-            #     _do_iteration_part2,
-            #     email = email,
-            #     _queue = "noretry"
-            # )
+            doc_id = document.doc_id
+            print doc_id
 
-    
-    
-    domains = {}
-    for address in addresses.values():
-        for domain in address:
-            domains[domain] = domains.get(domain, 0) + 1                
-    
-    
-    
-    domain_list = []
-    for key, value in domains.items():
-        domain_list.append((value, key))
-
-    domain_list.sort(reverse = True)
-
-
-    logging.info(domain_list)
+            deferred.defer(
+                _do_iteration_part2,
+                doc_id = doc_id,
+                _queue = "noretry"
+            )
 
     logging.info("Do-Iteration fertig")
 
     return True
 
 
-def _do_iteration_part2(email):
+def _do_iteration_part2(doc_id):
 
-    # E-Mail in (Imabix/Excel)-Import suchen
-    result = common.addresses.get_addresses_by_search(
-        page = 1,
-        page_size = 100,
-        query_string = u'email = "{email}" AND (tag = "Imabis-Import" OR tag = "Excel-Import")'.format(email = email),
+    print u"DoIt....", doc_id
+
+    common.addresses.delete_address(
+        user = "gerold",
+        key_urlsafe = doc_id,
+        force = True
     )
-    for address in result["addresses"]:
-        # Imabis/Excel-Adresse löschen
-        logging.info("Adresse wird geloescht PROD")
-        common.addresses.delete_address(
-            user = "gerold",
-            key_urlsafe = address.key.urlsafe(),
-            force = True
-        )
 
 
 
