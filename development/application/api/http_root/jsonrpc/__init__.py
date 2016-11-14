@@ -1323,9 +1323,14 @@ class JsonRpc(CherryPyJsonRpc):
             ))
 
         # Finished
+        next_cursor = fetched_result.get("next_cursor")
+        if next_cursor:
+            next_cursor = next_cursor.web_safe_string
+
+
         return dict(
             total_quantity = fetched_result["total_quantity"],
-            next_cursor = fetched_result["next_cursor"].web_safe_string,
+            next_cursor = next_cursor,
             addresses = addresses
         )
 
