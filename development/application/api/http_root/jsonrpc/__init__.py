@@ -501,29 +501,6 @@ class JsonRpc(CherryPyJsonRpc):
 
         addresses = []
 
-        # fetched_result = common.addresses.get_addresses(
-        #     page = page,
-        #     page_size = page_size,
-        #     order_by = order_by,
-        #     filter_by_organization = filter_by_organization,
-        #     filter_by_organization_char1 = filter_by_organization_char1,
-        #     filter_by_first_name = filter_by_first_name,
-        #     filter_by_first_name_char1 = filter_by_first_name_char1,
-        #     filter_by_last_name = filter_by_last_name,
-        #     filter_by_last_name_char1 = filter_by_last_name_char1,
-        #     filter_by_nickname = filter_by_nickname,
-        #     filter_by_nickname_char1 = filter_by_nickname_char1,
-        #     filter_by_street = filter_by_street,
-        #     filter_by_street_char1 = filter_by_street_char1,
-        #     filter_by_postcode = filter_by_postcode,
-        #     filter_by_postcode_char1 = filter_by_postcode_char1,
-        #     filter_by_city = filter_by_city,
-        #     filter_by_city_char1 = filter_by_city_char1,
-        #     filter_by_business_items = filter_by_business_items,
-        #     filter_by_category_items = filter_by_category_items,
-        #     filter_by_tag_items = filter_by_tag_items
-        # )
-
         try:
             fetched_result = common.addresses.get_addresses_by_search(
                 page = page,
@@ -1224,6 +1201,146 @@ class JsonRpc(CherryPyJsonRpc):
         """
 
         return common.addresses.get_search_index_fieldnames()
+
+
+    @rpcmethod
+    def get_addresses_for_iteration(
+        self,
+        cursor = None,
+        limit = 100,
+        include = None,
+        exclude = None,
+        exclude_creation_metadata = None,
+        exclude_edit_metadata = None,
+        exclude_empty_fields = None,
+        order_by = None,
+        query_string = None,
+        filter_by_organization = None,
+        filter_by_organization_char1 = None,
+        filter_by_first_name = None,
+        filter_by_first_name_char1 = None,
+        filter_by_last_name = None,
+        filter_by_last_name_char1 = None,
+        filter_by_nickname = None,
+        filter_by_nickname_char1 = None,
+        filter_by_street = None,
+        filter_by_street_char1 = None,
+        filter_by_postcode = None,
+        filter_by_postcode_char1 = None,
+        filter_by_city = None,
+        filter_by_city_char1 = None,
+        filter_by_business_items = None,
+        filter_by_category_items = None,
+        filter_by_tag_items = None
+    ):
+        """
+        Returns a dictionary with the count of addresses and one page of addresses
+
+        All *datetime.date*- and *datetime.datetime*-values will convert to
+        ISO date strings.
+
+        :param cursor: Cursor-String for iteration over the full result
+
+        :param limit: Maximum quantity of addresses in result
+
+        :param include: Optional list of properties to include. Default: all.
+
+        :param exclude: Optional list of properties to exclude.
+            If there is overlap between include and exclude, then exclude "wins."
+
+        :param exclude_creation_metadata: If `True`, the fields "ct" (creation timestamp)
+            and "cu" (creation user) will excluded
+
+        :param exclude_edit_metadata: If `True`, the fields "et" (creation timestamp)
+            and "eu" (creation user) will excluded.
+
+        :param order_by: Order result, String or list with fieldnames. A "-"
+            sets descending order.
+
+        :param query_string: Query string
+
+        :param filter_by_name: Case insensitive filter string which filters the
+            fields "organization", "first_name", "last_name".
+
+        :param filter_by_place: Case insensitive filter string which filters the
+            fields "street", "postcode", "city", "country", "land", "district".
+
+        :param filter_by_category_items: List with *case sensitive* items.
+
+        :param filter_by_tag_items: List with *case sensitive* items.
+
+        :param filter_by_business_items: List with *case sensitive* items.
+
+        :return: Dictionary with total quantity, cursor-string and one page
+            with addresses::
+
+                {
+                    "total_quantity": <Quantity>,
+                    "next_cursor": <CursorString>
+                    "addresses": [<Address>, ...]
+                }
+        """
+
+        addresses = []
+
+        try:
+            fetched_result = common.addresses.get_addresses_for_iteration(
+                cursor = cursor,
+                limit = limit,
+                order_by = order_by,
+                query_string = query_string,
+                filter_by_organization = filter_by_organization,
+                filter_by_organization_char1 = filter_by_organization_char1,
+                filter_by_first_name = filter_by_first_name,
+                filter_by_first_name_char1 = filter_by_first_name_char1,
+                filter_by_last_name = filter_by_last_name,
+                filter_by_last_name_char1 = filter_by_last_name_char1,
+                filter_by_nickname = filter_by_nickname,
+                filter_by_nickname_char1 = filter_by_nickname_char1,
+                filter_by_street = filter_by_street,
+                filter_by_street_char1 = filter_by_street_char1,
+                filter_by_postcode = filter_by_postcode,
+                filter_by_postcode_char1 = filter_by_postcode_char1,
+                filter_by_city = filter_by_city,
+                filter_by_city_char1 = filter_by_city_char1,
+                filter_by_business_items = filter_by_business_items,
+                filter_by_category_items = filter_by_category_items,
+                filter_by_tag_items = filter_by_tag_items
+            )
+        except search.Error as err:
+            raise JsonRpcError(
+                message = common.format_.safe_errormessage(err),
+                code = QUERY_ERROR
+            )
+
+        for address in fetched_result["addresses"]:
+            addresses.append(address.to_dict(
+                include = include,
+                exclude = exclude,
+                exclude_creation_metadata = exclude_creation_metadata,
+                exclude_edit_metadata = exclude_edit_metadata,
+                exclude_empty_fields = exclude_empty_fields
+            ))
+
+        # Finished
+        return dict(
+            total_quantity = fetched_result["total_quantity"],
+            next_cursor = fetched_result["next_cursor"].web_safe_string,
+            addresses = addresses
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1530,3 +1530,154 @@ def get_search_index_fieldnames():
 
     # Finished
     return schema.keys()
+
+
+def get_addresses_for_iteration(
+    cursor,
+    limit = 100,
+    order_by = None,
+    query_string = None,
+    filter_by_organization = None,
+    filter_by_organization_char1 = None,
+    filter_by_first_name = None,
+    filter_by_first_name_char1 = None,
+    filter_by_last_name = None,
+    filter_by_last_name_char1 = None,
+    filter_by_nickname = None,
+    filter_by_nickname_char1 = None,
+    filter_by_street = None,
+    filter_by_street_char1 = None,
+    filter_by_postcode = None,
+    filter_by_postcode_char1 = None,
+    filter_by_city = None,
+    filter_by_city_char1 = None,
+    filter_by_business_items = None,
+    filter_by_category_items = None,
+    filter_by_tag_items = None
+):
+    """
+    :param cursor: Search-Cursor for iteration over the full result
+
+    :return: Dictionary with total quantity, cursor and one page with
+        real addresses::
+
+            {
+                "total_quantity": <Quantity>,
+                "next_cursor": <Cursor>,
+                "addresses": [<Address>, ...]
+            }
+    """
+
+    index = search.Index("Address")
+    if cursor:
+        if isinstance(cursor, basestring):
+            cursor = search.Cursor(web_safe_string = cursor or None)
+    else:
+        cursor = search.Cursor()
+
+    # Sorting
+    if order_by and isinstance(order_by, basestring):
+        order_by = [order_by]
+    if order_by:
+        sort_expressions = []
+        for order_item in order_by:
+            # Parse
+            field_name = order_item.lstrip("-").lower()
+            if order_item.startswith("-"):
+                direction = search.SortExpression.DESCENDING
+            else:
+                direction = search.SortExpression.ASCENDING
+
+            sort_expressions.append(
+                search.SortExpression(
+                    expression = field_name,
+                    direction = direction
+                )
+            )
+        sort_options = search.SortOptions(
+            expressions = sort_expressions,
+            limit = search.MAXIMUM_SORTED_DOCUMENTS
+        )
+    else:
+        sort_options = None
+
+    # Query Options
+    query_options = search.QueryOptions(
+        limit = limit,
+        number_found_accuracy = search.MAXIMUM_NUMBER_FOUND_ACCURACY,
+        cursor = cursor,
+        sort_options = sort_options,
+        ids_only = True
+    )
+
+    # Query String
+    if not query_string:
+        query_string = u""
+
+    if filter_by_organization:
+        query_string += u' organization:%s' % filter_by_organization
+    if filter_by_organization_char1:
+        query_string += u' organization_char1:%s' % filter_by_organization_char1[0]
+    if filter_by_first_name:
+        query_string += u' first_name:%s' % filter_by_first_name
+    if filter_by_first_name_char1:
+        query_string += u' first_name_char1:%s' % filter_by_first_name_char1[0]
+    if filter_by_last_name:
+        query_string += u' last_name:%s' % filter_by_last_name
+    if filter_by_last_name_char1:
+        query_string += u' last_name_char1:%s' % filter_by_last_name_char1[0]
+    if filter_by_nickname:
+        query_string += u' nickname:%s' % filter_by_nickname
+    if filter_by_nickname_char1:
+        query_string += u' nickname_char1:%s' % filter_by_nickname_char1[0]
+    if filter_by_street:
+        query_string += u' street:%s' % filter_by_street
+    if filter_by_street_char1:
+        query_string += u' street_char1:%s' % filter_by_street_char1[0]
+    if filter_by_postcode:
+        query_string += u' postcode:%s' % filter_by_postcode
+    if filter_by_postcode_char1:
+        query_string += u' postcode_char1:%s' % filter_by_postcode_char1[0]
+    if filter_by_city:
+        query_string += u' city:%s' % filter_by_city
+    if filter_by_city_char1:
+        query_string += u' city_char1:%s' % filter_by_city_char1[0]
+    if filter_by_business_items:
+        if isinstance(filter_by_business_items, basestring):
+            filter_by_business_items = [filter_by_business_items]
+        for business_item in filter_by_business_items:
+            query_string += u' business:"%s"' % business_item
+    if filter_by_category_items:
+        if isinstance(filter_by_category_items, basestring):
+            filter_by_category_items = [filter_by_category_items]
+        for category_item in filter_by_category_items:
+            query_string += u' category:"%s"' % category_item
+    if filter_by_tag_items:
+        if isinstance(filter_by_tag_items, basestring):
+            filter_by_tag_items = [filter_by_tag_items]
+        for tag_item in filter_by_tag_items:
+            query_string += u' tag:"%s"' % tag_item
+
+    query_string = query_string.lstrip()
+
+    # Search
+    query = search.Query(query_string = query_string, options = query_options)
+    search_result = index.search(query)
+    next_cursor = search_result.cursor
+
+
+    # Fetch addresses
+    addresses = []
+    for document in search_result.results:
+        key_urlsafe = document.doc_id
+        key = ndb.Key(urlsafe = key_urlsafe)
+        address = key.get()
+        if address:
+            addresses.append(address)
+
+    # Finished
+    return {
+        "total_quantity": search_result.number_found,
+        "next_cursor": next_cursor,
+        "addresses": addresses
+    }
