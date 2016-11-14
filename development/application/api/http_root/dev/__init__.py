@@ -74,7 +74,7 @@ jsonrpc.exposed = True
 
 
 
-#---------------------------------
+# ---------------------------------
 
 
 
@@ -84,8 +84,10 @@ def _do_iteration():
     index = search.Index("Address")
     cursor = search.Cursor()
     iternumber = 0
-    domains = {}
-
+    addresses = {}
+    
+    
+    # Domains und doc_ids sammeln
     while cursor:
         iternumber += 1
         logging.info("Iteration: {iternumber}".format(iternumber = iternumber))
@@ -100,10 +102,43 @@ def _do_iteration():
         cursor = results.cursor
 
         for document in results:
+            doc_id = document.doc_id
             email = document.fields[0].value
-
             domain = email.split("@", 1)[1]
-            domains[domain] = domains.get(domain, 0) + 1
+            
+            if domain in [
+                u'aon.at',
+                u'gmx.at',
+                u'hotmail.com',
+                u'chello.at',
+                u'gmail.com',
+                u'yahoo.de',
+                u'immoads.at',
+                u'a1.net',
+                u'gmx.net',
+                u'utanet.at',
+                u'liwest.at',
+                u'inode.at',
+                u'web.de',
+                u'tele2.at',
+                u't-online.de',
+                u'oe24.at',
+                u'gmx.com',
+                u'yahoo.com',
+                u'drei.at',
+                u'yahoo.it',
+                u'tirol.com',
+                u'test.at',
+                u'sms.at',
+                u'rimml.com',
+                u'outlook.com',
+                u'justimmo.at',
+            ]:
+                continue
+            
+            domains = addresses.setdefault(doc_id, set())
+            domains.add(domain)
+            
 
             # deferred.defer(
             #     _do_iteration_part2,
@@ -111,7 +146,23 @@ def _do_iteration():
             #     _queue = "noretry"
             # )
 
-    logging.info(domains)
+    
+    
+    domains = {}
+    for address in addresses.values():
+        for domain in address:
+            domains[domain] = domains.get(domain, 0) + 1                
+    
+    
+    
+    domain_list = []
+    for key, value in domains.items():
+        domain_list.append((value, key))
+
+    domain_list.sort(reverse = True)
+
+
+    logging.info(domain_list)
 
     logging.info("Do-Iteration fertig")
 
@@ -134,7 +185,6 @@ def _do_iteration_part2(email):
             key_urlsafe = address.key.urlsafe(),
             force = True
         )
-
 
 
 
