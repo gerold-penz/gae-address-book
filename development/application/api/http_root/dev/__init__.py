@@ -72,11 +72,19 @@ jsonrpc = JsonRpc()
 jsonrpc.exposed = True
 
 
+
+
+#---------------------------------
+
+
+
+
 def _do_iteration():
 
     index = search.Index("Address")
     cursor = search.Cursor()
     iternumber = 0
+    domains = {}
 
     while cursor:
         iternumber += 1
@@ -94,11 +102,16 @@ def _do_iteration():
         for document in results:
             email = document.fields[0].value
 
-            deferred.defer(
-                _do_iteration_part2,
-                email = email,
-                _queue = "noretry"
-            )
+            domain = email.split("@", 1)[1]
+            domains[domain] = domains.get(domain, 0) + 1
+
+            # deferred.defer(
+            #     _do_iteration_part2,
+            #     email = email,
+            #     _queue = "noretry"
+            # )
+
+    logging.info(domains)
 
     logging.info("Do-Iteration fertig")
 

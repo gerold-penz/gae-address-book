@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 ==============
+Version 0.2.12
+==============
+
+2016-11-14
+
+- Dev-API-Tests
+
+
+==============
 Version 0.2.11
 ==============
 
