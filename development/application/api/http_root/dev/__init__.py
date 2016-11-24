@@ -93,8 +93,18 @@ def _do_iteration():
         logging.info("Iteration: {iternumber}".format(iternumber = iternumber))
 
         options = search.QueryOptions(limit = 100, cursor = cursor, ids_only = True)
+
+        query_string = " OR ".join([
+            'email = "{email}"'.format(email = email) for email in [
+                "thomas.wurzer@immoads.at",
+                "max.muster@immoads.at"
+            ]
+        ])
+        assert len(query_string) < 2000
+
+
         query = search.Query(
-            query_string = 'NOT postcode = "0000"',
+            query_string = query_string,
             options = options
         )
 
@@ -102,12 +112,7 @@ def _do_iteration():
         cursor = results.cursor
 
         for i, document in enumerate(results):
-            if i % 2 == 0:
-                continue
-
             doc_id = document.doc_id
-            print doc_id
-
             deferred.defer(
                 _do_iteration_part2,
                 doc_id = doc_id,
@@ -123,11 +128,23 @@ def _do_iteration_part2(doc_id):
 
     print u"DoIt....", doc_id
 
-    common.addresses.delete_address(
+    address = common.addresses.get_address(key_urlsafe = doc_id)
+    tag_items = address.tag_items or []
+    tag_items.append("XXX")
+
+    common.addresses.save_address(
         user = "gerold",
         key_urlsafe = doc_id,
-        force = True
+        tag_items = tag_items
+
     )
+
+
+    # common.addresses.delete_address(
+    #     user = "gerold",
+    #     key_urlsafe = doc_id,
+    #     force = True
+    # )
 
 
 
