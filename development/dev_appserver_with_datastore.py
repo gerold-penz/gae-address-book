@@ -15,7 +15,7 @@ os.chdir(THISDIR)
 subprocess.call(
     args = [
         os.path.expanduser(
-            "~/bin/google_appengine/dev_appserver.py"
+            "~/bin/google-cloud-sdk/platform/google_appengine/dev_appserver.py"
         ),
         "--host", "0.0.0.0",
         "--port", "8081",
