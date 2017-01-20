@@ -1389,7 +1389,7 @@ class JsonRpc(CherryPyJsonRpc):
         user = cherrypy.request.login
 
         # Working
-        common.addresses.add_categories(
+        common.addresses.delete_categories(
             user = user,
             address_keys = address_keys,
             categories = categories
@@ -1453,7 +1453,7 @@ class JsonRpc(CherryPyJsonRpc):
         user = cherrypy.request.login
 
         # Working
-        common.addresses.add_tags(
+        common.addresses.delete_tags(
             user = user,
             address_keys = address_keys,
             tags = tags
