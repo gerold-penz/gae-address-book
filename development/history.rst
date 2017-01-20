@@ -6,9 +6,6 @@ Google App Engine - Address Book - Data Backend
 ToDo: Security: Authorization: *common.authorization*
 
 
-ToDo: get_addresses_for_iteration
-
-
 =============
 Version 0.3.1
 =============
