@@ -10,6 +10,17 @@ ToDo: get_addresses_for_iteration
 
 
 =============
+Version 0.3.1
+=============
+
+2017-01-20
+
+- New API-functions: *add_categories()* and *delete_categories()*
+
+- New API-functions: *add_tags()* and *delete_tags()*
+
+
+=============
 Version 0.3.0
 =============
 

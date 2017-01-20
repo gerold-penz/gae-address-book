@@ -1335,14 +1335,132 @@ class JsonRpc(CherryPyJsonRpc):
         )
 
 
+    @rpcmethod
+    def add_categories(
+        self,
+        address_keys,
+        categories
+    ):
+        """
+        Adds one or more categories to one or more addresses
+
+        ==========
+        Parameters
+        ==========
+
+        :param address_keys: List with keys or string with one key
+
+        :param categories: List with category names or string with one category
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Working
+        common.addresses.add_categories(
+            user = user,
+            address_keys = address_keys,
+            categories = categories
+        )
+
+        # Finished
+        return True
 
 
+    @rpcmethod
+    def delete_tags(
+        self,
+        address_keys,
+        tags
+    ):
+        """
+        Deletes one or more tags from one or more addresses
+
+        ==========
+        Parameters
+        ==========
+
+        :param address_keys: List with keys or string with one key
+
+        :param tags: List with tag names or string with one tag
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Working
+        common.addresses.add_tags(
+            user = user,
+            address_keys = address_keys,
+            tags = tags
+        )
+
+        # Finished
+        return True
 
 
+    @rpcmethod
+    def add_tags(
+        self,
+        address_keys,
+        tags
+    ):
+        """
+        Adds one or more tags to one or more addresses
+
+        ==========
+        Parameters
+        ==========
+
+        :param address_keys: List with keys or string with one key
+
+        :param tags: List with tag names or string with one tag
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Working
+        common.addresses.add_tags(
+            user = user,
+            address_keys = address_keys,
+            tags = tags
+        )
+
+        # Finished
+        return True
 
 
+    @rpcmethod
+    def delete_tags(
+        self,
+        address_keys,
+        tags
+    ):
+        """
+        Deletes one or more tags from one or more addresses
 
+        ==========
+        Parameters
+        ==========
 
+        :param address_keys: List with keys or string with one key
+
+        :param tags: List with tag names or string with one tag
+        """
+
+        # Username
+        user = cherrypy.request.login
+
+        # Working
+        common.addresses.add_tags(
+            user = user,
+            address_keys = address_keys,
+            tags = tags
+        )
+
+        # Finished
+        return True
 
 
 

@@ -17,10 +17,15 @@ from model.address import (
 )
 from model.address_history import AddressHistory
 from model.deleted_address import DeletedAddress
-from business_items import add_business_items_to_cache
-from category_items import add_category_items_to_cache
-from tag_items import add_tag_items_to_cache
-
+from . business_items import add_business_items_to_cache
+from . category_items import (
+    add_category_items_to_cache,
+    get_category_items_cached
+)
+from . tag_items import (
+    add_tag_items_to_cache,
+    get_tag_items_cached
+)
 
 ADDRESS_QUANTITY = "address_quantity"
 
@@ -1681,3 +1686,198 @@ def get_addresses_for_iteration(
         "next_cursor": next_cursor,
         "addresses": addresses
     }
+
+
+def add_categories(user, address_keys, categories):
+    """
+    Adds one or more categories to one or more addresses
+
+    :param user: Username
+
+    :param address_keys: List with keys or string with one key
+
+    :param categories: List with category names or string with one category
+    """
+
+    # Params
+    if isinstance(address_keys, basestring):
+        address_keys = [address_keys]
+    if isinstance(categories, basestring):
+        categories = [categories]
+
+    # Collect cached category names
+    cached_categories = {}
+    for category in get_category_items_cached():
+        cached_categories[category.lower()] = category
+
+    # Replace categories with correct spelled category names
+    _categories = []
+    for category in categories:
+        if category.lower() in cached_categories:
+            _categories.append(cached_categories[category.lower()])
+        else:
+            _categories.append(category)
+    categories = _categories
+    del _categories
+
+    # Update addresses
+    for address_key in address_keys:
+        # Current address
+        address = get_address(key_urlsafe = address_key)
+        old_category_items = sorted(address.category_items or [])
+
+        # New category items
+        new_category_items = set(address.category_items or [])
+        new_category_items.update(categories)
+        new_category_items = sorted(list(new_category_items))
+
+        # Save (if needed)
+        if new_category_items != old_category_items:
+            save_address(
+                user = user,
+                key_urlsafe = address_key,
+                category_items = new_category_items
+            )
+
+
+def delete_categories(user, address_keys, categories):
+    """
+    Deletes one or more categories from one or more addresses
+
+    :param user: Username
+
+    :param address_keys: List with keys or string with one key
+
+    :param categories: List with category names or string with one category
+    """
+
+    # Params
+    if isinstance(address_keys, basestring):
+        address_keys = [address_keys]
+    if isinstance(categories, basestring):
+        categories = [categories]
+
+    # Update addresses
+    for address_key in address_keys:
+        # Current address
+        address = get_address(key_urlsafe = address_key)
+        old_category_items = sorted(address.category_items or [])
+
+        # Current categories
+        current_categories = {}
+        for category in (address.category_items or []):
+            current_categories[category.lower()] = category
+
+        # Delete from current categories
+        for category in categories:
+            if category.lower() in current_categories:
+                del current_categories[category.lower()]
+
+        # New category items
+        new_category_items = sorted(list(set(current_categories.values() or [])))
+
+        # Save (if needed)
+        if new_category_items != old_category_items:
+            save_address(
+                user = user,
+                key_urlsafe = address_key,
+                category_items = new_category_items
+            )
+
+
+def add_tags(user, address_keys, tags):
+    """
+    Adds one or more tags to one or more addresses
+
+    :param user: Username
+
+    :param address_keys: List with keys or string with one key
+
+    :param tags: List with tag names or string with one tag
+    """
+
+    # Params
+    if isinstance(address_keys, basestring):
+        address_keys = [address_keys]
+    if isinstance(tags, basestring):
+        tags = [tags]
+
+    # Collect cached tag names
+    cached_tags = {}
+    for tag in get_tag_items_cached():
+        cached_tags[tag.lower()] = tag
+
+    # Replace tags with correct spelled tag names
+    _tags = []
+    for tag in tags:
+        if tag.lower() in cached_tags:
+            _tags.append(cached_tags[tag.lower()])
+        else:
+            _tags.append(tag)
+    tags = _tags
+    del _tags
+
+    # Update addresses
+    for address_key in address_keys:
+        # Current address
+        address = get_address(key_urlsafe = address_key)
+        old_tag_items = sorted(address.tag_items or [])
+
+        # New tag items
+        new_tag_items = set(address.tag_items or [])
+        new_tag_items.update(tags)
+        new_tag_items = sorted(list(new_tag_items))
+
+        # Save (if needed)
+        if new_tag_items != old_tag_items:
+            save_address(
+                user = user,
+                key_urlsafe = address_key,
+                tag_items = new_tag_items
+            )
+
+
+def delete_tags(user, address_keys, tags):
+    """
+    Deletes one or more tags from one or more addresses
+
+    :param user: Username
+
+    :param address_keys: List with keys or string with one key
+
+    :param tags: List with tag names or string with one tag
+    """
+
+    # Params
+    if isinstance(address_keys, basestring):
+        address_keys = [address_keys]
+    if isinstance(tags, basestring):
+        tags = [tags]
+
+    # Update addresses
+    for address_key in address_keys:
+        # Current address
+        address = get_address(key_urlsafe = address_key)
+        old_tag_items = sorted(address.tag_items or [])
+
+        # Current tags
+        current_tags = {}
+        for tag in (address.tag_items or []):
+            current_tags[tag.lower()] = tag
+
+        # Delete from current tags
+        for tag in tags:
+            if tag.lower() in current_tags:
+                del current_tags[tag.lower()]
+
+        # New tag items
+        new_tag_items = sorted(list(set(current_tags.values() or [])))
+
+        # Save (if needed)
+        if new_tag_items != old_tag_items:
+            save_address(
+                user = user,
+                key_urlsafe = address_key,
+                tag_items = new_tag_items
+            )
+
