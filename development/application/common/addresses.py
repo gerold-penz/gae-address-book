@@ -1705,6 +1705,15 @@ def add_categories(user, address_keys, categories):
     if isinstance(categories, basestring):
         categories = [categories]
 
+    # Clean categories
+    _categories = []
+    for category in categories:
+        category = category.strip()
+        if category:
+            _categories.append(category)
+    categories = _categories
+    del _categories
+
     # Collect cached category names
     cached_categories = {}
     for category in get_category_items_cached():
@@ -1757,6 +1766,15 @@ def delete_categories(user, address_keys, categories):
     if isinstance(categories, basestring):
         categories = [categories]
 
+    # Clean categories
+    _categories = []
+    for category in categories:
+        category = category.strip()
+        if category:
+            _categories.append(category)
+    categories = _categories
+    del _categories
+
     # Update addresses
     for address_key in address_keys:
         # Current address
@@ -1801,6 +1819,15 @@ def add_tags(user, address_keys, tags):
         address_keys = [address_keys]
     if isinstance(tags, basestring):
         tags = [tags]
+
+    # Clean tags
+    _tags = []
+    for tag in tags:
+        tag = tag.strip()
+        if tag:
+            _tags.append(tag)
+    tags = _tags
+    del _tags
 
     # Collect cached tag names
     cached_tags = {}
@@ -1853,6 +1880,15 @@ def delete_tags(user, address_keys, tags):
         address_keys = [address_keys]
     if isinstance(tags, basestring):
         tags = [tags]
+
+    # Clean tags
+    _tags = []
+    for tag in tags:
+        tag = tag.strip()
+        if tag:
+            _tags.append(tag)
+    tags = _tags
+    del _tags
 
     # Update addresses
     for address_key in address_keys:
