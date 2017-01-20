@@ -1368,13 +1368,13 @@ class JsonRpc(CherryPyJsonRpc):
 
 
     @rpcmethod
-    def delete_tags(
+    def delete_categories(
         self,
         address_keys,
-        tags
+        categories
     ):
         """
-        Deletes one or more tags from one or more addresses
+        Deletes one or more categories from one or more addresses
 
         ==========
         Parameters
@@ -1382,17 +1382,17 @@ class JsonRpc(CherryPyJsonRpc):
 
         :param address_keys: List with keys or string with one key
 
-        :param tags: List with tag names or string with one tag
+        :param categories: List with category names or string with one category
         """
 
         # Username
         user = cherrypy.request.login
 
         # Working
-        common.addresses.add_tags(
+        common.addresses.add_categories(
             user = user,
             address_keys = address_keys,
-            tags = tags
+            categories = categories
         )
 
         # Finished
