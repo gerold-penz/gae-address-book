@@ -1311,11 +1311,14 @@ def update_address_search_index():
             return
 
         for address in addresses:
+            try:
+                # Update search index for the address
+                address.update_search_index()
+            except StandardError as err:
+                logging.error(unicode(err))
+                logging.error(u"Address-Key:", address.key.urlsafe())
             # Append key
             address_keys.add(address.key.urlsafe())
-
-            # Update search index for the address
-            address.update_search_index()
 
         return _update_index(next_cursor)
 

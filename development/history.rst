@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.3.2
+=============
+
+2017-02-14
+
+- Versuch einen Fehler beim Erstellen des Indexes auszubessern
+
+
+=============
 Version 0.3.1
 =============
 
