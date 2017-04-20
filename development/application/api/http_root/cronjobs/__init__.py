@@ -86,28 +86,42 @@ def backup_database():
         app_identity.get_default_gcs_bucket_name() if app_identity else None
     )
 
-    # URL anpassen
+    # Parameter anpassen
     iso_date = datetime.date.today().isoformat()
-    url = (
-        "/_ah/datastore_admin/backup.create"
-        "?name=DatabaseBackup"
-        "&kind=Address"
-        "&kind=AddressHistory"
-        "&kind=FreeDefinedField"
-        "&kind=NamedValue"
-        "&kind=DeletedAddress"
-        "&filesystem=gs"
-        "&gs_bucket_name={bucket_name}/backups/{iso_date}"
-    ).format(
-        bucket_name = bucket_name,
-        iso_date = iso_date
+    iso_year = iso_date[0:4]
+    iso_month = iso_date[5:7]
+    iso_day = iso_date[8:10]
+    params = dict(
+        name = "DatabaseBackup",
+        kind = [
+            "Address",
+            "AddressHistory",
+            "FreeDefinedField",
+            "NamedValue",
+            "DeletedAddress",
+        ],
+        filesystem = "gs",
+        gs_bucket_name = "{bucket_name}/backups/{iso_year}/{iso_month}/{iso_day}".format(
+            bucket_name = bucket_name,
+            iso_year = iso_year,
+            iso_month = iso_month,
+            iso_day = iso_day
+        )
     )
-    logging.info(url)
 
     # Job erstellen
     taskqueue.add(
-        url = url,
+        url = "/_ah/datastore_admin/backup.create",
+        params = params,
         target = "ah-builtin-python-bundle"
     )
+
+
+
+
+
+
+
+
 
 
