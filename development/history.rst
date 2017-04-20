@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.3.3
+=============
+
+2017-04-20
+
+- Cron-Job für das Backup automatisiert
+
+
+=============
 Version 0.3.2
 =============
 
