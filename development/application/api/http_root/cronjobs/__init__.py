@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import os
-import logging
 import cherrypy
 import datetime
 import common.constants
