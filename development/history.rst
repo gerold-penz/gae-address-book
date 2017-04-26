@@ -7,6 +7,16 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.3.4
+=============
+
+2017-04-26
+
+- Tag-Items und Category-Items werden jetzt zum Cache hinzugefügt, wenn
+  Tags oder Categories zu einer Adresse hinzugefügt werden.
+
+
+=============
 Version 0.3.3
 =============
 

@@ -1363,6 +1363,9 @@ class JsonRpc(CherryPyJsonRpc):
             categories = categories
         )
 
+        # Kategorien zum Cache hinzufügen
+        common.category_items.add_category_items_to_cache(categories)
+
         # Finished
         return True
 
@@ -1426,6 +1429,9 @@ class JsonRpc(CherryPyJsonRpc):
             address_keys = address_keys,
             tags = tags
         )
+
+        # Tag-Items zum Cache hinzufügen
+        common.tag_items.add_tag_items_to_cache(tags)
 
         # Finished
         return True
