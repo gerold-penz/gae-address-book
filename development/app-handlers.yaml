@@ -1,32 +1,3 @@
-# Skip Files
-skip_files:
-
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^(.*/)?.*/node_modules/
-- ^(.*/)?.*/scss/
-- ^(.*/)?.*\.scss$
-- ^(.*/)?.*\.bowerrc$
-- ^(.*/)?.*bower\.json$
-- ^(.*/)?.*composer\.json$
-- ^(.*/)?.*package\.json$
-- ^(.*/)?.*sache\.json$
-- ^(.*/)?.*gulpfile\.js$
-- ^(.*/)?.*appcfg_update\.py$
-- ^(.*/)?.*appcfg_update\.py$
-- ^(.*/)?.*/bower_components/angular-i18n/
-- ^(.*/)?.*/bower_components/jquery/src/
-- ^(.*/)?.*/bower_components/moment/src/
-- ^(.*/)?.*/bower_components/moment/locale/
-- ^(.*/)?.*/bower_components/modernizr/feature-detects/
-- ^(.*/)?.*/bower_components/modernizr/media/
-- ^(.*/)?.*/bower_components/modernizr/test/
-
-
-# Handlers
 handlers:
 
 ## Favicon

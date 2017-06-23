@@ -1,8 +1,10 @@
-application: gae-address-book-local-dev
-version: 1
+service: default
+
 runtime: python27
 api_version: 1
 threadsafe: true
+
+instance_class: F4
 
 # Builtins
 builtins:
@@ -10,5 +12,6 @@ builtins:
 
 # Includes
 includes:
-- app-includes.yaml
+- app-skip-files.yaml
+- app-handlers.yaml
 

@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.4.0
+=============
+
+2017-06-23
+
+- Strukturanpassung für neuen Upload in die App Engine.
+
+
+=============
 Version 0.3.4
 =============
 
