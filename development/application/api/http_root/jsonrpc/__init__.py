@@ -302,7 +302,15 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"group": "<group name>", "label": "<label>", "text": "<text>", value_type = "unicode"|"int"|"float"|"date"), ...]
+                [
+                    {
+                        "group": "<group name>",
+                        "label": "<label>",
+                        "text": "<text>",
+                        "value_type" = "unicode"|"int"|"float"|"date")
+                    },
+                    ...
+                ]
 
             Example::
 
@@ -728,13 +736,21 @@ class JsonRpc(CherryPyJsonRpc):
         :param free_defined_items: A list with dictionaries.
             Syntax::
 
-                [{"label": "<label>", "text": "<text>", value_type = "unicode"|"int"|"float"|"date"}, ...]
+                [
+                    {
+                        "group": "<group name>",
+                        "label": "<label>",
+                        "text": "<text>",
+                        "value_type" = "unicode"|"int"|"float"|"date")
+                    },
+                    ...
+                ]
 
             Example::
 
                 [
-                    {"label": "Shoe-Size", "text": "45", value_type = "unicode"},
-                    {"label": "Body-Height", "text": "180", value_type = "unicode"}
+                    {"group": "", "label": "Shoe-Size", "text": "45", value_type = "unicode"},
+                    {"group": "", "label": "Body-Height", "text": "180", value_type = "unicode"}
                 ]
 
         :param business_items: A list with strings.
