@@ -7,6 +7,15 @@ ToDo: Security: Authorization: *common.authorization*
 
 
 =============
+Version 0.4.1
+=============
+
+2018-03-26
+
+- Test der Strukturanpassung
+
+
+=============
 Version 0.4.0
 =============
 
